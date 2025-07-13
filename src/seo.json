@@ -1,0 +1,7 @@
+{
+  "glitch-help-instructions": "For a custom domain, change the 'url' parameter from 'glitch-default' to your domain _without_ a traling slash, like 'https://www.example.com'",
+  "title": "FutureSkills PRIME",
+  "description": "FutureSkills PRIME (Programme for Re-skilling/ Up-skilling of IT Manpower for Employability) is an industry focused scheme sponsored by the Ministry of Electronics and Information Technology (MeitY), Government of India, with the goal to build skills in the emerging 10 technologies in the field of Information Technology. (www.futureskillsprime.in) NIELIT Chandigarh is a Co-Lead Resource Centre for Big Data Analytics and Virtual Reality.",
+  "url": "FutureSkillsPRIME",
+  "image": "https://cdn.glitch.global/f6cf5324-6f29-4927-81d0-f904b3b236c3/unnamed.png?v=1744870954215"
+}
