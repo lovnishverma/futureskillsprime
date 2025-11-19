@@ -569,7 +569,7 @@ const RegistrationSection = () => {
       <Alert className="mb-8 border-red-200 bg-red-50 transform hover:scale-102 transition-transform">
         <AlertCircle className="h-5 w-5 text-red-600 animate-pulse" />
         <div className="text-red-600 font-semibold ml-3">
-          Last Date for Registration: 20th May 2025 (Hard Deadline)
+          Submitting the physical form or a scanned copy of the physical form is mandatory.
         </div>
       </Alert>
 
