@@ -2041,9 +2041,21 @@
               <div class="alumni-course-item">
                 <button type="button" class="alumni-course-title" onclick="toggleCourseType(this,'${key}')">→ ${type}</button>
                 <ul class="alumni-batches hidden" id="course-${key}">
-                  ${batches.map((batch, i) => {
-            const n = batch.match(/\d+/)?.[0] || i + 1;
-            return `<li><a href="https://futureskillsprime.onrender.com/${pA}_${tA}_Batch${n}.html" target="_blank" rel="noopener">${batch}</a></li>`;
+          ${batches.map((batch, i) => {
+            // Use a fixed mapping of programme+type -> custom URLs for the six courses
+            const mapKey = `${program}-${type}`;
+            const urlMap = {
+              'Big Data and Data Science-Government Official Training - Advanced': 'https://nielitropar-dte.hf.space/',
+              'Big Data and Data Science-Government Official Training - Basic': 'https://nielitropar-dte.hf.space/',
+              'Big Data and Data Science-BDDS BOOTCAMP': 'https://nielit.gov.in/chandigarh/sites/default/files/Chandigarh/FSP%20BDDS%20Bootcamp%20%20Brochure.pdf',
+              'Augmented and Virtual Reality-Government Official Training - Advanced': 'https://nielit.gov.in/sites/default/files/Chandigarh/FSP%20ARVR%20GOT-A%20Brochure.pdf',
+              'Augmented and Virtual Reality-Government Official Training - Basic': 'https://nielit.gov.in/sites/default/files/Chandigarh/FSP%20ARVR%20GOT-B%20Brochure.pdf',
+              'Augmented and Virtual Reality-AVR BOOTCAMP': 'https://nielit.gov.in/sites/default/files/Chandigarh/ARVR%20Bootcamp%20%20Brochure.pdf'
+            };
+            const href = urlMap[mapKey] || '#';
+            const isExternal = /^https?:\/\//i.test(href);
+            const attrs = isExternal ? ' target="_blank" rel="noopener"' : '';
+            return `<li><a href="${href}"${attrs}>${batch}</a></li>`;
           }).join('')}
                 </ul>
               </div>`;
