@@ -1,13 +1,1957 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-       <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="https://cdn.glitch.global/f6cf5324-6f29-4927-81d0-f904b3b236c3/unnamed.png?v=1744870954215" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FutureSkills PRIME</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/index.jsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FutureSkills PRIME - NIELIT Chandigarh</title>
+  <style>
+    /* ===== CSS RESET & BASE ===== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #1a4f8a;
+      --primary-dark: #0f2d52;
+      --secondary: #6d28d9;
+      --accent: #e8a020;
+      --blue-600: #2563eb;
+      --blue-500: #3b82f6;
+      --blue-100: #dbeafe;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --red-50: #fef2f2;
+      --red-100: #fee2e2;
+      --red-600: #dc2626;
+      --green-bg: #d4edda;
+      --green-text: #155724;
+      --red-bg: #f8d7da;
+      --red-text: #721c24;
+      --nav-height: 64px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #fff;
+      color: var(--gray-800);
+      line-height: 1.6;
+      padding-top: var(--nav-height);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    /* ===== UTILITY CLASSES ===== */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    @media (min-width: 640px) {
+      .container {
+        padding: 0 1.5rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .container {
+        padding: 0 2rem;
+      }
+    }
+
+    .section-padding {
+      padding: 4rem 0;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .gradient-text {
+      background: linear-gradient(to right, var(--blue-600), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .card {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .img-placeholder {
+      background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 50%, #a5b4fc 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    /* ===== NAVIGATION ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .navbar.scrolled {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+    }
+
+    .nav-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--blue-600);
+    }
+
+    .nav-desktop {
+      display: none;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .nav-desktop {
+        display: flex;
+      }
+    }
+
+    .nav-link {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--gray-700);
+      text-transform: capitalize;
+      letter-spacing: 0.025em;
+      position: relative;
+      transition: color 0.3s;
+      cursor: pointer;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--blue-600);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--blue-600);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    .nav-link.active::after,
+    .nav-link:hover::after {
+      transform: scaleX(1);
+    }
+
+    /* Alumni dropdown */
+    .alumni-dropdown-trigger {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .alumni-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 0.5rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+      min-width: 320px;
+      max-height: 300px;
+      overflow-y: auto;
+      display: none;
+      z-index: 1001;
+    }
+
+    .alumni-dropdown-trigger:hover .alumni-dropdown-menu {
+      display: block;
+    }
+
+    .alumni-program {
+      margin-bottom: 0.75rem;
+    }
+
+    .alumni-program-title {
+      font-weight: 600;
+      color: var(--blue-600);
+      font-size: 0.85rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      padding: 0.25rem 0;
+    }
+
+    .alumni-courses {
+      padding-left: 0.75rem;
+      margin-top: 0.25rem;
+    }
+
+    .alumni-course-item {
+      font-size: 0.8rem;
+    }
+
+    .alumni-course-title {
+      font-weight: 500;
+      color: var(--gray-700);
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      padding: 0.2rem 0;
+      font-size: 0.8rem;
+    }
+
+    .alumni-batches {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.25rem;
+      padding-left: 0.75rem;
+      margin-top: 0.25rem;
+    }
+
+    .alumni-batches a {
+      color: var(--blue-600);
+      font-size: 0.75rem;
+    }
+
+    .alumni-batches a:hover {
+      text-decoration: underline;
+    }
+
+    .mobile-toggle {
+      display: block;
+      padding: 0.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--gray-700);
+    }
+
+    @media (min-width: 768px) {
+      .mobile-toggle {
+        display: none;
+      }
+    }
+
+    .mobile-menu {
+      display: none;
+      background: white;
+      padding: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .mobile-menu.open {
+      display: block;
+    }
+
+    .mobile-link {
+      display: block;
+      padding: 0.75rem 1rem;
+      font-weight: 500;
+      color: var(--gray-700);
+      border-radius: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .mobile-link:hover,
+    .mobile-link.active {
+      background: var(--blue-100);
+      color: var(--blue-600);
+    }
+
+    .mobile-alumni {
+      padding: 0.75rem 1rem;
+    }
+
+    .mobile-alumni-title {
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 0.5rem;
+    }
+
+    /* ===== HERO CAROUSEL ===== */
+    .hero-section {
+      position: relative;
+    }
+
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .carousel-container {
+        height: 600px;
+      }
+    }
+
+    .carousel-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .carousel-slide.active {
+      opacity: 1;
+    }
+
+    .carousel-slide .img-placeholder {
+      width: 100%;
+      height: 100%;
+      font-size: 1.25rem;
+    }
+
+    .carousel-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.15);
+      pointer-events: none;
+    }
+
+    .carousel-nav {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      pointer-events: none;
+    }
+
+    @media (min-width: 768px) {
+      .carousel-nav {
+        padding: 1.5rem;
+      }
+    }
+
+    .carousel-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(4px);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      pointer-events: all;
+      color: var(--gray-800);
+    }
+
+    .carousel-btn:hover {
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    .carousel-dots {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .carousel-dot.active {
+      background: white;
+      width: 24px;
+      border-radius: 5px;
+    }
+
+    /* Hero content */
+    .hero-content {
+      background: linear-gradient(to bottom, #f9fafb, white);
+      padding: 3rem 0;
+    }
+
+    .hero-content h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    @media (min-width: 640px) {
+      .hero-content h1 {
+        font-size: 3.5rem;
+      }
+    }
+
+    .hero-content .subtitle {
+      font-size: 1.25rem;
+      color: var(--gray-600);
+      margin-bottom: 2rem;
+    }
+
+    @media (min-width: 640px) {
+      .hero-content .subtitle {
+        font-size: 1.5rem;
+      }
+    }
+
+    .hero-tags {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      font-weight: 500;
+      color: var(--gray-700);
+    }
+
+    .hero-tag .icon {
+      color: var(--blue-500);
+    }
+
+    /* About section */
+    .about-card {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      padding: 2.5rem;
+      margin-top: 2rem;
+    }
+
+    @media (min-width: 640px) {
+      .about-card {
+        padding: 3rem;
+      }
+    }
+
+    .about-card h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--gray-200);
+    }
+
+    .about-card p {
+      color: var(--gray-600);
+      font-size: 1.125rem;
+      line-height: 1.75;
+    }
+
+    /* ===== COURSES SECTION ===== */
+    .courses-section {
+      background: var(--gray-100);
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 0.75rem;
+    }
+
+    @media (min-width: 640px) {
+      .section-title {
+        font-size: 2.5rem;
+      }
+    }
+
+    .section-subtitle {
+      font-size: 1.125rem;
+      color: var(--gray-600);
+      margin-bottom: 2.5rem;
+    }
+
+    .courses-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 768px) {
+      .courses-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .courses-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .course-card {
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: box-shadow 0.3s;
+    }
+
+    .course-card:hover {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .course-card-body {
+      padding: 1.5rem;
+    }
+
+    .course-card h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 0.5rem;
+    }
+
+    .course-objective {
+      color: var(--gray-600);
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .course-speakers {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      color: var(--gray-700);
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .course-toggle {
+      color: var(--blue-600);
+      font-weight: 500;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.9rem;
+      padding: 0;
+      transition: color 0.2s;
+    }
+
+    .course-toggle:hover {
+      color: #1e40af;
+    }
+
+    .course-details {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: all 0.35s ease;
+    }
+
+    .course-details.open {
+      max-height: 2000px;
+      opacity: 1;
+      margin-top: 0.75rem;
+    }
+
+    .course-day {
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--gray-200);
+      margin-bottom: 0.75rem;
+    }
+
+    .course-day h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gray-800);
+      margin-bottom: 0.25rem;
+    }
+
+    .course-day .detail-title {
+      font-weight: 500;
+      color: var(--gray-700);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .course-day ul {
+      list-style: disc;
+      padding-left: 1.25rem;
+      font-size: 0.82rem;
+      color: var(--gray-600);
+    }
+
+    .course-day li {
+      margin-bottom: 0.15rem;
+    }
+
+    /* ===== SPEAKERS SECTION ===== */
+    .speakers-section {
+      background: #f9fafb;
+    }
+
+    .speakers-grid {
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: 1fr;
+      margin-top: 3rem;
+    }
+
+    @media (min-width: 768px) {
+      .speakers-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .speakers-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .speaker-card {
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+
+    .speaker-card:hover {
+      transform: scale(1.03);
+    }
+
+    .speaker-img-placeholder {
+      width: 160px;
+      height: 160px;
+      margin: 1.5rem auto 0;
+      border-radius: 50%;
+      font-size: 0.8rem;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .speaker-info {
+      padding: 1.5rem;
+    }
+
+    .speaker-info h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    .speaker-role {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #4f46e5;
+      margin-top: 0.25rem;
+    }
+
+    .speaker-institution {
+      font-size: 0.875rem;
+      color: var(--gray-500);
+      margin-top: 0.25rem;
+    }
+
+    .speaker-topic {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.35rem 0.85rem;
+      background: #e0e7ff;
+      color: #4338ca;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .speaker-bio {
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      color: var(--gray-600);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ===== REGISTRATION SECTION ===== */
+    .registration-section {
+      background: linear-gradient(to bottom, var(--gray-50), white);
+    }
+
+    .alert-box {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      background: var(--red-50);
+      border: 1px solid var(--red-100);
+      border-radius: 0.5rem;
+      margin-bottom: 2rem;
+      color: var(--red-600);
+      font-weight: 600;
+    }
+
+    .registration-card,
+    .contact-card {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: box-shadow 0.3s;
+    }
+
+    .registration-card:hover,
+    .contact-card:hover {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .registration-card h2,
+    .contact-card h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 1.5rem;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--blue-100);
+      color: var(--blue-600);
+      font-weight: 700;
+      transition: all 0.3s;
+    }
+
+    .step-item:hover .step-num {
+      background: var(--blue-600);
+      color: white;
+    }
+
+    .step-text {
+      padding-top: 0.5rem;
+      color: var(--gray-600);
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--blue-600);
+      color: white;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      transition: background 0.3s;
+      margin-top: 0.75rem;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+
+    .contact-info-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      color: var(--gray-600);
+      transition: all 0.3s;
+      border-radius: 0.5rem;
+    }
+
+    .contact-info-item:hover {
+      color: var(--blue-600);
+      transform: translateX(4px);
+    }
+
+    .contact-icon {
+      color: var(--blue-600);
+      flex-shrink: 0;
+    }
+
+    /* ===== NOMINATION FORM SECTION ===== */
+    .nomination-section {
+      background: var(--gray-100);
+    }
+
+    .nomination-form-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (min-width: 640px) {
+      .nomination-form-container {
+        padding: 2.5rem;
+      }
+    }
+
+    .nomination-form-container h2 {
+      text-align: center;
+      color: var(--primary-dark);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+
+    .form-logo-placeholder {
+      width: 250px;
+      height: 80px;
+      margin: 0 auto 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .form-fieldset {
+      border: 1px solid #d0d8e4;
+      border-radius: 0.5rem;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      background: #fafbfc;
+      transition: all 0.3s;
+    }
+
+    .form-legend {
+      background: var(--primary);
+      color: white;
+      padding: 0.35rem 1rem;
+      border-radius: 0.35rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .form-col {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--primary-dark);
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 0.35rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 2fr 2fr;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      align-items: center;
+    }
+
+    .grid-3 strong {
+      font-size: 0.82rem;
+      color: var(--gray-700);
+    }
+
+    .form-submit-btn {
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .form-submit-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .form-submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .status-message {
+      margin-top: 1.25rem;
+      text-align: center;
+      font-weight: 600;
+      padding: 0.75rem;
+      border-radius: 0.35rem;
+      display: none;
+    }
+
+    .status-message.success {
+      display: block;
+      background: var(--green-bg);
+      color: var(--green-text);
+    }
+
+    .status-message.error {
+      display: block;
+      background: var(--red-bg);
+      color: var(--red-text);
+    }
+
+    /* ===== CONTACT SECTION ===== */
+    .contact-grid {
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 768px) {
+      .contact-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .contact-subcard {
+      background: var(--gray-100);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+    }
+
+    .contact-subcard h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 1rem;
+    }
+
+    .coordinator-item {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem;
+      background: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      margin-bottom: 0.75rem;
+      font-weight: 500;
+      color: var(--gray-700);
+      transition: box-shadow 0.2s;
+    }
+
+    .coordinator-item:hover {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--gray-900);
+      color: var(--gray-300);
+      padding: 2rem 0;
+      text-align: center;
+      font-size: 0.875rem;
+    }
+
+    .footer p {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer a {
+      color: var(--blue-500);
+      transition: color 0.2s;
+    }
+
+    .footer a:hover {
+      color: #60a5fa;
+    }
+
+    /* ===== SCROLL ANIMATIONS ===== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease-out;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE HELPERS ===== */
+    @media (max-width: 640px) {
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-tags {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero-tag {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="#" class="nav-logo">FutureSkills PRIME</a>
+
+      <div class="nav-desktop" id="navDesktop">
+        <a href="#home" class="nav-link active" data-section="home">Home</a>
+        <a href="#courses" class="nav-link" data-section="courses">Courses</a>
+        <a href="#speakers" class="nav-link" data-section="speakers">Speakers</a>
+        <a href="#registration" class="nav-link" data-section="registration">Registration</a>
+        <a href="#nomination" class="nav-link" data-section="nomination">Nomination</a>
+        <a href="#contact" class="nav-link" data-section="contact">Contact</a>
+        <div class="alumni-dropdown-trigger nav-link">
+          Alumni &#9662;
+          <div class="alumni-dropdown-menu" id="alumniDropdown"></div>
+        </div>
+      </div>
+
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#home" class="mobile-link active" data-section="home">Home</a>
+      <a href="#courses" class="mobile-link" data-section="courses">Courses</a>
+      <a href="#speakers" class="mobile-link" data-section="speakers">Speakers</a>
+      <a href="#registration" class="mobile-link" data-section="registration">Registration</a>
+      <a href="#nomination" class="mobile-link" data-section="nomination">Nomination</a>
+      <a href="#contact" class="mobile-link" data-section="contact">Contact</a>
+      <div class="mobile-alumni">
+        <div class="mobile-alumni-title">Alumni</div>
+        <div id="mobileAlumniDropdown"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HOME / HERO ===== -->
+  <section id="home" class="hero-section">
+    <!-- Carousel -->
+    <div class="carousel-container" id="carousel">
+      <div class="carousel-slide active">
+        <div class="img-placeholder">[ Hero Image Placeholder 1 ]</div>
+      </div>
+      <div class="carousel-slide">
+        <div class="img-placeholder">[ Hero Image Placeholder 2 ]</div>
+      </div>
+      <div class="carousel-slide">
+        <div class="img-placeholder">[ Hero Image Placeholder 3 ]</div>
+      </div>
+      <div class="carousel-overlay"></div>
+      <div class="carousel-nav">
+        <button class="carousel-btn" id="prevSlide" aria-label="Previous">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button class="carousel-btn" id="nextSlide" aria-label="Next">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+      <div class="carousel-dots" id="carouselDots"></div>
+    </div>
+
+    <!-- Hero Content -->
+    <div class="hero-content">
+      <div class="container text-center fade-in">
+        <h1 class="gradient-text">FutureSkills PRIME</h1>
+        <p class="subtitle">Bridging the Industry Skill Gap <strong>(NIELIT)</strong></p>
+        <div class="hero-tags">
+          <div class="hero-tag">
+            <svg class="icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            1 Week (5 Days)
+          </div>
+          <div class="hero-tag">
+            <svg class="icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            6 Hours Daily
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="container fade-in">
+      <div class="about-card">
+        <h2>About the Program</h2>
+        <p>FutureSkills PRIME (Programme for Re-skilling/ Up-skilling of IT Manpower for Employability) is an industry
+          focused scheme sponsored by the Ministry of Electronics and Information Technology (MeitY), Government of
+          India, with the goal to build skills in the emerging 10 technologies in the field of Information Technology.
+          (www.futureskillsprime.in) NIELIT Chandigarh is a Co-Lead Resource Centre for Big Data Analytics and Virtual
+          Reality.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COURSES ===== -->
+  <section id="courses" class="courses-section section-padding">
+    <div class="container fade-in">
+      <div class="text-center">
+        <h2 class="section-title">Our Offered Courses</h2>
+        <p class="section-subtitle">Explore our comprehensive training programs</p>
+      </div>
+      <div class="courses-grid" id="coursesGrid"></div>
+    </div>
+  </section>
+
+  <!-- ===== SPEAKERS ===== -->
+  <section id="speakers" class="speakers-section section-padding">
+    <div class="container fade-in">
+      <div class="text-center">
+        <h2 class="section-title">Meet Our Distinguished Speakers</h2>
+        <p class="section-subtitle">Learn from industry experts and academic leaders</p>
+      </div>
+      <div class="speakers-grid" id="speakersGrid"></div>
+    </div>
+  </section>
+
+  <!-- ===== REGISTRATION ===== -->
+  <section id="registration" class="registration-section section-padding">
+    <div class="container fade-in">
+      <div class="text-center">
+        <h1 class="section-title gradient-text" style="font-size: 2.5rem;">Registration Details</h1>
+        <p style="font-size: 1.25rem; color: var(--gray-600); margin-bottom: 1.5rem;">FutureSkills PRIME <strong>(NIELIT
+            Chandigarh)</strong></p>
+      </div>
+
+      <div class="alert-box">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        <span>Submitting the physical form or a scanned copy of the physical form is mandatory.</span>
+      </div>
+
+      <div class="registration-card">
+        <h2>How to Register</h2>
+        <div class="step-item">
+          <span class="step-num">1</span>
+          <div class="step-text">Fill your Details in Google Form</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">2</span>
+          <div class="step-text">Upload Necessary Documents</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">3</span>
+          <div class="step-text">
+            Fill and Submit the physical form at NIELIT Chandigarh
+            <br><br>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQqOPSoLR4YA/viewform?usp=header" target="_blank"
+              rel="noopener noreferrer" class="btn-primary">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+              Register Now
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="registration-card">
+        <h2>Contact for Registration Queries</h2>
+        <div class="contact-info-item">
+          <svg class="contact-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+            <polyline points="22,6 12,13 2,6" />
+          </svg>
+          <span class="font-medium">nielitchdropar@gmail.com</span>
+        </div>
+        <div class="contact-info-item">
+          <svg class="contact-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path
+              d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+          </svg>
+          <span class="font-medium">9815621657</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NOMINATION FORM ===== -->
+  <section id="nomination" class="nomination-section section-padding">
+    <div class="container fade-in">
+      <div class="text-center">
+        <h2 class="section-title">Nomination Form</h2>
+        <p class="section-subtitle">Submit your nomination for FutureSkills PRIME courses</p>
+      </div>
+
+      <div class="nomination-form-container">
+        <div class="img-placeholder form-logo-placeholder">[ NIELIT Logo Placeholder ]</div>
+        <h2>NIELIT Nomination Form</h2>
+
+        <form id="nominationForm">
+          <!-- Programme Details -->
+          <fieldset class="form-fieldset">
+            <legend class="form-legend">1. Programme Details</legend>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Track *</label>
+                <select name="Track" class="form-select" required>
+                  <option value="">Select Track</option>
+                  <option value="ARVR">Augmented & Virtual Reality (ARVR)</option>
+                  <option value="BDDS">Big Data & Data Science (BDDS)</option>
+                </select>
+              </div>
+              <div class="form-col">
+                <label class="form-label">Level *</label>
+                <select name="Level" id="levelSelect" class="form-select" required>
+                  <option value="">Select Level</option>
+                  <option value="Basic">Basic (GOT)</option>
+                  <option value="Advanced">Advanced (GOT)</option>
+                  <option value="Bootcamp">Bootcamp</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Course Start Date</label>
+                <input type="date" name="Course_Start_Date" class="form-input">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Resource Centre Name</label>
+                <input type="text" name="Resource_Centre_Name" class="form-input" value="NIELIT Chandigarh">
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Applicant Details -->
+          <fieldset class="form-fieldset">
+            <legend class="form-legend">2. Applicant Details</legend>
+            <div class="form-row">
+              <div class="form-col" style="flex:0.3">
+                <label class="form-label">Title *</label>
+                <select name="Title" class="form-select" required>
+                  <option value="" disabled selected>Select Title</option>
+                  <option value="Mr.">Mr.</option>
+                  <option value="Ms.">Ms.</option>
+                  <option value="Dr.">Dr.</option>
+                  <option value="Prof.">Prof.</option>
+                </select>
+              </div>
+              <div class="form-col" style="flex:0.7">
+                <label class="form-label">Full Name *</label>
+                <input type="text" name="Name" class="form-input" required placeholder="As on Govt ID">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">DOB *</label>
+                <input type="date" name="DOB" class="form-input" required>
+              </div>
+              <div class="form-col">
+                <label class="form-label">Gender *</label>
+                <select name="Gender" class="form-select" required>
+                  <option value="M">Male (M)</option>
+                  <option value="F">Female (F)</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Contact Number *</label>
+                <input type="tel" name="Contact_Number" class="form-input" pattern="[6-9][0-9]{9}" required>
+              </div>
+              <div class="form-col">
+                <label class="form-label">Email ID *</label>
+                <input type="email" name="Email" class="form-input" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Aadhar Number</label>
+                <input type="text" name="Aadhar" class="form-input" pattern="[0-9]{12}">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Native State & District</label>
+                <div style="display:flex;gap:10px;">
+                  <input type="text" name="Native_State" class="form-input" placeholder="State">
+                  <input type="text" name="District" class="form-input" placeholder="District">
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Organisation Details -->
+          <fieldset class="form-fieldset">
+            <legend class="form-legend">3. Organisation / Institute Details</legend>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Organisation / College Name *</label>
+                <input type="text" name="Organisation" class="form-input" required>
+              </div>
+              <div class="form-col" id="deptCol">
+                <label class="form-label">Department</label>
+                <input type="text" name="Department" class="form-input">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Designation *</label>
+                <input type="text" name="Designation" class="form-input" required
+                  placeholder="e.g. Data Analyst, Student">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Status *</label>
+                <select name="Status" class="form-select" required>
+                  <option value="Pursuing">Pursuing</option>
+                  <option value="In-service">In-service</option>
+                  <option value="Passed out">Passed out</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-col">
+                <label class="form-label">Beneficiary Category *</label>
+                <select name="Beneficiary_Category" class="form-select" required>
+                  <option value="Career aspirant/Student">Career aspirant/Student</option>
+                  <option value="IT Employees">IT Employees</option>
+                  <option value="Faculty">Faculty</option>
+                  <option value="Government Employee">Government Employee</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Educational Qualifications -->
+          <fieldset class="form-fieldset">
+            <legend class="form-legend">4. Educational Qualifications</legend>
+            <label class="form-label">Highest Qualification</label>
+            <input type="text" name="Highest_Qualification" class="form-input"
+              placeholder="e.g. B.Tech CSE (Required for Bootcamp & GOT)">
+
+            <div id="detailedEducationSection" class="hidden" style="margin-top:15px;">
+              <p style="font-size:12px;color:#666;margin-bottom:10px;">Please list up to 3 detailed qualifications
+                (Required for GOT forms).</p>
+              <div class="grid-3">
+                <div><strong>Year</strong></div>
+                <div><strong>Degree / Programme</strong></div>
+                <div><strong>University / Board</strong></div>
+                <input type="text" name="Edu1_Year" class="form-input"><input type="text" name="Edu1_Degree"
+                  class="form-input"><input type="text" name="Edu1_University" class="form-input">
+                <input type="text" name="Edu2_Year" class="form-input"><input type="text" name="Edu2_Degree"
+                  class="form-input"><input type="text" name="Edu2_University" class="form-input">
+                <input type="text" name="Edu3_Year" class="form-input"><input type="text" name="Edu3_Degree"
+                  class="form-input"><input type="text" name="Edu3_University" class="form-input">
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Technical Experience -->
+          <fieldset class="form-fieldset hidden" id="detailedExperienceSection">
+            <legend class="form-legend">5. Technical / Project Experience</legend>
+            <div class="grid-3">
+              <div><strong>Year</strong></div>
+              <div><strong>Area of Expertise</strong></div>
+              <div><strong>Centre / Organisation</strong></div>
+              <input type="text" name="Exp1_Year" class="form-input"><input type="text" name="Exp1_Area_of_Expertise"
+                class="form-input"><input type="text" name="Exp1_Centre" class="form-input">
+              <input type="text" name="Exp2_Year" class="form-input"><input type="text" name="Exp2_Area_of_Expertise"
+                class="form-input"><input type="text" name="Exp2_Centre" class="form-input">
+              <input type="text" name="Exp3_Year" class="form-input"><input type="text" name="Exp3_Area_of_Expertise"
+                class="form-input"><input type="text" name="Exp3_Centre" class="form-input">
+            </div>
+          </fieldset>
+
+          <!-- Previous FSP Details -->
+          <fieldset class="form-fieldset">
+            <legend class="form-legend">6. Previous FSP Details</legend>
+            <div class="form-row">
+              <div class="form-col" style="flex:0.3;">
+                <label class="form-label">Previous FSP Program? *</label>
+                <select name="Previous_FSP_Program" class="form-select" required>
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+              <div class="form-col" style="flex:0.7;">
+                <label class="form-label">If Yes, Provide Details</label>
+                <input type="text" name="Previous_FSP_Details_1" class="form-input"
+                  placeholder="Program / Centre / Date">
+              </div>
+            </div>
+          </fieldset>
+
+          <button type="submit" class="form-submit-btn" id="submitBtn">Submit Nomination</button>
+          <div class="status-message" id="statusMessage"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact" class="section-padding">
+    <div class="container fade-in">
+      <div class="contact-card">
+        <h2 class="gradient-text" style="font-size: 2rem;">Contact Information</h2>
+        <div class="contact-grid">
+          <div class="contact-subcard">
+            <h3>Program Coordinators</h3>
+            <div class="coordinator-item">Mrs. Anita Budhiraja (Coordinator)</div>
+            <div class="coordinator-item">Dr. Sarwan Singh (Co-Coordinator)</div>
+          </div>
+          <div class="contact-subcard">
+            <h3>Get in Touch</h3>
+            <div class="contact-info-item">
+              <svg class="contact-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+              nielitchdropar@gmail.com
+            </div>
+            <div class="contact-info-item">
+              <svg class="contact-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
+              8264098112
+            </div>
+            <div class="contact-info-item">
+              <svg class="contact-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              NIELIT ROPAR. Birla Farms, Bada Phull. Rupnagar 140001 (Punjab).
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 NIELIT Chandigarh - FutureSkills PRIME. All rights reserved.</p>
+      <p>An Initiative by Ministry of Electronics and Information Technology (MeitY), Government of India</p>
+    </div>
+  </footer>
+
+  <script>
+    // ==================== DATA ====================
+    const courses = [
+      {
+        course: 1,
+        title: "ARVR Govt. Official Training - Advanced",
+        objective: "Focuses on hands-on AR experience using Unity and Vuforia, suitable for those with some Unity knowledge.",
+        speakers: ["Dr. Sarwan Singh", "Mr. Nikshep Paliwal, Mr. Amrinder Singh"],
+        days: [{
+          theory: {
+            title: "GOT - Advanced (40 Hours)",
+            topics: ["Unity Advanced Features (8 hrs)", "Complex AR with Vuforia (10 hrs)", "Interactive VR with A-Frame (10 hrs)", "Cross-Platform Testing & Optimization (6 hrs)", "Capstone Project (6 hrs)"]
+          }
+        }]
+      },
+      {
+        course: 2,
+        title: "ARVR Govt. Official Training - Basic",
+        objective: "Perfect for beginners to explore AR/VR fundamentals and get started with Unity.",
+        speakers: ["Dr. Sarwan Singh", "Mr. Nikshep Paliwal, Mr. Amrinder Singh"],
+        days: [{
+          theory: {
+            title: "GOT - Basic (30 Hours)",
+            topics: ["Introduction to AR/VR (4 hrs)", "Getting Started with Unity (6 hrs)", "Building AR Experiences with Vuforia (10 hrs)", "Introduction to WebVR using A-Frame (6 hrs)", "Capstone Project (4 hrs)"]
+          }
+        }]
+      },
+      {
+        course: 3,
+        title: "ARVR Bootcamp",
+        objective: "An intensive, fast-paced version covering all modules from basics to project in a compact timeline.",
+        speakers: ["Dr. Sarwan Singh", "Mr. Nikshep Paliwal, Mr. Amrinder Singh"],
+        days: [{
+          theory: {
+            title: "Bootcamp (40 Hours)",
+            topics: ["Unity Basics + Environment Design (8 hrs)", "Rapid AR Prototyping with Vuforia (10 hrs)", "Real-World Simulations using A-Frame (10 hrs)", "Multi-device Deployment Techniques (6 hrs)", "Capstone Project (6 hrs)"]
+          }
+        }]
+      },
+      {
+        course: 4,
+        title: "BDDS Govt. Official Training - Advanced",
+        objective: "Build a strong mathematical and practical foundation in deep learning.",
+        speakers: ["Dr. Sarwan Singh", "Mr. Lovnish Verma", "Mr. Ravi Kant"],
+        days: [{
+          theory: {
+            title: "GOT - Advanced (40 Hours)",
+            topics: ["Introduction to Big Data: Characteristics, Sources, and Value", "Hadoop Ecosystem Overview: HDFS, YARN, MapReduce", "Apache Hive: Data Warehousing Concepts", "Apache Sqoop and Flume: Data Ingestion Techniques", "Apache Spark: Architecture, RDDs vs DataFrames", "Spark SQL and Integration with Hive", "NoSQL Concepts: Types and Use Cases", "MongoDB Overview: Document Store, CRUD Operations, Indexing", "Python for Data Science: Numpy, Pandas Overview", "Statistical Analysis for Data Science", "Data Visualization: Matplotlib, Seaborn, ggplot", "Machine Learning Concepts: Supervised & Unsupervised Learning", "Algorithms: Linear/Logistic Regression, Decision Trees, K-Means, Association Rules", "Neural Networks: Architecture, Gradient Descent, Activation Functions", "Deep Learning Frameworks: TensorFlow and Keras", "Introduction to CNNs and RNNs", "Applications of AI in Government and Public Sectors", "OpenAI Overview and Industry Trends", "Capstone Planning: Problem Selection, Data Sources, and Design", "Evaluation Criteria and Report Preparation"]
+          },
+          practical: {
+            title: "Practical Labs (40 Hours)",
+            topics: ["Install and Configure Hadoop Single Node Cluster", "Run Word Count Program using MapReduce on HDFS Data", "Data Loading in Hive and Basic Query Execution", "Sqoop Import from MySQL to HDFS/Hive", "Log Data Collection using Apache Flume", "Create RDDs and DataFrames in Apache Spark using PySpark", "Use Spark SQL to Transform and Query Data", "Setup MongoDB and Create a TODO CRUD Application", "Data Manipulation with Pandas: Filtering, Grouping, Aggregation", "Numerical Computations with NumPy Arrays", "Generate Charts using Matplotlib and Seaborn", "Preprocess Real-World Dataset (e.g., missing values, encoding)", "Build ML Models using Scikit-Learn (Regression, Classification)", "Train and Evaluate a Neural Network using Keras (ANN)", "Create a Simple CNN for Image Classification (e.g., MNIST)", "Train an RNN/LSTM for Time Series or Text Data", "Use TensorBoard to Visualize Training Metrics", "Integrate Model with a Web App (Optional Demo)", "Work on Capstone Project Tasks: Data Ingestion, Cleaning, EDA", "Submit Initial Capstone Proposal and Progress Snapshot"]
+          }
+        }]
+      },
+      {
+        course: 5,
+        title: "BDDS Govt. Official Training - Basic",
+        objective: "Build a strong mathematical and practical foundation in deep learning.",
+        speakers: ["Dr. Sarwan Singh", "Mr. Lovnish Verma", "Mr. Ravi Kant"],
+        days: [{
+          theory: {
+            title: "GOT - Basic (30 Hours)",
+            topics: ["Introduction to Databases: RDBMS vs NoSQL", "What is Big Data? Volume, Velocity, Variety, Veracity, and Value", "Introduction to Data Science: Scope and Applications", "What is Deep Learning? History and Real-World Use Cases", "Overview of Data Engineering and Data Analytics Roles", "Introduction to Hadoop Ecosystem and Architecture", "Understanding HDFS (Hadoop Distributed File System)", "Introduction to YARN and Resource Management", "Need for Distributed Storage and Processing", "Difference between OLAP and OLTP Systems"]
+          },
+          practical: {
+            title: "Practical Labs (30 Hours)",
+            topics: ["Installing Python and Jupyter Notebook (Anaconda)", "Installing and Configuring Java and Hadoop (Single Node)", "Basic Linux Commands for Hadoop Operations", "Running First MapReduce Example (Word Count)", "Working with Jupyter: Creating First Notebook", "Importing Python Libraries: NumPy, Pandas, Matplotlib, Seaborn", "Exploring a Sample CSV Dataset using Pandas", "Performing Basic Statistics (mean, median, std) on Data", "Installing MongoDB and Running First Insert/Find Query", "Case Study: Review of Public Sector Data Use Cases"]
+          }
+        }]
+      },
+      {
+        course: 6,
+        title: "BDDS Bootcamp",
+        objective: "Build a strong mathematical and practical foundation in deep learning.",
+        speakers: ["Dr. Sarwan Singh", "Mr. Lovnish Verma", "Mr. Ravi Kant"],
+        days: [{
+          theory: {
+            title: "Bootcamp (40 Hours)",
+            topics: ["What is Big Data? - 5Vs and Applications", "Introduction to Data Science - Definitions, Scope, and Industry Use Cases", "Introduction to Relational Databases and DBMS Concepts", "Basics of SQL - SELECT, INSERT, UPDATE, DELETE Commands", "Understanding Joins - INNER, LEFT, RIGHT, FULL", "Constraints and Normalization in SQL", "Introduction to Hadoop - History, Architecture and Ecosystem", "HDFS and YARN - Storage and Resource Management", "Understanding the MapReduce Programming Model", "Overview of ETL Process and Data Pipelines"]
+          },
+          practical: {
+            title: "Practical Labs (40 Hours)",
+            topics: ["Installing Python, TensorFlow, PyTorch via Anaconda", "Setting up Jupyter Notebook for Development", "Installing Java and Hadoop on Ubuntu VM (Single Node Cluster)", "Running Initial HDFS Commands and Understanding HDFS Shell", "Executing Sample MapReduce Jobs (Word Count)", "Installing and Querying with Apache Hive", "Hands-on SQL Practice - SELECT, JOINs, GROUP BY, HAVING", "Installing and Running MongoDB Locally", "Performing CRUD Operations in MongoDB", "Creating First DataFrame using Pandas and Plotting with Matplotlib"]
+          }
+        }]
+      }
+    ];
+
+    const speakers = [
+      { name: "Sh. Deepak Wasan", role: "Executive Director", institution: "NIELIT Chandigarh", topic: "Artificial Intelligence and Machine Learning", bio: "Sh. Deepak Wasan specializes in Artificial Intelligence and Machine Learning, contributing significantly to the field through research and publications." },
+      { name: "Ms. Anita Budhiraja", role: "Scientist-E", institution: "NIELIT Chandigarh", topic: "Artificial Intelligence and Machine Learning", bio: "Ms. Anita Budhiraja specializes in Artificial Intelligence and Machine Learning, contributing significantly to the field through research and publications." },
+      { name: "Dr. Sarwan Singh", role: "Scientist-D", institution: "NIELIT Chandigarh", topic: "Artificial Intelligence and Machine Learning", bio: "Dr. Sarwan Singh specializes in Artificial Intelligence and Machine Learning, contributing significantly to the field through research and publications." },
+      { name: "Dr. Sharmistha Bhattacharjee", role: "Scientist-D", institution: "NIELIT Chandigarh", topic: "Advancements in Big Data & Data Science", bio: "Dr. Sharmistha Bhattacharjee brings extensive experience from the industry, offering valuable insights into current trends and practices." },
+      { name: "Mr. Lovnish Verma", role: "Project Engineer", institution: "NIELIT Chandigarh", topic: "Advancements in AI", bio: "Mr. Lovnish Verma works at NIELIT Chandigarh, focusing on advancements in Artificial Intelligence and Machine Learning." },
+      { name: "Mr. Nikshep Paliwal", role: "Project Engineer", institution: "NIELIT Chandigarh", topic: "AR/VR with expertise in Mobile Application Development", bio: "Mr. Nikshep Paliwal works at NIELIT Chandigarh, specializing in the AR/VR domain, actively involved in immersive technology development." },
+      { name: "Mr. Ravi Kant", role: "Project Assistant", institution: "NIELIT Chandigarh", topic: "Big Data & Data Science, Web Application Development, Graphic Design", bio: "Ravi Kant is a Project Assistant at NIELIT Chandigarh with expertise in Big Data, Data Science, Web Development, and Graphic Design." },
+      { name: "Mr. Amrinder Singh", role: "Project Assistant", institution: "NIELIT Chandigarh", topic: "AR/VR & Web Application Developer", bio: "Mr. Amrinder Singh works on machine learning projects at NIELIT Chandigarh." }
+    ];
+
+    const alumniData = {
+      'Big Data and Data Science': {
+        'Government Official Training - Advanced': ['Batch 1', 'Batch 2', 'Batch 3'],
+        'Government Official Training - Basic': ['Batch 1', 'Batch 2', 'Batch 3'],
+        'BDDS BOOTCAMP': ['Batch 1', 'Batch 2', 'Batch 3'],
+      },
+      'Augmented and Virtual Reality': {
+        'Government Official Training - Advanced': ['Batch 1', 'Batch 2', 'Batch 3'],
+        'Government Official Training - Basic': ['Batch 1', 'Batch 2', 'Batch 3'],
+        'AVR BOOTCAMP': Array.from({ length: 20 }, (_, i) => `Batch ${i + 1}`),
+      },
+    };
+
+    function abbreviate(str) {
+      return str.split(' ').map(w => w[0].toUpperCase()).join('');
+    }
+
+    // ==================== RENDER COURSES ====================
+    function renderCourses() {
+      const grid = document.getElementById('coursesGrid');
+      grid.innerHTML = courses.map(c => `
+            <div class="course-card">
+                <div class="course-card-body">
+                    <h3>${c.title}</h3>
+                    <p class="course-objective">${c.objective}</p>
+                    <div class="course-speakers">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        ${c.speakers.join(', ')}
+                    </div>
+                    <button class="course-toggle" data-course="${c.course}">
+                        Course Details
+                        <svg class="toggle-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="course-details" id="course-${c.course}">
+                        ${c.days.map((day, idx) => `
+                            <div class="course-day">
+                                <h4>Topics Covered</h4>
+                                ${day.theory ? `
+                                    <div class="detail-title">${day.theory.title}:</div>
+                                    <ul>${day.theory.topics.map(t => `<li>${t}</li>`).join('')}</ul>
+                                ` : ''}
+                                ${day.practical ? `
+                                    <div class="detail-title">${day.practical.title}:</div>
+                                    <ul>${day.practical.topics.map(t => `<li>${t}</li>`).join('')}</ul>
+                                ` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+      // Toggle functionality
+      document.querySelectorAll('.course-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const courseId = btn.dataset.course;
+          const details = document.getElementById(`course-${courseId}`);
+          const icon = btn.querySelector('.toggle-icon');
+          const isOpen = details.classList.contains('open');
+          details.classList.toggle('open');
+          icon.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+        });
+      });
+    }
+
+    // ==================== RENDER SPEAKERS ====================
+    function renderSpeakers() {
+      const grid = document.getElementById('speakersGrid');
+      grid.innerHTML = speakers.map((s, i) => `
+            <div class="speaker-card fade-in">
+                <div class="img-placeholder speaker-img-placeholder">[ Photo Placeholder ]</div>
+                <div class="speaker-info">
+                    <h3>${s.name}</h3>
+                    <p class="speaker-role">${s.role}</p>
+                    <p class="speaker-institution">${s.institution}</p>
+                    <span class="speaker-topic">${s.topic}</span>
+                    <p class="speaker-bio">${s.bio}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ==================== RENDER ALUMNI DROPDOWN ====================
+    function renderAlumniDropdown() {
+      const dropdown = document.getElementById('alumniDropdown');
+      const mobileDropdown = document.getElementById('mobileAlumniDropdown');
+
+      function buildHTML(isMobile) {
+        return Object.entries(alumniData).map(([program, types]) => `
+                <div class="alumni-program">
+                    <button type="button" class="alumni-program-title" onclick="toggleAlumniProgram(this, '${program.replace(/'/g, "\\'")}')">
+                        ${program}
+                    </button>
+                    <div class="alumni-courses hidden" id="prog-${program.replace(/\s+/g, '-').replace(/&/g, 'and')}">
+                        ${Object.entries(types).map(([type, batches]) => {
+          const programAbbr = abbreviate(program);
+          const typeAbbr = abbreviate(type);
+          const key = `${program}-${type}`.replace(/\s+/g, '-').replace(/&/g, 'and');
+          return `
+                                <div class="alumni-course-item">
+                                    <button type="button" class="alumni-course-title" onclick="toggleCourseType(this, '${key}')">${type}</button>
+                                    <ul class="alumni-batches hidden" id="course-${key}">
+                                        ${batches.map((batch, idx) => {
+            const batchNum = batch.match(/\d+/)?.[0] || idx + 1;
+            const url = `https://futureskillsprime.glitch.me/${programAbbr}_${typeAbbr}_Batch${batchNum}.html`;
+            return `<li><a href="${url}" target="_blank" rel="noopener noreferrer">${batch}</a></li>`;
+          }).join('')}
+                                    </ul>
+                                </div>
+                            `;
+        }).join('')}
+                    </div>
+                </div>
+            `).join('');
+      }
+
+      dropdown.innerHTML = buildHTML(false);
+      mobileDropdown.innerHTML = buildHTML(true);
+    }
+
+    function toggleAlumniProgram(btn, program) {
+      const id = 'prog-' + program.replace(/\s+/g, '-').replace(/&/g, 'and');
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('hidden');
+    }
+
+    function toggleCourseType(btn, key) {
+      const el = document.getElementById('course-' + key);
+      if (el) el.classList.toggle('hidden');
+    }
+
+    // ==================== CAROUSEL ====================
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dotsContainer = document.getElementById('carouselDots');
+
+    function initCarousel() {
+      // Create dots
+      slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+        dot.addEventListener('click', () => goToSlide(i));
+        dotsContainer.appendChild(dot);
+      });
+
+      // Auto-advance
+      setInterval(() => goToSlide((currentSlide + 1) % slides.length), 5000);
+    }
+
+    function goToSlide(index) {
+      slides[currentSlide].classList.remove('active');
+      dotsContainer.children[currentSlide].classList.remove('active');
+      currentSlide = index;
+      slides[currentSlide].classList.add('active');
+      dotsContainer.children[currentSlide].classList.add('active');
+    }
+
+    document.getElementById('prevSlide').addEventListener('click', () => {
+      goToSlide((currentSlide - 1 + slides.length) % slides.length);
+    });
+
+    document.getElementById('nextSlide').addEventListener('click', () => {
+      goToSlide((currentSlide + 1) % slides.length);
+    });
+
+    // ==================== MOBILE MENU ====================
+    const mobileToggle = document.getElementById('mobileToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    mobileToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+    });
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.remove('open'));
+    });
+
+    // ==================== SCROLL SPY & NAVBAR ====================
+    const navbar = document.getElementById('navbar');
+    const navLinks = document.querySelectorAll('.nav-link[data-section], .mobile-link[data-section]');
+    const sections = document.querySelectorAll('section[id]');
+
+    function onScroll() {
+      const scrollY = window.scrollY;
+      navbar.classList.toggle('scrolled', scrollY > 50);
+
+      let current = 'home';
+      sections.forEach(section => {
+        if (scrollY >= section.offsetTop - 100) {
+          current = section.id;
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.dataset.section === current);
+      });
+
+      // Fade-in animation
+      document.querySelectorAll('.fade-in').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.85) {
+          el.classList.add('visible');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', onScroll);
+
+    // Smooth scroll for nav links
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.getElementById(link.dataset.section);
+        if (target) {
+          window.scrollTo({ top: target.offsetTop - 64, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // ==================== NOMINATION FORM ====================
+    const levelSelect = document.getElementById('levelSelect');
+    const detailedEducationSection = document.getElementById('detailedEducationSection');
+    const detailedExperienceSection = document.getElementById('detailedExperienceSection');
+
+    levelSelect.addEventListener('change', function () {
+      if (this.value === 'Bootcamp' || this.value === '') {
+        detailedEducationSection.classList.add('hidden');
+        detailedExperienceSection.classList.add('hidden');
+      } else {
+        detailedEducationSection.classList.remove('hidden');
+        detailedExperienceSection.classList.remove('hidden');
+      }
+    });
+
+    // Trigger once to set initial state
+    levelSelect.dispatchEvent(new Event('change'));
+
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4A7b3YNQsWeOkIiFvXnexRpVftBhRgOl7bVY5lV6MJdv2mQx_sKO1EbrDJ0LU5dVjvw/exec";
+
+    document.getElementById('nominationForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      const msg = document.getElementById('statusMessage');
+      btn.disabled = true;
+      btn.innerText = "Submitting...";
+      msg.className = 'status-message';
+
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch(WEB_APP_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(data),
+        });
+        const result = await response.json();
+        if (result.status === "success") {
+          msg.className = 'status-message success';
+          msg.innerText = "Nomination submitted successfully!";
+          this.reset();
+          levelSelect.dispatchEvent(new Event('change'));
+        } else {
+          msg.className = 'status-message error';
+          msg.innerText = "Submission failed. Please try again.";
+        }
+      } catch (error) {
+        msg.className = 'status-message error';
+        msg.innerText = "Network Error. Please try again.";
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Submit Nomination";
+      }
+    });
+
+    // ==================== INIT ====================
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCourses();
+      renderSpeakers();
+      renderAlumniDropdown();
+      initCarousel();
+      onScroll(); // Trigger once on load
+    });
+  </script>
+</body>
+
 </html>
