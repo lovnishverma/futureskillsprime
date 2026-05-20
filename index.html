@@ -180,7 +180,8 @@
       z-index: 1001;
     }
 
-    .alumni-dropdown-trigger:hover .alumni-dropdown-menu {
+    .alumni-dropdown-trigger:hover .alumni-dropdown-menu,
+    .alumni-dropdown-trigger.open .alumni-dropdown-menu {
       display: block;
     }
 
@@ -295,6 +296,19 @@
       color: var(--gray-700);
       margin-bottom: 0.5rem;
       font-size: 0.85rem;
+      cursor: pointer;
+      display: block;
+      padding: 0.6rem 0.75rem;
+      border-radius: 6px;
+    }
+
+    .mobile-alumni #mobileAlumniDropdown {
+      display: none;
+    }
+
+    .mobile-alumni.open #mobileAlumniDropdown {
+      display: block;
+      padding-left: 0.5rem;
     }
 
     /* ── HERO CAROUSEL ── */
@@ -1312,6 +1326,19 @@
       .about-card {
         padding: 1.5rem;
       }
+
+      .mobile-alumni .mobile-alumni-title {
+        cursor: pointer;
+      }
+
+      .mobile-alumni #mobileAlumniDropdown {
+        display: none;
+      }
+
+      .mobile-alumni.open #mobileAlumniDropdown {
+        display: block;
+        padding-left: 0.5rem;
+      }
     }
   </style>
 </head>
@@ -2032,14 +2059,14 @@
       function buildHTML() {
         return Object.entries(alumniData).map(([program, types]) => `
       <div class="alumni-program">
-        <button type="button" class="alumni-program-title" onclick="toggleAlumniProgram(this,'${program.replace(/'/g, "\\'")}')">▶ ${program}</button>
+        <button type="button" class="alumni-program-title" data-program="${program.replace(/'/g, "\\'")}" onclick="toggleAlumniProgram(this,'${program.replace(/'/g, "\\'")}')">▶ ${program}</button>
         <div class="alumni-courses hidden" id="prog-${program.replace(/\s+/g, '-').replace(/&/g, 'and')}">
           ${Object.entries(types).map(([type, batches]) => {
           const pA = abbreviate(program), tA = abbreviate(type);
           const key = `${program}-${type}`.replace(/\s+/g, '-').replace(/&/g, 'and');
           return `
               <div class="alumni-course-item">
-                <button type="button" class="alumni-course-title" onclick="toggleCourseType(this,'${key}')">→ ${type}</button>
+                <button type="button" class="alumni-course-title" data-key="${key}" onclick="toggleCourseType(this,'${key}')">→ ${type}</button>
                 <ul class="alumni-batches hidden" id="course-${key}">
           ${batches.map((batch, i) => {
             // Use a fixed mapping of programme+type -> custom URLs for the six courses
@@ -2065,15 +2092,112 @@
     `).join('');
       }
       document.getElementById('alumniDropdown').innerHTML = buildHTML();
-      document.getElementById('mobileAlumniDropdown').innerHTML = buildHTML();
+      // Render a native <details> accordion for mobile to ensure reliable tap behavior
+      function buildMobileHTML() {
+        return Object.entries(alumniData).map(([program, types]) => `
+          <details class="mobile-program">
+            <summary class="mobile-program-summary">${program}</summary>
+            <div class="mobile-program-types">
+              ${Object.entries(types).map(([type, batches]) => `
+                <details class="mobile-course">
+                  <summary class="mobile-course-summary">${type}</summary>
+                  <ul class="alumni-batches mobile-batches">
+                    ${batches.map((batch, i) => `<li><a href="${(function () {
+          const mapKey = `${program}-${type}`; const urlMap = {
+            'Big Data and Data Science-Government Official Training - Advanced': 'https://nielitropar-dte.hf.space/',
+            'Big Data and Data Science-Government Official Training - Basic': 'https://nielitropar-dte.hf.space/',
+            'Big Data and Data Science-BDDS BOOTCAMP': 'https://nielit.gov.in/chandigarh/sites/default/files/Chandigarh/FSP%20BDDS%20Bootcamp%20%20Brochure.pdf',
+            'Augmented and Virtual Reality-Government Official Training - Advanced': 'https://nielit.gov.in/sites/default/files/Chandigarh/FSP%20ARVR%20GOT-A%20Brochure.pdf',
+            'Augmented and Virtual Reality-Government Official Training - Basic': 'https://nielit.gov.in/sites/default/files/Chandigarh/FSP%20ARVR%20GOT-B%20Brochure.pdf',
+            'Augmented and Virtual Reality-AVR BOOTCAMP': 'https://nielit.gov.in/sites/default/files/Chandigarh/ARVR%20Bootcamp%20%20Brochure.pdf'
+          }; return urlMap[mapKey] || '#';
+        })()}" ${/^(https?:\/\/)/.test((function () {
+          const mapKey = `${program}-${type}`; const urlMap = {
+            'Big Data and Data Science-Government Official Training - Advanced': 'https://nielitropar-dte.hf.space/',
+            'Big Data and Data Science-Government Official Training - Basic': 'https://nielitropar-dte.hf.space/',
+            'Big Data and Data Science-BDDS BOOTCAMP': 'https://nielit.gov.in/chandigarh/sites/default/files/Chandigarh/FSP%20BDDS%20Bootcamp%20%20Brochure.pdf',
+            'Augmented and Virtual Reality-Government Official Training - Advanced': 'https://nielit.gov.in/sites/default/files/Chandigarh/FSP%20ARVR%20GOT-A%20Brochure.pdf',
+            'Augmented and Virtual Reality-Government Official Training - Basic': 'https://nielit.gov.in/sites/default/files/Chandigarh/FSP%20ARVR%20GOT-B%20Brochure.pdf',
+            'Augmented and Virtual Reality-AVR BOOTCAMP': 'https://nielit.gov.in/sites/default/files/Chandigarh/ARVR%20Bootcamp%20%20Brochure.pdf'
+          }; return (urlMap[mapKey] || '#');
+        })()) ? ' target="_blank" rel="noopener"' : ''}>${batch}</a></li>`).join('')}
+                  </ul>
+                </details>`).join('')}
+            </div>
+          </details>
+        `).join('');
+      }
+      document.getElementById('mobileAlumniDropdown').innerHTML = buildMobileHTML();
+
+      // Attach robust event handlers for program and course toggles (works on touch devices)
+      function attachAlumniHandlers(rootId) {
+        const root = document.getElementById(rootId);
+        if (!root) return;
+        root.querySelectorAll('.alumni-program-title').forEach(btn => {
+          const program = btn.getAttribute('data-program');
+          const handler = (e) => { e.stopPropagation(); toggleAlumniProgram(btn, program); };
+          btn.addEventListener('click', handler);
+          btn.addEventListener('touchstart', (e) => { e.stopPropagation(); handler(e); });
+          btn.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(e); } });
+        });
+        root.querySelectorAll('.alumni-course-title').forEach(btn => {
+          const key = btn.getAttribute('data-key');
+          const handler = (e) => { e.stopPropagation(); toggleCourseType(btn, key); };
+          btn.addEventListener('click', handler);
+          btn.addEventListener('touchstart', (e) => { e.stopPropagation(); handler(e); });
+          btn.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(e); } });
+        });
+      }
+      attachAlumniHandlers('alumniDropdown');
+      attachAlumniHandlers('mobileAlumniDropdown');
+
+      // Delegated handlers as a fallback for mobile browsers where direct handlers may miss
+      const delegatedHandler = (e) => {
+        const btn = e.target.closest('.alumni-program-title, .alumni-course-title');
+        if (!btn) return;
+        e.stopPropagation();
+        if (btn.classList.contains('alumni-program-title')) {
+          toggleAlumniProgram(btn);
+          // also toggle matching mobile <details>
+          const programText = btn.textContent.replace(/^\s*[\W\u25B6]+\s*/, '').trim();
+          const mobileDetail = Array.from(document.querySelectorAll('#mobileAlumniDropdown details')).find(d => d.querySelector('summary')?.textContent.trim() === programText);
+          if (mobileDetail) mobileDetail.open = !mobileDetail.open;
+        } else if (btn.classList.contains('alumni-course-title')) {
+          toggleCourseType(btn);
+          const courseText = btn.textContent.replace(/^\s*[\W\u2192]+\s*/, '').trim();
+          // find mobile course summary inside the right program
+          const parentProgram = btn.closest('.alumni-program')?.querySelector('.alumni-program-title')?.textContent.replace(/^\s*[\W\u25B6]+\s*/, '').trim();
+          const mobileProgram = Array.from(document.querySelectorAll('#mobileAlumniDropdown details')).find(d => d.querySelector('summary')?.textContent.trim() === parentProgram);
+          if (mobileProgram) {
+            const mobileCourse = Array.from(mobileProgram.querySelectorAll('details')).find(cd => cd.querySelector('summary')?.textContent.trim() === courseText);
+            if (mobileCourse) mobileCourse.open = !mobileCourse.open;
+          }
+        }
+      };
+      document.addEventListener('click', delegatedHandler);
+      document.addEventListener('touchstart', delegatedHandler);
     }
 
-    function toggleAlumniProgram(btn, program) {
-      const id = 'prog-' + program.replace(/\s+/g, '-').replace(/&/g, 'and');
-      document.getElementById(id)?.classList.toggle('hidden');
+    function toggleAlumniProgram(btnOrProgram, program) {
+      // If called with a string (legacy inline), toggle by id
+      if (typeof btnOrProgram === 'string') {
+        const id = 'prog-' + btnOrProgram.replace(/\s+/g, '-').replace(/&/g, 'and');
+        document.getElementById(id)?.classList.toggle('hidden');
+        return;
+      }
+      // Called with element - toggle the nearby .alumni-courses
+      const btn = btnOrProgram;
+      const prog = btn.closest('.alumni-program');
+      prog?.querySelector('.alumni-courses')?.classList.toggle('hidden');
     }
-    function toggleCourseType(btn, key) {
-      document.getElementById('course-' + key)?.classList.toggle('hidden');
+    function toggleCourseType(btnOrKey, key) {
+      if (typeof btnOrKey === 'string') {
+        document.getElementById('course-' + btnOrKey)?.classList.toggle('hidden');
+        return;
+      }
+      const btn = btnOrKey;
+      const item = btn.closest('.alumni-course-item');
+      item?.querySelector('.alumni-batches')?.classList.toggle('hidden');
     }
 
     // ==================== CAROUSEL ====================
@@ -2110,6 +2234,36 @@
     document.querySelectorAll('.mobile-link').forEach(link => {
       link.addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open'));
     });
+
+    // ==================== ALUMNI DROPDOWN (CLICK + MOBILE) ====================
+    (function setupAlumniDropdown() {
+      const desktopTrigger = document.querySelector('.alumni-dropdown-trigger');
+      const desktopMenu = document.getElementById('alumniDropdown');
+      if (desktopTrigger) {
+        desktopTrigger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          desktopTrigger.classList.toggle('open');
+        });
+        // close when clicking outside
+        document.addEventListener('click', () => desktopTrigger.classList.remove('open'));
+        // prevent clicks inside menu from closing immediately
+        desktopMenu && desktopMenu.addEventListener('click', (e) => e.stopPropagation());
+      }
+
+      // Mobile: toggle visibility of the alumni block inside mobile menu by toggling .open on .mobile-alumni
+      const mobileTitle = document.querySelector('.mobile-alumni-title');
+      const mobileAlumni = document.querySelector('.mobile-alumni');
+      if (mobileTitle && mobileAlumni) {
+        mobileTitle.setAttribute('role', 'button');
+        mobileTitle.setAttribute('tabindex', '0');
+        const toggleMobileAlumni = (e) => { e.stopPropagation(); mobileAlumni.classList.toggle('open'); };
+        mobileTitle.addEventListener('click', toggleMobileAlumni);
+        mobileTitle.addEventListener('touchstart', (e) => { e.stopPropagation(); toggleMobileAlumni(e); });
+        mobileTitle.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleMobileAlumni(e); } });
+        // close mobile alumni when mobile menu is closed
+        document.getElementById('mobileToggle')?.addEventListener('click', () => mobileAlumni.classList.remove('open'));
+      }
+    })();
 
     // ==================== SCROLL SPY ====================
     const navbar = document.getElementById('navbar');
