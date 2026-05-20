@@ -2,7 +2,7 @@
 
 A responsive, single-page web application designed for the FutureSkills PRIME initiative at NIELIT Chandigarh. This landing page serves as a central hub for discovering upcoming courses, viewing distinguished speakers, browsing alumni batches, and submitting program nominations.
 
-## 🚀 Features
+## Features
 
 *   **Modern, Responsive UI:** Built with a mobile-first approach, featuring a collapsible mobile menu and sticky glass-morphism navigation bar.
 *   **Dynamic Hero Carousel:** Auto-advancing image slider with manual dot/arrow navigation to highlight key programs.
