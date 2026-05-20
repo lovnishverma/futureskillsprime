@@ -1,71 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>404 - Page Not Found</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found | FutureSkills PRIME</title>
   <style>
-    * {
+    /* ===== CSS RESET & BASE ===== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      font-family: "Segoe UI", Roboto, sans-serif;
     }
+
+    :root {
+      --primary: #1a4f8a;
+      --primary-dark: #0f2d52;
+      --secondary: #6d28d9;
+      --accent: #e8a020;
+      --blue-600: #2563eb;
+      --blue-500: #3b82f6;
+      --blue-100: #dbeafe;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --nav-height: 64px;
+    }
+
     body {
-      background: linear-gradient(135deg, #1d1f27, #323544);
-      color: #fff;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      line-height: 1.6;
+      padding-top: var(--nav-height);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    /* ===== UTILITY CLASSES ===== */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    @media (min-width: 640px) {
+      .container {
+        padding: 0 1.5rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .container {
+        padding: 0 2rem;
+      }
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .gradient-text {
+      background: linear-gradient(to right, var(--blue-600), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--blue-600);
+      color: white;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      transition: background 0.3s, transform 0.2s;
+      margin-top: 0.75rem;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+    }
+
+    /* ===== NAVIGATION (MATCHING MAIN SITE) ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+    }
+
+    .nav-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--blue-600);
+    }
+
+    .nav-desktop {
+      display: none;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .nav-desktop {
+        display: flex;
+      }
+    }
+
+    .nav-link {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--gray-700);
+      text-transform: capitalize;
+      letter-spacing: 0.025em;
+      position: relative;
+      transition: color 0.3s;
+      cursor: pointer;
+    }
+
+    .nav-link:hover {
+      color: var(--blue-600);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--blue-600);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    .nav-link:hover::after {
+      transform: scaleX(1);
+    }
+
+    /* ===== 404 SPECIFIC STYLES ===== */
+    .error-section {
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      text-align: center;
+      padding: 4rem 0;
+      background: linear-gradient(to bottom, #f9fafb, white);
     }
-    .container {
+
+    .error-content {
       max-width: 600px;
-      padding: 2rem;
+      margin: 0 auto;
+      background: white;
+      padding: 3rem 2rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
     }
-    h1 {
+
+    .error-code {
       font-size: 6rem;
-      font-weight: bold;
-      color: #ff4757;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 4px 10px rgba(37, 99, 235, 0.15);
+    }
+
+    @media (min-width: 640px) {
+      .error-code {
+        font-size: 8rem;
+      }
+    }
+
+    .error-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--gray-900);
       margin-bottom: 1rem;
     }
-    h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-    }
-    p {
-      font-size: 1rem;
+
+    .error-desc {
+      color: var(--gray-600);
+      font-size: 1.125rem;
       margin-bottom: 2rem;
-      color: #dcdcdc;
     }
-    a {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      background: #ff4757;
-      color: #fff;
-      text-decoration: none;
-      transition: 0.3s;
+
+    .illustration {
+      margin-bottom: 2rem;
+      color: var(--blue-100);
     }
-    a:hover {
-      background: #e84118;
-      transform: scale(1.05);
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--gray-900);
+      color: var(--gray-300);
+      padding: 2rem 0;
+      text-align: center;
+      font-size: 0.875rem;
+      margin-top: auto;
     }
-    .emoji {
-      font-size: 3rem;
-      margin-bottom: 1rem;
+
+    .footer p {
+      margin-bottom: 0.5rem;
+    }
+
+    /* ===== SCROLL ANIMATIONS ===== */
+    .fade-in {
+      animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="emoji">🚫</div>
-    <h1>404</h1>
-    <h2>Page Not Found</h2>
-    <p>Oops! The page you’re looking for doesn’t exist or has been moved.</p>
-    <a href="index.html">⬅ Back to Home</a>
-  </div>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">FutureSkills PRIME</a>
+
+      <div class="nav-desktop">
+        <!-- Links point back to index.html -->
+        <a href="index.html#home" class="nav-link">Home</a>
+        <a href="index.html#courses" class="nav-link">Courses</a>
+        <a href="index.html#speakers" class="nav-link">Speakers</a>
+        <a href="index.html#registration" class="nav-link">Registration</a>
+        <a href="index.html#nomination" class="nav-link">Nomination</a>
+        <a href="index.html#contact" class="nav-link">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== 404 CONTENT ===== -->
+  <section class="error-section">
+    <div class="container text-center fade-in">
+      <div class="error-content">
+        
+        <div class="illustration">
+          <svg width="120" height="120" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin: 0 auto; display: block; color: var(--blue-500);">
+            <circle cx="12" cy="12" r="10" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16 16s-1.5-2-4-2-4 2-4 2" />
+            <line x1="9" y1="9" x2="9.01" y2="9" stroke-width="2" stroke-linecap="round"/>
+            <line x1="15" y1="9" x2="15.01" y2="9" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <h1 class="gradient-text error-code">404</h1>
+        <h2 class="error-title">Page Not Found</h2>
+        <p class="error-desc">We're sorry, but the page you are looking for doesn't exist, has been removed, or is temporarily unavailable.</p>
+        
+        <a href="index.html" class="btn-primary">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Return to Homepage
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 NIELIT Chandigarh - FutureSkills PRIME. All rights reserved.</p>
+      <p>An Initiative by Ministry of Electronics and Information Technology (MeitY), Government of India</p>
+    </div>
+  </footer>
+
 </body>
 </html>
