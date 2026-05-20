@@ -1977,6 +1977,9 @@
       },
     };
 
+    // Guard to prevent touchstart+click double-toggle on mobile
+    let __lastTouch = 0;
+
     function abbreviate(str) { return str.split(' ').map(w => w[0].toUpperCase()).join(''); }
 
     // ==================== RENDER COURSES ====================
@@ -2136,15 +2139,15 @@
         root.querySelectorAll('.alumni-program-title').forEach(btn => {
           const program = btn.getAttribute('data-program');
           const handler = (e) => { e.stopPropagation(); toggleAlumniProgram(btn, program); };
-          btn.addEventListener('click', handler);
-          btn.addEventListener('touchstart', (e) => { e.stopPropagation(); handler(e); });
+          btn.addEventListener('click', (e) => { if (Date.now() - __lastTouch < 500) return; handler(e); });
+          btn.addEventListener('touchstart', (e) => { __lastTouch = Date.now(); e.stopPropagation(); handler(e); });
           btn.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(e); } });
         });
         root.querySelectorAll('.alumni-course-title').forEach(btn => {
           const key = btn.getAttribute('data-key');
           const handler = (e) => { e.stopPropagation(); toggleCourseType(btn, key); };
-          btn.addEventListener('click', handler);
-          btn.addEventListener('touchstart', (e) => { e.stopPropagation(); handler(e); });
+          btn.addEventListener('click', (e) => { if (Date.now() - __lastTouch < 500) return; handler(e); });
+          btn.addEventListener('touchstart', (e) => { __lastTouch = Date.now(); e.stopPropagation(); handler(e); });
           btn.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(e); } });
         });
       }
@@ -2153,8 +2156,11 @@
 
       // Delegated handlers as a fallback for mobile browsers where direct handlers may miss
       const delegatedHandler = (e) => {
+        // ignore clicks that immediately follow a touch event
+        if (e.type === 'click' && (Date.now() - __lastTouch < 500)) return;
         const btn = e.target.closest('.alumni-program-title, .alumni-course-title');
         if (!btn) return;
+        if (e.type === 'touchstart') __lastTouch = Date.now();
         e.stopPropagation();
         if (btn.classList.contains('alumni-program-title')) {
           toggleAlumniProgram(btn);
@@ -2165,7 +2171,6 @@
         } else if (btn.classList.contains('alumni-course-title')) {
           toggleCourseType(btn);
           const courseText = btn.textContent.replace(/^\s*[\W\u2192]+\s*/, '').trim();
-          // find mobile course summary inside the right program
           const parentProgram = btn.closest('.alumni-program')?.querySelector('.alumni-program-title')?.textContent.replace(/^\s*[\W\u25B6]+\s*/, '').trim();
           const mobileProgram = Array.from(document.querySelectorAll('#mobileAlumniDropdown details')).find(d => d.querySelector('summary')?.textContent.trim() === parentProgram);
           if (mobileProgram) {
@@ -2257,8 +2262,8 @@
         mobileTitle.setAttribute('role', 'button');
         mobileTitle.setAttribute('tabindex', '0');
         const toggleMobileAlumni = (e) => { e.stopPropagation(); mobileAlumni.classList.toggle('open'); };
-        mobileTitle.addEventListener('click', toggleMobileAlumni);
-        mobileTitle.addEventListener('touchstart', (e) => { e.stopPropagation(); toggleMobileAlumni(e); });
+        mobileTitle.addEventListener('click', (e) => { if (Date.now() - __lastTouch < 500) return; toggleMobileAlumni(e); });
+        mobileTitle.addEventListener('touchstart', (e) => { __lastTouch = Date.now(); e.stopPropagation(); toggleMobileAlumni(e); });
         mobileTitle.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleMobileAlumni(e); } });
         // close mobile alumni when mobile menu is closed
         document.getElementById('mobileToggle')?.addEventListener('click', () => mobileAlumni.classList.remove('open'));
