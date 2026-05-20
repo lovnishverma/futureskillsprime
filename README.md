@@ -92,4 +92,3 @@ NIELIT Chandigarh / Ropar
 
 *An Initiative by the Ministry of Electronics and Information Technology (MeitY), Government of India.*
 
-```
