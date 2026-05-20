@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FutureSkills PRIME - NIELIT Chandigarh</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@400;600;700;800&display=swap"
+    rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="https://www.nielit.gov.in/images/NIELIT_logo.jpg">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
       --primary: #1a4f8a;
@@ -34,7 +43,9 @@
       --radius: 1rem;
     }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -44,45 +55,95 @@
       padding-top: var(--nav-height);
     }
 
-    a { text-decoration: none; color: inherit; }
-    ul { list-style: none; }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    ul {
+      list-style: none;
+    }
 
     /* ── UTILS ── */
-    .container { max-width: 1280px; margin: 0 auto; padding: 0 1.25rem; }
-    @media(min-width:768px){ .container{ padding:0 2rem; } }
-    .section-padding { padding: 5rem 0; }
-    .text-center { text-align: center; }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    @media(min-width:768px) {
+      .container {
+        padding: 0 2rem;
+      }
+    }
+
+    .section-padding {
+      padding: 5rem 0;
+    }
+
+    .text-center {
+      text-align: center;
+    }
 
     .gradient-text {
       background: linear-gradient(135deg, var(--blue-600) 0%, var(--secondary) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     /* ── NAV ── */
     .navbar {
-      position: fixed; top: 0; left: 0; right: 0;
-      height: var(--nav-height); z-index: 1000;
-      background: rgba(255,255,255,0.97);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.97);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--gray-200);
       transition: box-shadow 0.3s;
     }
-    .navbar.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
-    .navbar .container { display: flex; justify-content: space-between; align-items: center; height: 100%; }
+
+    .navbar.scrolled {
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .navbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+    }
 
     .nav-logo {
       font-family: 'Syne', sans-serif;
-      font-size: 1.2rem; font-weight: 800;
+      font-size: 1.2rem;
+      font-weight: 800;
       color: var(--primary);
       letter-spacing: -0.02em;
     }
-    .nav-logo span { color: var(--blue-600); }
 
-    .nav-desktop { display: none; align-items: center; gap: 0.25rem; }
-    @media(min-width:768px){ .nav-desktop{ display:flex; } }
+    .nav-logo span {
+      color: var(--blue-600);
+    }
+
+    .nav-desktop {
+      display: none;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    @media(min-width:768px) {
+      .nav-desktop {
+        display: flex;
+      }
+    }
 
     .nav-link {
-      font-size: 0.82rem; font-weight: 600;
+      font-size: 0.82rem;
+      font-weight: 600;
       color: var(--gray-600);
       letter-spacing: 0.03em;
       text-transform: uppercase;
@@ -92,973 +153,1809 @@
       cursor: pointer;
       position: relative;
     }
-    .nav-link:hover, .nav-link.active {
+
+    .nav-link:hover,
+    .nav-link.active {
       color: var(--blue-600);
       background: var(--blue-50);
     }
 
-    .alumni-dropdown-trigger { position: relative; }
-    .alumni-dropdown-menu {
-      position: absolute; top: calc(100% + 10px); left: 0;
-      background: white; border: 1px solid var(--gray-200);
-      border-radius: 0.75rem;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-      padding: 1rem; min-width: 340px; max-height: 320px;
-      overflow-y: auto; display: none; z-index: 1001;
+    .alumni-dropdown-trigger {
+      position: relative;
     }
-    .alumni-dropdown-trigger:hover .alumni-dropdown-menu { display: block; }
-    .alumni-program { margin-bottom: 0.75rem; }
+
+    .alumni-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 0.75rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+      padding: 1rem;
+      min-width: 340px;
+      max-height: 320px;
+      overflow-y: auto;
+      display: none;
+      z-index: 1001;
+    }
+
+    .alumni-dropdown-trigger:hover .alumni-dropdown-menu {
+      display: block;
+    }
+
+    .alumni-program {
+      margin-bottom: 0.75rem;
+    }
+
     .alumni-program-title {
-      font-weight: 700; color: var(--primary); font-size: 0.82rem;
-      cursor: pointer; background: none; border: none; width: 100%;
-      text-align: left; padding: 0.3rem 0.5rem; border-radius: 4px;
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 0.82rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      padding: 0.3rem 0.5rem;
+      border-radius: 4px;
       transition: background 0.2s;
     }
-    .alumni-program-title:hover { background: var(--blue-50); }
-    .alumni-courses { padding-left: 0.75rem; margin-top: 0.25rem; }
-    .alumni-course-item { font-size: 0.8rem; }
+
+    .alumni-program-title:hover {
+      background: var(--blue-50);
+    }
+
+    .alumni-courses {
+      padding-left: 0.75rem;
+      margin-top: 0.25rem;
+    }
+
+    .alumni-course-item {
+      font-size: 0.8rem;
+    }
+
     .alumni-course-title {
-      font-weight: 500; color: var(--gray-700); cursor: pointer;
-      background: none; border: none; width: 100%; text-align: left;
-      padding: 0.2rem 0; font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--gray-700);
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      padding: 0.2rem 0;
+      font-size: 0.8rem;
     }
-    .alumni-batches { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.25rem; padding-left: 0.75rem; margin-top: 0.25rem; }
-    .alumni-batches a { color: var(--blue-600); font-size: 0.75rem; }
-    .alumni-batches a:hover { text-decoration: underline; }
 
-    .mobile-toggle { display:block; padding:0.5rem; background:none; border:none; cursor:pointer; color:var(--gray-700); }
-    @media(min-width:768px){ .mobile-toggle{ display:none; } }
+    .alumni-batches {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.25rem;
+      padding-left: 0.75rem;
+      margin-top: 0.25rem;
+    }
 
-    .mobile-menu { display:none; background:white; padding:1rem; border-top:1px solid var(--gray-200); }
-    .mobile-menu.open { display:block; }
+    .alumni-batches a {
+      color: var(--blue-600);
+      font-size: 0.75rem;
+    }
+
+    .alumni-batches a:hover {
+      text-decoration: underline;
+    }
+
+    .mobile-toggle {
+      display: block;
+      padding: 0.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--gray-700);
+    }
+
+    @media(min-width:768px) {
+      .mobile-toggle {
+        display: none;
+      }
+    }
+
+    .mobile-menu {
+      display: none;
+      background: white;
+      padding: 1rem;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .mobile-menu.open {
+      display: block;
+    }
+
     .mobile-link {
-      display:block; padding:0.75rem 1rem; font-weight:600;
-      font-size:0.85rem; color:var(--gray-700); border-radius:0.5rem; transition:all 0.2s;
+      display: block;
+      padding: 0.75rem 1rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--gray-700);
+      border-radius: 0.5rem;
+      transition: all 0.2s;
     }
-    .mobile-link:hover, .mobile-link.active { background:var(--blue-50); color:var(--blue-600); }
-    .mobile-alumni { padding:0.75rem 1rem; }
-    .mobile-alumni-title { font-weight:700; color:var(--gray-700); margin-bottom:0.5rem; font-size:0.85rem; }
+
+    .mobile-link:hover,
+    .mobile-link.active {
+      background: var(--blue-50);
+      color: var(--blue-600);
+    }
+
+    .mobile-alumni {
+      padding: 0.75rem 1rem;
+    }
+
+    .mobile-alumni-title {
+      font-weight: 700;
+      color: var(--gray-700);
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+    }
 
     /* ── HERO CAROUSEL ── */
     .carousel-container {
-      position: relative; width: 100%; height: 520px; overflow: hidden;
+      position: relative;
+      width: 100%;
+      height: 520px;
+      overflow: hidden;
       background: #0f1b2d;
     }
-    @media(min-width:768px){ .carousel-container{ height: 640px; } }
 
-    .carousel-slide { position:absolute; inset:0; opacity:0; transition:opacity 0.7s ease; }
-    .carousel-slide.active { opacity:1; }
+    @media(min-width:768px) {
+      .carousel-container {
+        height: 640px;
+      }
+    }
+
+    .carousel-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.7s ease;
+    }
+
+    .carousel-slide.active {
+      opacity: 1;
+    }
 
     .carousel-slide img {
-      width: 100%; height: 100%; object-fit: cover;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       display: block;
     }
 
     /* Fallback gradient for missing images */
     .carousel-slide .slide-fallback {
-      width:100%; height:100%;
-      display:flex; align-items:center; justify-content:center;
-      flex-direction:column; gap:1rem; color:rgba(255,255,255,0.6);
-      font-size:1rem; font-weight:500;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 1rem;
+      font-weight: 500;
     }
-    .slide-fallback-1 { background: linear-gradient(135deg, #0f1b2d 0%, #1a4f8a 50%, #2563eb 100%); }
-    .slide-fallback-2 { background: linear-gradient(135deg, #1a1a2e 0%, #6d28d9 60%, #4338ca 100%); }
-    .slide-fallback-3 { background: linear-gradient(135deg, #0c1445 0%, #1a4f8a 40%, #0ea5e9 100%); }
+
+    .slide-fallback-1 {
+      background: linear-gradient(135deg, #0f1b2d 0%, #1a4f8a 50%, #2563eb 100%);
+    }
+
+    .slide-fallback-2 {
+      background: linear-gradient(135deg, #1a1a2e 0%, #6d28d9 60%, #4338ca 100%);
+    }
+
+    .slide-fallback-3 {
+      background: linear-gradient(135deg, #0c1445 0%, #1a4f8a 40%, #0ea5e9 100%);
+    }
 
     .carousel-overlay {
-      position:absolute; inset:0;
-      background: linear-gradient(to top, rgba(10,20,40,0.6) 0%, transparent 50%);
-      pointer-events:none;
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10, 20, 40, 0.6) 0%, transparent 50%);
+      pointer-events: none;
     }
 
     .carousel-hero-text {
-      position: absolute; bottom: 0; left: 0; right: 0;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
       padding: 2.5rem 2rem;
       color: white;
       pointer-events: none;
     }
+
     .carousel-hero-text h2 {
       font-family: 'Syne', sans-serif;
       font-size: clamp(1.4rem, 3vw, 2.2rem);
-      font-weight: 800; line-height: 1.2;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+      font-weight: 800;
+      line-height: 1.2;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
       margin-bottom: 0.5rem;
     }
+
     .carousel-hero-text p {
-      font-size: 0.95rem; opacity: 0.85;
-      text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+      font-size: 0.95rem;
+      opacity: 0.85;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
     }
 
     .carousel-nav {
-      position:absolute; inset:0; display:flex;
-      align-items:center; justify-content:space-between;
-      padding:1.5rem; pointer-events:none;
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem;
+      pointer-events: none;
     }
+
     .carousel-btn {
-      width:44px; height:44px; border-radius:50%;
-      background:rgba(255,255,255,0.2);
-      backdrop-filter:blur(6px);
-      border:1px solid rgba(255,255,255,0.3);
-      cursor:pointer; display:flex; align-items:center; justify-content:center;
-      transition:all 0.3s; pointer-events:all; color:white;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      pointer-events: all;
+      color: white;
     }
-    .carousel-btn:hover { background:rgba(255,255,255,0.35); transform:scale(1.05); }
-    .carousel-dots { position:absolute; bottom:1.75rem; left:0; right:0; display:flex; justify-content:center; gap:0.5rem; z-index:2; }
-    .carousel-dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.4); border:none; cursor:pointer; transition:all 0.3s; }
-    .carousel-dot.active { background:white; width:24px; border-radius:4px; }
+
+    .carousel-btn:hover {
+      background: rgba(255, 255, 255, 0.35);
+      transform: scale(1.05);
+    }
+
+    .carousel-dots {
+      position: absolute;
+      bottom: 1.75rem;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      z-index: 2;
+    }
+
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .carousel-dot.active {
+      background: white;
+      width: 24px;
+      border-radius: 4px;
+    }
 
     /* ── HERO CONTENT ── */
     .hero-content {
       background: linear-gradient(180deg, #f0f6ff 0%, #ffffff 100%);
       padding: 3.5rem 0 2.5rem;
     }
+
     .hero-content h1 {
       font-family: 'Syne', sans-serif;
       font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 800; margin-bottom: 0.75rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
       letter-spacing: -0.03em;
     }
-    .hero-content .subtitle { font-size:1.15rem; color:var(--gray-600); margin-bottom:2rem; }
 
-    .hero-tags { display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; }
-    .hero-tag {
-      display:inline-flex; align-items:center; gap:0.65rem;
-      background:white; padding:0.65rem 1.4rem; border-radius:9999px;
-      box-shadow: 0 2px 12px rgba(37,99,235,0.1);
-      border: 1px solid var(--blue-100);
-      font-weight:600; font-size:0.9rem; color:var(--gray-700);
+    .hero-content .subtitle {
+      font-size: 1.15rem;
+      color: var(--gray-600);
+      margin-bottom: 2rem;
     }
-    .hero-tag .icon { color:var(--blue-600); }
+
+    .hero-tags {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: white;
+      padding: 0.65rem 1.4rem;
+      border-radius: 9999px;
+      box-shadow: 0 2px 12px rgba(37, 99, 235, 0.1);
+      border: 1px solid var(--blue-100);
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--gray-700);
+    }
+
+    .hero-tag .icon {
+      color: var(--blue-600);
+    }
 
     /* ── ABOUT CARD ── */
-    .about-section { padding: 0 0 4rem; background: linear-gradient(180deg, #ffffff 0%, #f8faff 100%); }
+    .about-section {
+      padding: 0 0 4rem;
+      background: linear-gradient(180deg, #ffffff 0%, #f8faff 100%);
+    }
+
     .about-card {
-      background: white; border-radius: 1.25rem;
-      box-shadow: 0 8px 40px rgba(37,99,235,0.08);
+      background: white;
+      border-radius: 1.25rem;
+      box-shadow: 0 8px 40px rgba(37, 99, 235, 0.08);
       border: 1px solid var(--blue-100);
       padding: 2.5rem 3rem;
-      display: grid; gap: 2rem;
+      display: grid;
+      gap: 2rem;
       grid-template-columns: 1fr;
     }
-    @media(min-width:900px){ .about-card{ grid-template-columns: 1fr 1fr; align-items:center; } }
+
+    @media(min-width:900px) {
+      .about-card {
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+      }
+    }
+
     .about-card-text h2 {
       font-family: 'Syne', sans-serif;
-      font-size: 1.6rem; font-weight: 800;
-      color: var(--gray-900); margin-bottom: 1rem;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-bottom: 1rem;
       letter-spacing: -0.02em;
     }
-    .about-card-text p { color:var(--gray-600); font-size:1rem; line-height:1.8; }
+
+    .about-card-text p {
+      color: var(--gray-600);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
     .about-stats {
-      display: grid; grid-template-columns: 1fr 1fr;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 1rem;
     }
+
     .stat-box {
       background: linear-gradient(135deg, var(--blue-50), #ede9fe);
-      border-radius: 0.75rem; padding: 1.25rem;
+      border-radius: 0.75rem;
+      padding: 1.25rem;
       text-align: center;
     }
+
     .stat-box .stat-num {
       font-family: 'Syne', sans-serif;
-      font-size: 2rem; font-weight: 800; color: var(--primary);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary);
       display: block;
     }
-    .stat-box .stat-label { font-size: 0.8rem; color: var(--gray-600); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .stat-box .stat-label {
+      font-size: 0.8rem;
+      color: var(--gray-600);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
 
     /* ── SECTION HEADERS ── */
     .section-label {
-      display: inline-block; padding: 0.3rem 0.9rem;
-      background: var(--blue-50); color: var(--blue-600);
-      border-radius: 9999px; font-size: 0.78rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.07em;
+      display: inline-block;
+      padding: 0.3rem 0.9rem;
+      background: var(--blue-50);
+      color: var(--blue-600);
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
       margin-bottom: 0.75rem;
     }
+
     .section-title {
       font-family: 'Syne', sans-serif;
       font-size: clamp(1.75rem, 3vw, 2.5rem);
-      font-weight: 800; color: var(--gray-900);
-      margin-bottom: 0.75rem; letter-spacing: -0.02em;
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
     }
-    .section-subtitle { font-size:1rem; color:var(--gray-500); margin-bottom:3rem; }
+
+    .section-subtitle {
+      font-size: 1rem;
+      color: var(--gray-500);
+      margin-bottom: 3rem;
+    }
 
     /* ── COURSES ── */
-    .courses-section { background: #f7f9ff; }
-    .courses-grid { display:grid; gap:1.5rem; grid-template-columns:1fr; }
-    @media(min-width:768px){ .courses-grid{ grid-template-columns:repeat(2,1fr); } }
-    @media(min-width:1100px){ .courses-grid{ grid-template-columns:repeat(3,1fr); } }
+    .courses-section {
+      background: #f7f9ff;
+    }
+
+    .courses-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: 1fr;
+    }
+
+    @media(min-width:768px) {
+      .courses-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(min-width:1100px) {
+      .courses-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
 
     .course-card {
-      background:white; border-radius:1rem;
+      background: white;
+      border-radius: 1rem;
       border: 1px solid var(--gray-200);
-      overflow:hidden; transition:all 0.3s;
-      display: flex; flex-direction: column;
+      overflow: hidden;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
     }
-    .course-card:hover { box-shadow:0 12px 40px rgba(37,99,235,0.1); transform:translateY(-2px); border-color:var(--blue-200,#bfdbfe); }
+
+    .course-card:hover {
+      box-shadow: 0 12px 40px rgba(37, 99, 235, 0.1);
+      transform: translateY(-2px);
+      border-color: var(--blue-200, #bfdbfe);
+    }
 
     .course-card-top {
       height: 6px;
     }
-    .course-card-top.arvr { background: linear-gradient(90deg, #6d28d9, #4338ca); }
-    .course-card-top.bdds { background: linear-gradient(90deg, #1a4f8a, #2563eb); }
-    .course-card-top.arvr-boot { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
-    .course-card-top.bdds-boot { background: linear-gradient(90deg, #0369a1, #38bdf8); }
 
-    .course-card-body { padding:1.5rem; flex:1; display:flex; flex-direction:column; }
+    .course-card-top.arvr {
+      background: linear-gradient(90deg, #6d28d9, #4338ca);
+    }
+
+    .course-card-top.bdds {
+      background: linear-gradient(90deg, #1a4f8a, #2563eb);
+    }
+
+    .course-card-top.arvr-boot {
+      background: linear-gradient(90deg, #7c3aed, #a78bfa);
+    }
+
+    .course-card-top.bdds-boot {
+      background: linear-gradient(90deg, #0369a1, #38bdf8);
+    }
+
+    .course-card-body {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
     .course-badge {
-      display:inline-block; padding:0.2rem 0.7rem;
-      border-radius:9999px; font-size:0.72rem; font-weight:700;
-      text-transform:uppercase; letter-spacing:0.05em;
-      margin-bottom:0.75rem;
+      display: inline-block;
+      padding: 0.2rem 0.7rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
     }
-    .badge-arvr { background:#ede9fe; color:#6d28d9; }
-    .badge-bdds { background:#dbeafe; color:#1a4f8a; }
-    .badge-boot { background:#fef3c7; color:#92400e; }
 
-    .course-card h3 { font-size:1rem; font-weight:700; color:var(--gray-900); margin-bottom:0.5rem; line-height:1.3; }
-    .course-objective { color:var(--gray-500); font-size:0.85rem; margin-bottom:0.85rem; flex:1; }
+    .badge-arvr {
+      background: #ede9fe;
+      color: #6d28d9;
+    }
+
+    .badge-bdds {
+      background: #dbeafe;
+      color: #1a4f8a;
+    }
+
+    .badge-boot {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .course-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+
+    .course-objective {
+      color: var(--gray-500);
+      font-size: 0.85rem;
+      margin-bottom: 0.85rem;
+      flex: 1;
+    }
+
     .course-speakers {
-      display:flex; align-items:flex-start; gap:0.5rem;
-      color:var(--gray-600); font-size:0.8rem; margin-bottom:0.85rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      color: var(--gray-600);
+      font-size: 0.8rem;
+      margin-bottom: 0.85rem;
     }
+
+    /* Course Actions Updates */
+    .course-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: auto;
+      width: 100%;
+    }
+
     .course-toggle {
-      color:var(--blue-600); font-weight:600; background:none; border:none;
-      cursor:pointer; display:inline-flex; align-items:center; gap:0.35rem;
-      font-size:0.82rem; padding:0.4rem 0.75rem;
-      border-radius:6px; background:var(--blue-50);
-      transition:all 0.2s; width:100%; justify-content:center; margin-top:auto;
+      color: var(--blue-600);
+      font-weight: 600;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.82rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      background: var(--blue-50);
+      transition: all 0.2s;
+      flex: 1;
+      justify-content: center;
     }
-    .course-toggle:hover { background:var(--blue-100); }
-    .course-details { overflow:hidden; max-height:0; opacity:0; transition:all 0.4s ease; }
-    .course-details.open { max-height:2000px; opacity:1; margin-top:1rem; }
-    .course-day { padding-top:0.75rem; border-top:1px solid var(--gray-200); margin-bottom:0.75rem; }
-    .course-day h4 { font-size:0.9rem; font-weight:700; color:var(--gray-800); margin-bottom:0.25rem; }
-    .course-day .detail-title { font-weight:600; color:var(--blue-600); font-size:0.82rem; margin:0.5rem 0 0.25rem; }
-    .course-day ul { list-style:disc; padding-left:1.1rem; font-size:0.78rem; color:var(--gray-600); }
-    .course-day li { margin-bottom:0.15rem; }
+
+    .course-toggle:hover {
+      background: var(--blue-100);
+    }
+
+    .btn-brochure {
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.82rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      background: var(--blue-600);
+      transition: all 0.2s;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .btn-brochure:hover {
+      background: var(--blue-700);
+    }
+
+    .course-details {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+
+    .course-details.open {
+      max-height: 2000px;
+      opacity: 1;
+      margin-top: 1rem;
+    }
+
+    .course-day {
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--gray-200);
+      margin-bottom: 0.75rem;
+    }
+
+    .course-day h4 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--gray-800);
+      margin-bottom: 0.25rem;
+    }
+
+    .course-day .detail-title {
+      font-weight: 600;
+      color: var(--blue-600);
+      font-size: 0.82rem;
+      margin: 0.5rem 0 0.25rem;
+    }
+
+    .course-day ul {
+      list-style: disc;
+      padding-left: 1.1rem;
+      font-size: 0.78rem;
+      color: var(--gray-600);
+    }
+
+    .course-day li {
+      margin-bottom: 0.15rem;
+    }
 
     /* ── SPEAKERS ── */
-    .speakers-section { background: white; }
-    .speakers-grid { display:grid; gap:1.75rem; grid-template-columns:1fr; }
-    @media(min-width:640px){ .speakers-grid{ grid-template-columns:repeat(2,1fr); } }
-    @media(min-width:1024px){ .speakers-grid{ grid-template-columns:repeat(4,1fr); } }
+    .speakers-section {
+      background: white;
+    }
+
+    .speakers-grid {
+      display: grid;
+      gap: 1.75rem;
+      grid-template-columns: 1fr;
+    }
+
+    @media(min-width:640px) {
+      .speakers-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(min-width:1024px) {
+      .speakers-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
 
     .speaker-card {
-      background:white; border-radius:1rem;
+      background: white;
+      border-radius: 1rem;
       border: 1px solid var(--gray-200);
-      overflow:hidden; transition:all 0.3s;
-      text-align:center;
+      overflow: hidden;
+      transition: all 0.3s;
+      text-align: center;
     }
-    .speaker-card:hover { box-shadow:0 16px 48px rgba(37,99,235,0.12); transform:translateY(-4px); }
+
+    .speaker-card:hover {
+      box-shadow: 0 16px 48px rgba(37, 99, 235, 0.12);
+      transform: translateY(-4px);
+    }
 
     .speaker-img-wrap {
-      position:relative; padding-top:1.5rem;
+      position: relative;
+      padding-top: 1.5rem;
       background: linear-gradient(180deg, #f0f6ff 0%, #ffffff 100%);
     }
+
     .speaker-img-wrap img {
-      width:120px; height:120px; border-radius:50%;
-      object-fit:cover; object-position:top center;
-      margin:0 auto; display:block;
-      border:3px solid white;
-      box-shadow:0 4px 20px rgba(0,0,0,0.12);
-    }
-    .speaker-avatar {
-      width:120px; height:120px; border-radius:50%;
-      margin:0 auto; display:flex; align-items:center; justify-content:center;
-      font-family:'Syne',sans-serif; font-size:2rem; font-weight:800;
-      color:white; border:3px solid white;
-      box-shadow:0 4px 20px rgba(0,0,0,0.12);
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: top center;
+      margin: 0 auto;
+      display: block;
+      border: 3px solid white;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
     }
 
-    .speaker-info { padding:1.25rem 1rem 1.5rem; }
-    .speaker-info h3 { font-size:0.95rem; font-weight:700; color:var(--gray-900); margin-bottom:0.2rem; }
-    .speaker-role { font-size:0.78rem; font-weight:600; color:#4f46e5; margin-top:0.2rem; }
-    .speaker-institution { font-size:0.75rem; color:var(--gray-500); margin-top:0.15rem; }
-    .speaker-topic {
-      display:inline-block; margin-top:0.65rem; padding:0.25rem 0.7rem;
-      background:#e0e7ff; color:#4338ca; border-radius:9999px;
-      font-size:0.72rem; font-weight:600;
+    .speaker-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: white;
+      border: 3px solid white;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
     }
-    .speaker-bio { margin-top:0.75rem; font-size:0.78rem; color:var(--gray-600); line-height:1.5;
-      display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+
+    .speaker-info {
+      padding: 1.25rem 1rem 1.5rem;
+    }
+
+    .speaker-info h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 0.2rem;
+    }
+
+    .speaker-role {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-top: 0.2rem;
+    }
+
+    .speaker-institution {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+      margin-top: 0.15rem;
+    }
+
+    .speaker-topic {
+      display: inline-block;
+      margin-top: 0.65rem;
+      padding: 0.25rem 0.7rem;
+      background: #e0e7ff;
+      color: #4338ca;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+
+    .speaker-bio {
+      margin-top: 0.75rem;
+      font-size: 0.78rem;
+      color: var(--gray-600);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
 
     /* ── REGISTRATION ── */
-    .registration-section { background:linear-gradient(180deg,#f7f9ff,white); }
-    .alert-box {
-      display:flex; align-items:center; gap:0.75rem;
-      padding:1rem 1.25rem; background:#fff7ed;
-      border:1px solid #fed7aa; border-radius:0.75rem;
-      margin-bottom:2rem; color:#c2410c; font-weight:600; font-size:0.9rem;
+    .registration-section {
+      background: linear-gradient(180deg, #f7f9ff, white);
     }
-    .reg-grid { display:grid; gap:1.5rem; }
-    @media(min-width:900px){ .reg-grid{ grid-template-columns:2fr 1fr; } }
+
+    .alert-box {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 1.25rem;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 0.75rem;
+      margin-bottom: 2rem;
+      color: #c2410c;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .reg-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    @media(min-width:900px) {
+      .reg-grid {
+        grid-template-columns: 2fr 1fr;
+      }
+    }
 
     .reg-card {
-      background:white; border-radius:1.25rem;
-      border:1px solid var(--gray-200);
-      box-shadow:0 4px 24px rgba(0,0,0,0.06);
-      padding:2rem; transition:box-shadow 0.3s;
+      background: white;
+      border-radius: 1.25rem;
+      border: 1px solid var(--gray-200);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+      padding: 2rem;
+      transition: box-shadow 0.3s;
     }
-    .reg-card:hover { box-shadow:0 12px 40px rgba(0,0,0,0.1); }
-    .reg-card h2 { font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:800; color:var(--gray-900); margin-bottom:1.5rem; }
 
-    .step-item { display:flex; align-items:flex-start; gap:1rem; margin-bottom:1.25rem; }
-    .step-num {
-      flex-shrink:0; width:38px; height:38px;
-      display:flex; align-items:center; justify-content:center;
-      border-radius:50%; background:var(--blue-100); color:var(--blue-600);
-      font-weight:800; font-size:0.9rem; transition:all 0.3s;
+    .reg-card:hover {
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
     }
-    .step-item:hover .step-num { background:var(--blue-600); color:white; }
-    .step-text { padding-top:0.5rem; color:var(--gray-600); font-size:0.9rem; }
+
+    .reg-card h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-bottom: 1.5rem;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--blue-100);
+      color: var(--blue-600);
+      font-weight: 800;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+
+    .step-item:hover .step-num {
+      background: var(--blue-600);
+      color: white;
+    }
+
+    .step-text {
+      padding-top: 0.5rem;
+      color: var(--gray-600);
+      font-size: 0.9rem;
+    }
 
     .btn-primary {
-      display:inline-flex; align-items:center; gap:0.5rem;
-      padding:0.7rem 1.4rem; background:var(--blue-600); color:white;
-      border-radius:0.5rem; font-weight:600; font-size:0.9rem;
-      transition:all 0.3s; margin-top:0.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.4rem;
+      background: var(--blue-600);
+      color: white;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+      margin-top: 0.5rem;
     }
-    .btn-primary:hover { background:var(--blue-700); transform:translateX(2px); }
+
+    .btn-primary:hover {
+      background: var(--blue-700);
+      transform: translateX(2px);
+    }
 
     .contact-info-item {
-      display:flex; align-items:center; gap:0.75rem;
-      padding:0.7rem 0.75rem; color:var(--gray-600);
-      transition:all 0.2s; border-radius:0.5rem; font-size:0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 0.75rem;
+      color: var(--gray-600);
+      transition: all 0.2s;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
     }
-    .contact-info-item:hover { color:var(--blue-600); background:var(--blue-50); transform:translateX(3px); }
-    .contact-icon { color:var(--blue-600); flex-shrink:0; }
+
+    .contact-info-item:hover {
+      color: var(--blue-600);
+      background: var(--blue-50);
+      transform: translateX(3px);
+    }
+
+    .contact-icon {
+      color: var(--blue-600);
+      flex-shrink: 0;
+    }
 
     /* ── NOMINATION FORM ── */
-    .nomination-section { background:var(--gray-100); }
-    .nomination-form-container {
-      max-width:860px; margin:0 auto; background:white;
-      padding:2.5rem; border-radius:1.25rem;
-      box-shadow:0 8px 40px rgba(0,0,0,0.08);
-      border:1px solid var(--gray-200);
+    .nomination-section {
+      background: var(--gray-100);
     }
-    @media(min-width:640px){ .nomination-form-container{ padding:3rem; } }
 
-    .form-header { text-align:center; margin-bottom:2rem; }
-    .form-header img { height:60px; width:auto; object-fit:contain; display:block; margin:0 auto 1rem; }
+    .nomination-form-container {
+      max-width: 860px;
+      margin: 0 auto;
+      background: white;
+      padding: 2.5rem;
+      border-radius: 1.25rem;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+      border: 1px solid var(--gray-200);
+    }
+
+    @media(min-width:640px) {
+      .nomination-form-container {
+        padding: 3rem;
+      }
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .form-header img {
+      height: 60px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 1rem;
+    }
+
     .form-header h2 {
-      font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800;
-      color:var(--primary-dark); border-bottom:2px solid var(--accent);
-      padding-bottom:0.75rem; display:inline-block;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.75rem;
+      display: inline-block;
     }
 
     .form-fieldset {
-      border:1px solid #d0d8e4; border-radius:0.75rem;
-      padding:1.25rem; margin-bottom:1.25rem; background:#fafbfc;
+      border: 1px solid #d0d8e4;
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      background: #fafbfc;
     }
+
     .form-legend {
-      background:var(--primary); color:white;
-      padding:0.3rem 1rem; border-radius:0.35rem;
-      font-weight:700; font-size:0.82rem;
-      font-family:'Plus Jakarta Sans',sans-serif;
+      background: var(--primary);
+      color: white;
+      padding: 0.3rem 1rem;
+      border-radius: 0.35rem;
+      font-weight: 700;
+      font-size: 0.82rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
-    .form-row { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem; }
-    .form-col { flex:1; min-width:180px; }
-    .form-label { display:block; margin-bottom:0.4rem; font-weight:600; font-size:0.82rem; color:var(--primary-dark); }
-    .form-input, .form-select, .form-textarea {
-      width:100%; padding:0.65rem 0.75rem;
-      border:1px solid #d0d8e4; border-radius:0.4rem;
-      font-family:inherit; font-size:0.88rem; transition:border-color 0.2s;
-      background:white;
+
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
     }
-    .form-input:focus, .form-select:focus, .form-textarea:focus {
-      outline:none; border-color:var(--primary);
-      box-shadow:0 0 0 3px rgba(26,79,138,0.1);
+
+    .form-col {
+      flex: 1;
+      min-width: 180px;
     }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      font-size: 0.82rem;
+      color: var(--primary-dark);
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid #d0d8e4;
+      border-radius: 0.4rem;
+      font-family: inherit;
+      font-size: 0.88rem;
+      transition: border-color 0.2s;
+      background: white;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26, 79, 138, 0.1);
+    }
+
     .grid-3 {
-      display:grid; grid-template-columns:1fr 2fr 2fr;
-      gap:0.75rem; margin-bottom:0.75rem; align-items:center;
+      display: grid;
+      grid-template-columns: 1fr 2fr 2fr;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      align-items: center;
     }
-    .grid-3 strong { font-size:0.8rem; color:var(--gray-700); }
-    .hidden { display:none !important; }
+
+    .grid-3 strong {
+      font-size: 0.8rem;
+      color: var(--gray-700);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
     .form-submit-btn {
-      width:100%; padding:0.9rem; background:var(--primary);
-      color:white; border:none; border-radius:0.5rem;
-      font-size:1rem; font-weight:700; cursor:pointer;
-      transition:background 0.3s; font-family:inherit;
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-family: inherit;
     }
-    .form-submit-btn:hover { background:var(--primary-dark); }
-    .form-submit-btn:disabled { opacity:0.6; cursor:not-allowed; }
+
+    .form-submit-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .form-submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .status-message {
-      margin-top:1.25rem; text-align:center; font-weight:600;
-      padding:0.75rem; border-radius:0.35rem; display:none;
+      margin-top: 1.25rem;
+      text-align: center;
+      font-weight: 600;
+      padding: 0.75rem;
+      border-radius: 0.35rem;
+      display: none;
     }
-    .status-message.success { display:block; background:#d4edda; color:#155724; }
-    .status-message.error { display:block; background:#f8d7da; color:#721c24; }
+
+    .status-message.success {
+      display: block;
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-message.error {
+      display: block;
+      background: #f8d7da;
+      color: #721c24;
+    }
 
     /* ── CONTACT ── */
     .contact-card {
-      background:white; border-radius:1.25rem;
-      border:1px solid var(--gray-200);
-      box-shadow:0 4px 24px rgba(0,0,0,0.06);
-      padding:2.5rem;
+      background: white;
+      border-radius: 1.25rem;
+      border: 1px solid var(--gray-200);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+      padding: 2.5rem;
     }
+
     .contact-card h2 {
-      font-family:'Syne',sans-serif; font-size:2rem; font-weight:800;
-      margin-bottom:2rem;
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 2rem;
     }
-    .contact-grid { display:grid; gap:1.5rem; grid-template-columns:1fr; }
-    @media(min-width:768px){ .contact-grid{ grid-template-columns:repeat(2,1fr); } }
-    .contact-subcard { background:var(--gray-50); border-radius:0.75rem; padding:1.5rem; border:1px solid var(--gray-200); }
-    .contact-subcard h3 { font-size:1.1rem; font-weight:700; color:var(--gray-900); margin-bottom:1rem; }
+
+    .contact-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: 1fr;
+    }
+
+    @media(min-width:768px) {
+      .contact-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .contact-subcard {
+      background: var(--gray-50);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      border: 1px solid var(--gray-200);
+    }
+
+    .contact-subcard h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 1rem;
+    }
+
     .coordinator-item {
-      display:flex; align-items:center; padding:0.75rem;
-      background:white; border-radius:0.5rem;
-      border:1px solid var(--gray-200);
-      box-shadow:0 1px 4px rgba(0,0,0,0.04);
-      margin-bottom:0.75rem; font-weight:600; font-size:0.9rem;
-      color:var(--gray-700); transition:all 0.2s;
+      display: flex;
+      align-items: center;
+      padding: 0.75rem;
+      background: white;
+      border-radius: 0.5rem;
+      border: 1px solid var(--gray-200);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--gray-700);
+      transition: all 0.2s;
     }
-    .coordinator-item::before { content:'👤'; margin-right:0.6rem; }
-    .coordinator-item:hover { box-shadow:0 4px 16px rgba(37,99,235,0.1); transform:translateX(2px); }
+
+    .coordinator-item::before {
+      content: '👤';
+      margin-right: 0.6rem;
+    }
+
+    .coordinator-item:hover {
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
+      transform: translateX(2px);
+    }
 
     /* ── FOOTER ── */
-    /* .footer {
-      background:var(--gray-900); color:var(--gray-400);
-      padding:2rem 0; text-align:center; font-size:0.82rem;
-    } */
-    
     .footer {
-     background: var(--gray-900);
-     color: #ffffff;
-     padding: 2rem 0;
-     text-align: center;
-     font-size: 0.82rem;
+      background: var(--gray-900);
+      color: #ffffff;
+      padding: 2rem 0;
+      text-align: center;
+      font-size: 0.82rem;
     }
 
     /* ── SCROLL ANIMATIONS ── */
-    .fade-in { opacity:0; transform:translateY(24px); transition:all 0.6s ease-out; }
-    .fade-in.visible { opacity:1; transform:translateY(0); }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: all 0.6s ease-out;
+    }
 
-    @media(max-width:640px){
-      .grid-3{ grid-template-columns:1fr; }
-      .hero-tags{ flex-direction:column; align-items:center; }
-      .hero-tag{ width:100%; max-width:280px; justify-content:center; }
-      .about-card{ padding:1.5rem; }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media(max-width:640px) {
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-tags {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero-tag {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+      }
+
+      .about-card {
+        padding: 1.5rem;
+      }
     }
   </style>
 </head>
+
 <body>
 
-<!-- ===== NAVIGATION ===== -->
-<nav class="navbar" id="navbar">
-  <div class="container">
-    <a href="#" class="nav-logo">FutureSkills <span>PRIME</span></a>
-    <div class="nav-desktop" id="navDesktop">
-      <a href="#home" class="nav-link active" data-section="home">Home</a>
-      <a href="#courses" class="nav-link" data-section="courses">Courses</a>
-      <a href="#speakers" class="nav-link" data-section="speakers">Speakers</a>
-      <a href="#registration" class="nav-link" data-section="registration">Registration</a>
-      <a href="#nomination" class="nav-link" data-section="nomination">Nomination</a>
-      <a href="#contact" class="nav-link" data-section="contact">Contact</a>
-      <div class="alumni-dropdown-trigger nav-link">
-        Alumni ▾
-        <div class="alumni-dropdown-menu" id="alumniDropdown"></div>
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="#" class="nav-logo">FutureSkills <span>PRIME</span></a>
+      <div class="nav-desktop" id="navDesktop">
+        <a href="#home" class="nav-link active" data-section="home">Home</a>
+        <a href="#courses" class="nav-link" data-section="courses">Courses</a>
+        <a href="#speakers" class="nav-link" data-section="speakers">Speakers</a>
+        <a href="#registration" class="nav-link" data-section="registration">Registration</a>
+        <a href="#nomination" class="nav-link" data-section="nomination">Nomination</a>
+        <a href="#contact" class="nav-link" data-section="contact">Contact</a>
+        <div class="alumni-dropdown-trigger nav-link">
+          Alumni ▾
+          <div class="alumni-dropdown-menu" id="alumniDropdown"></div>
+        </div>
       </div>
-    </div>
-    <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
-      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-    </button>
-  </div>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#home" class="mobile-link active" data-section="home">Home</a>
-    <a href="#courses" class="mobile-link" data-section="courses">Courses</a>
-    <a href="#speakers" class="mobile-link" data-section="speakers">Speakers</a>
-    <a href="#registration" class="mobile-link" data-section="registration">Registration</a>
-    <a href="#nomination" class="mobile-link" data-section="nomination">Nomination</a>
-    <a href="#contact" class="mobile-link" data-section="contact">Contact</a>
-    <div class="mobile-alumni">
-      <div class="mobile-alumni-title">Alumni</div>
-      <div id="mobileAlumniDropdown"></div>
-    </div>
-  </div>
-</nav>
-
-<!-- ===== HERO ===== -->
-<section id="home">
-  <div class="carousel-container" id="carousel">
-    <!-- Slide 1 -->
-    <div class="carousel-slide active">
-      <img src="assets/img/hero1.png" alt="FutureSkills PRIME - Programme Overview"
-           onerror="this.style.display='none';this.parentElement.querySelector('.slide-fallback').style.display='flex'">
-      <div class="slide-fallback slide-fallback-1" style="display:none">
-        <svg width="64" height="64" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-        <span>FutureSkills PRIME</span>
-      </div>
-      <div class="carousel-hero-text">
-        <h2>Upskilling India's Digital Workforce</h2>
-        <p>A MeitY Initiative — NIELIT Chandigarh</p>
-      </div>
-    </div>
-    <!-- Slide 2 -->
-    <div class="carousel-slide">
-      <img src="assets/img/hero2.png" alt="Augmented & Virtual Reality Training"
-           onerror="this.style.display='none';this.parentElement.querySelector('.slide-fallback').style.display='flex'">
-      <div class="slide-fallback slide-fallback-2" style="display:none">
-        <svg width="64" height="64" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-        <span>Augmented &amp; Virtual Reality</span>
-      </div>
-      <div class="carousel-hero-text">
-        <h2>Augmented &amp; Virtual Reality</h2>
-        <p>Build immersive experiences with Unity, Vuforia &amp; A-Frame</p>
-      </div>
-    </div>
-    <!-- Slide 3 -->
-    <div class="carousel-slide">
-      <img src="assets/img/hero3.png" alt="Big Data & Data Science Training"
-           onerror="this.style.display='none';this.parentElement.querySelector('.slide-fallback').style.display='flex'">
-      <div class="slide-fallback slide-fallback-3" style="display:none">
-        <svg width="64" height="64" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-        <span>Big Data &amp; Data Science</span>
-      </div>
-      <div class="carousel-hero-text">
-        <h2>Big Data &amp; Data Science</h2>
-        <p>Hadoop, Spark, MongoDB, Machine Learning &amp; Deep Learning</p>
-      </div>
-    </div>
-
-    <div class="carousel-overlay"></div>
-    <div class="carousel-nav">
-      <button class="carousel-btn" id="prevSlide" aria-label="Previous">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-      </button>
-      <button class="carousel-btn" id="nextSlide" aria-label="Next">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
       </button>
     </div>
-    <div class="carousel-dots" id="carouselDots"></div>
-  </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#home" class="mobile-link active" data-section="home">Home</a>
+      <a href="#courses" class="mobile-link" data-section="courses">Courses</a>
+      <a href="#speakers" class="mobile-link" data-section="speakers">Speakers</a>
+      <a href="#registration" class="mobile-link" data-section="registration">Registration</a>
+      <a href="#nomination" class="mobile-link" data-section="nomination">Nomination</a>
+      <a href="#contact" class="mobile-link" data-section="contact">Contact</a>
+      <div class="mobile-alumni">
+        <div class="mobile-alumni-title">Alumni</div>
+        <div id="mobileAlumniDropdown"></div>
+      </div>
+    </div>
+  </nav>
 
-  <!-- Hero Content -->
-  <div class="hero-content">
-    <div class="container text-center fade-in">
-      <h1 class="gradient-text">FutureSkills PRIME</h1>
-      <p class="subtitle">Bridging the Industry Skill Gap &nbsp;•&nbsp; <strong>NIELIT Chandigarh</strong></p>
-      <div class="hero-tags">
-        <div class="hero-tag">
-          <svg class="icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          1 Week • 5 Days
+  <!-- ===== HERO ===== -->
+  <section id="home">
+    <div class="carousel-container" id="carousel">
+      <!-- Slide 1 -->
+      <div class="carousel-slide active">
+        <img src="assets/img/hero1.png" alt="FutureSkills PRIME - Programme Overview"
+          onerror="this.style.display='none';this.parentElement.querySelector('.slide-fallback').style.display='flex'">
+        <div class="slide-fallback slide-fallback-1" style="display:none">
+          <svg width="64" height="64" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" viewBox="0 0 24 24">
+            <rect x="2" y="3" width="20" height="14" rx="2" />
+            <path d="M8 21h8M12 17v4" />
+          </svg>
+          <span>FutureSkills PRIME</span>
         </div>
-        <div class="hero-tag">
-          <svg class="icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          6 Hours Daily
+        <div class="carousel-hero-text">
+          <h2>Upskilling India's Digital Workforce</h2>
+          <p>A MeitY Initiative — NIELIT Chandigarh</p>
         </div>
-        <div class="hero-tag">
-          <svg class="icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
-          Free for Eligible Participants
+      </div>
+      <!-- Slide 2 -->
+      <div class="carousel-slide">
+        <img src="assets/img/hero2.png" alt="Augmented & Virtual Reality Training"
+          onerror="this.style.display='none';this.parentElement.querySelector('.slide-fallback').style.display='flex'">
+        <div class="slide-fallback slide-fallback-2" style="display:none">
+          <svg width="64" height="64" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" viewBox="0 0 24 24">
+            <path
+              d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+          </svg>
+          <span>Augmented &amp; Virtual Reality</span>
+        </div>
+        <div class="carousel-hero-text">
+          <h2>Augmented &amp; Virtual Reality</h2>
+          <p>Build immersive experiences with Unity, Vuforia &amp; A-Frame</p>
+        </div>
+      </div>
+      <!-- Slide 3 -->
+      <div class="carousel-slide">
+        <img src="assets/img/hero3.png" alt="Big Data & Data Science Training"
+          onerror="this.style.display='none';this.parentElement.querySelector('.slide-fallback').style.display='flex'">
+        <div class="slide-fallback slide-fallback-3" style="display:none">
+          <svg width="64" height="64" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" viewBox="0 0 24 24">
+            <ellipse cx="12" cy="5" rx="9" ry="3" />
+            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+          </svg>
+          <span>Big Data &amp; Data Science</span>
+        </div>
+        <div class="carousel-hero-text">
+          <h2>Big Data &amp; Data Science</h2>
+          <p>Hadoop, Spark, MongoDB, Machine Learning &amp; Deep Learning</p>
+        </div>
+      </div>
+
+      <div class="carousel-overlay"></div>
+      <div class="carousel-nav">
+        <button class="carousel-btn" id="prevSlide" aria-label="Previous">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button class="carousel-btn" id="nextSlide" aria-label="Next">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+      <div class="carousel-dots" id="carouselDots"></div>
+    </div>
+
+    <!-- Hero Content -->
+    <div class="hero-content">
+      <div class="container text-center fade-in">
+        <h1 class="gradient-text">FutureSkills PRIME</h1>
+        <p class="subtitle">Bridging the Industry Skill Gap &nbsp;•&nbsp; <strong>NIELIT Chandigarh</strong></p>
+        <div class="hero-tags">
+          <div class="hero-tag">
+            <svg class="icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24">
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            1 Week • 5 Days
+          </div>
+          <div class="hero-tag">
+            <svg class="icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            6 Hours Daily
+          </div>
+          <div class="hero-tag">
+            <svg class="icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            </svg>
+            Free for Eligible Participants
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- About -->
-  <div class="about-section">
+    <!-- About -->
+    <div class="about-section">
+      <div class="container fade-in">
+        <div class="about-card">
+          <div class="about-card-text">
+            <h2>About the Program</h2>
+            <p>FutureSkills PRIME (Programme for Re-skilling / Up-skilling of IT Manpower for Employability) is an
+              industry-focused scheme sponsored by the Ministry of Electronics and Information Technology (MeitY),
+              Government of India, with the goal to build skills in 10 emerging technologies in Information Technology.
+            </p>
+            <p style="margin-top:0.75rem;">NIELIT Chandigarh serves as a <strong>Co-Lead Resource Centre</strong> for
+              Big Data Analytics and Virtual Reality. <a href="https://www.futureskillsprime.in" target="_blank"
+                rel="noopener" style="color:var(--blue-600);">www.futureskillsprime.in</a></p>
+          </div>
+          <div class="about-stats">
+            <div class="stat-box"><span class="stat-num">6</span><span class="stat-label">Courses Offered</span></div>
+            <div class="stat-box"><span class="stat-num">40h</span><span class="stat-label">Max Training</span></div>
+            <div class="stat-box"><span class="stat-num">2</span><span class="stat-label">Technology Tracks</span></div>
+            <div class="stat-box"><span class="stat-num">Free</span><span class="stat-label">For Eligible</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COURSES ===== -->
+  <section id="courses" class="courses-section section-padding">
     <div class="container fade-in">
-      <div class="about-card">
-        <div class="about-card-text">
-          <h2>About the Program</h2>
-          <p>FutureSkills PRIME (Programme for Re-skilling / Up-skilling of IT Manpower for Employability) is an industry-focused scheme sponsored by the Ministry of Electronics and Information Technology (MeitY), Government of India, with the goal to build skills in 10 emerging technologies in Information Technology.</p>
-          <p style="margin-top:0.75rem;">NIELIT Chandigarh serves as a <strong>Co-Lead Resource Centre</strong> for Big Data Analytics and Virtual Reality. <a href="https://www.futureskillsprime.in" target="_blank" rel="noopener" style="color:var(--blue-600);">www.futureskillsprime.in</a></p>
-        </div>
-        <div class="about-stats">
-          <div class="stat-box"><span class="stat-num">6</span><span class="stat-label">Courses Offered</span></div>
-          <div class="stat-box"><span class="stat-num">40h</span><span class="stat-label">Max Training</span></div>
-          <div class="stat-box"><span class="stat-num">2</span><span class="stat-label">Technology Tracks</span></div>
-          <div class="stat-box"><span class="stat-num">Free</span><span class="stat-label">For Eligible</span></div>
-        </div>
+      <div class="text-center">
+        <span class="section-label">Our Programs</span>
+        <h2 class="section-title">Offered Courses</h2>
+        <p class="section-subtitle">Comprehensive training in cutting-edge technologies</p>
       </div>
+      <div class="courses-grid" id="coursesGrid"></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ===== COURSES ===== -->
-<section id="courses" class="courses-section section-padding">
-  <div class="container fade-in">
-    <div class="text-center">
-      <span class="section-label">Our Programs</span>
-      <h2 class="section-title">Offered Courses</h2>
-      <p class="section-subtitle">Comprehensive training in cutting-edge technologies</p>
-    </div>
-    <div class="courses-grid" id="coursesGrid"></div>
-  </div>
-</section>
-
-<!-- ===== SPEAKERS ===== -->
-<section id="speakers" class="speakers-section section-padding">
-  <div class="container fade-in">
-    <div class="text-center">
-      <span class="section-label">Faculty</span>
-      <h2 class="section-title">Distinguished Speakers</h2>
-      <p class="section-subtitle">Learn from industry experts and academic leaders</p>
-    </div>
-    <div class="speakers-grid" id="speakersGrid"></div>
-  </div>
-</section>
-
-<!-- ===== REGISTRATION ===== -->
-<section id="registration" class="registration-section section-padding">
-  <div class="container fade-in">
-    <div class="text-center" style="margin-bottom:2rem;">
-      <span class="section-label">Join Us</span>
-      <h2 class="section-title gradient-text">Registration Details</h2>
-      <p class="section-subtitle">FutureSkills PRIME — NIELIT Chandigarh</p>
-    </div>
-
-    <div class="alert-box">
-      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <span>Submitting the physical form or a scanned copy of the physical form is mandatory.</span>
-    </div>
-
-    <div class="reg-grid">
-      <div class="reg-card">
-        <h2>How to Register</h2>
-        <div class="step-item">
-          <span class="step-num">1</span>
-          <div class="step-text">Fill your details in the Nomination Form below</div>
-        </div>
-        <div class="step-item">
-          <span class="step-num">2</span>
-          <div class="step-text">Upload all necessary documents as required</div>
-        </div>
-        <div class="step-item">
-          <span class="step-num">3</span>
-          <div class="step-text">
-            Submit the physical form at NIELIT Chandigarh<br><br>
-            <a href="#nomination" class="btn-primary">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              Register Now
-            </a>
-          </div>
-        </div>
+  <!-- ===== SPEAKERS ===== -->
+  <section id="speakers" class="speakers-section section-padding">
+    <div class="container fade-in">
+      <div class="text-center">
+        <span class="section-label">Faculty</span>
+        <h2 class="section-title">Distinguished Speakers</h2>
+        <p class="section-subtitle">Learn from industry experts and academic leaders</p>
       </div>
-      <div class="reg-card">
-        <h2>Registration Queries</h2>
-        <div class="contact-info-item">
-          <svg class="contact-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          nielitchdropar@gmail.com
-        </div>
-        <div class="contact-info-item">
-          <svg class="contact-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          9815621657
-        </div>
-      </div>
+      <div class="speakers-grid" id="speakersGrid"></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ===== NOMINATION FORM ===== -->
-<section id="nomination" class="nomination-section section-padding">
-  <div class="container fade-in">
-    <div class="text-center" style="margin-bottom:2rem;">
-      <span class="section-label">Apply</span>
-      <h2 class="section-title">Nomination Form</h2>
-      <p class="section-subtitle">Submit your nomination for FutureSkills PRIME courses</p>
-    </div>
-    <div class="nomination-form-container">
-      <div class="form-header">
-        <img src="https://www.nielit.gov.in/images/NIELIT_logo.jpg" alt="NIELIT Logo"
-             onerror="this.style.display='none'">
-        <h2>NIELIT Nomination Form</h2>
+  <!-- ===== REGISTRATION ===== -->
+  <section id="registration" class="registration-section section-padding">
+    <div class="container fade-in">
+      <div class="text-center" style="margin-bottom:2rem;">
+        <span class="section-label">Join Us</span>
+        <h2 class="section-title gradient-text">Registration Details</h2>
+        <p class="section-subtitle">FutureSkills PRIME — NIELIT Chandigarh</p>
       </div>
 
-      <form id="nominationForm">
-        <fieldset class="form-fieldset">
-          <legend class="form-legend">1. Programme Details</legend>
-          <div class="form-row">
-            <div class="form-col">
-              <label class="form-label">Track *</label>
-              <select name="Track" class="form-select" required>
-                <option value="">Select Track</option>
-                <option value="ARVR">Augmented &amp; Virtual Reality (ARVR)</option>
-                <option value="BDDS">Big Data &amp; Data Science (BDDS)</option>
-              </select>
-            </div>
-            <div class="form-col">
-              <label class="form-label">Level *</label>
-              <select name="Level" id="levelSelect" class="form-select" required>
-                <option value="">Select Level</option>
-                <option value="Basic">Basic (GOT)</option>
-                <option value="Advanced">Advanced (GOT)</option>
-                <option value="Bootcamp">Bootcamp</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-col">
-              <label class="form-label">Course Start Date</label>
-              <input type="date" name="Course_Start_Date" class="form-input">
-            </div>
-            <div class="form-col">
-              <label class="form-label">Resource Centre Name</label>
-              <input type="text" name="Resource_Centre_Name" class="form-input" value="NIELIT Chandigarh">
-            </div>
-          </div>
-        </fieldset>
+      <div class="alert-box">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        <span>Submitting the physical form or a scanned copy of the physical form is mandatory.</span>
+      </div>
 
-        <fieldset class="form-fieldset">
-          <legend class="form-legend">2. Applicant Details</legend>
-          <div class="form-row">
-            <div class="form-col" style="flex:0.3">
-              <label class="form-label">Title *</label>
-              <select name="Title" class="form-select" required>
-                <option value="" disabled selected>Title</option>
-                <option>Mr.</option><option>Ms.</option><option>Dr.</option><option>Prof.</option>
-              </select>
-            </div>
-            <div class="form-col" style="flex:0.7">
-              <label class="form-label">Full Name *</label>
-              <input type="text" name="Name" class="form-input" required placeholder="As on Govt ID">
+      <div class="reg-grid">
+        <div class="reg-card">
+          <h2>How to Register</h2>
+          <div class="step-item">
+            <span class="step-num">1</span>
+            <div class="step-text">Fill your details in the Nomination Form below</div>
+          </div>
+          <div class="step-item">
+            <span class="step-num">2</span>
+            <div class="step-text">Upload all necessary documents as required</div>
+          </div>
+          <div class="step-item">
+            <span class="step-num">3</span>
+            <div class="step-text">
+              Submit the physical form at NIELIT Chandigarh<br><br>
+              <a href="#nomination" class="btn-primary">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+                Register Now
+              </a>
             </div>
           </div>
-          <div class="form-row">
-            <div class="form-col">
-              <label class="form-label">DOB *</label>
-              <input type="date" name="DOB" class="form-input" required>
-            </div>
-            <div class="form-col">
-              <label class="form-label">Gender *</label>
-              <select name="Gender" class="form-select" required>
-                <option value="M">Male</option><option value="F">Female</option><option value="Other">Other</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-col">
-              <label class="form-label">Contact Number *</label>
-              <input type="tel" name="Contact_Number" class="form-input" pattern="[6-9][0-9]{9}" required>
-            </div>
-            <div class="form-col">
-              <label class="form-label">Email ID *</label>
-              <input type="email" name="Email" class="form-input" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-col">
-              <label class="form-label">Aadhar Number</label>
-              <input type="text" name="Aadhar" class="form-input" pattern="[0-9]{12}">
-            </div>
-            <div class="form-col">
-              <label class="form-label">Native State &amp; District</label>
-              <div style="display:flex;gap:10px;">
-                <input type="text" name="Native_State" class="form-input" placeholder="State">
-                <input type="text" name="District" class="form-input" placeholder="District">
-              </div>
-            </div>
-          </div>
-        </fieldset>
-
-        <fieldset class="form-fieldset">
-          <legend class="form-legend">3. Organisation / Institute Details</legend>
-          <div class="form-row">
-            <div class="form-col">
-              <label class="form-label">Organisation / College Name *</label>
-              <input type="text" name="Organisation" class="form-input" required>
-            </div>
-            <div class="form-col">
-              <label class="form-label">Department</label>
-              <input type="text" name="Department" class="form-input">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-col">
-              <label class="form-label">Designation *</label>
-              <input type="text" name="Designation" class="form-input" required placeholder="e.g. Data Analyst, Student">
-            </div>
-            <div class="form-col">
-              <label class="form-label">Status *</label>
-              <select name="Status" class="form-select" required>
-                <option>Pursuing</option><option>In-service</option><option>Passed out</option><option>Other</option>
-              </select>
-            </div>
-            <div class="form-col">
-              <label class="form-label">Beneficiary Category *</label>
-              <select name="Beneficiary_Category" class="form-select" required>
-                <option>Career aspirant/Student</option><option>IT Employees</option><option>Faculty</option><option>Government Employee</option>
-              </select>
-            </div>
-          </div>
-        </fieldset>
-
-        <fieldset class="form-fieldset">
-          <legend class="form-legend">4. Educational Qualifications</legend>
-          <label class="form-label">Highest Qualification</label>
-          <input type="text" name="Highest_Qualification" class="form-input" placeholder="e.g. B.Tech CSE">
-          <div id="detailedEducationSection" class="hidden" style="margin-top:15px;">
-            <p style="font-size:12px;color:#666;margin-bottom:10px;">Please list up to 3 detailed qualifications (Required for GOT forms).</p>
-            <div class="grid-3">
-              <div><strong>Year</strong></div><div><strong>Degree / Programme</strong></div><div><strong>University / Board</strong></div>
-              <input type="text" name="Edu1_Year" class="form-input"><input type="text" name="Edu1_Degree" class="form-input"><input type="text" name="Edu1_University" class="form-input">
-              <input type="text" name="Edu2_Year" class="form-input"><input type="text" name="Edu2_Degree" class="form-input"><input type="text" name="Edu2_University" class="form-input">
-              <input type="text" name="Edu3_Year" class="form-input"><input type="text" name="Edu3_Degree" class="form-input"><input type="text" name="Edu3_University" class="form-input">
-            </div>
-          </div>
-        </fieldset>
-
-        <fieldset class="form-fieldset hidden" id="detailedExperienceSection">
-          <legend class="form-legend">5. Technical / Project Experience</legend>
-          <div class="grid-3">
-            <div><strong>Year</strong></div><div><strong>Area of Expertise</strong></div><div><strong>Centre / Organisation</strong></div>
-            <input type="text" name="Exp1_Year" class="form-input"><input type="text" name="Exp1_Area_of_Expertise" class="form-input"><input type="text" name="Exp1_Centre" class="form-input">
-            <input type="text" name="Exp2_Year" class="form-input"><input type="text" name="Exp2_Area_of_Expertise" class="form-input"><input type="text" name="Exp2_Centre" class="form-input">
-            <input type="text" name="Exp3_Year" class="form-input"><input type="text" name="Exp3_Area_of_Expertise" class="form-input"><input type="text" name="Exp3_Centre" class="form-input">
-          </div>
-        </fieldset>
-
-        <fieldset class="form-fieldset">
-          <legend class="form-legend">6. Previous FSP Details</legend>
-          <div class="form-row">
-            <div class="form-col" style="flex:0.3;">
-              <label class="form-label">Previous FSP Program? *</label>
-              <select name="Previous_FSP_Program" class="form-select" required>
-                <option value="No">No</option><option value="Yes">Yes</option>
-              </select>
-            </div>
-            <div class="form-col" style="flex:0.7;">
-              <label class="form-label">If Yes, Provide Details</label>
-              <input type="text" name="Previous_FSP_Details_1" class="form-input" placeholder="Program / Centre / Date">
-            </div>
-          </div>
-        </fieldset>
-
-        <button type="submit" class="form-submit-btn" id="submitBtn">Submit Nomination</button>
-        <div class="status-message" id="statusMessage"></div>
-      </form>
-    </div>
-  </div>
-</section>
-
-<!-- ===== CONTACT ===== -->
-<section id="contact" class="section-padding">
-  <div class="container fade-in">
-    <div class="contact-card">
-      <h2 class="gradient-text">Contact Information</h2>
-      <div class="contact-grid">
-        <div class="contact-subcard">
-          <h3>Program Coordinators</h3>
-          <div class="coordinator-item">Mrs. Anita Budhiraja (Coordinator)</div>
-          <div class="coordinator-item">Dr. Sarwan Singh (Co-Coordinator)</div>
         </div>
-        <div class="contact-subcard">
-          <h3>Get in Touch</h3>
+        <div class="reg-card">
+          <h2>Registration Queries</h2>
           <div class="contact-info-item">
-            <svg class="contact-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <svg class="contact-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+              <polyline points="22,6 12,13 2,6" />
+            </svg>
             nielitchdropar@gmail.com
           </div>
           <div class="contact-info-item">
-            <svg class="contact-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            8264098112
-          </div>
-          <div class="contact-info-item">
-            <svg class="contact-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            NIELIT ROPAR. Birla Farms, Bada Phull. Rupnagar 140001 (Punjab).
+            <svg class="contact-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24">
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+            </svg>
+            9815621657
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ===== FOOTER ===== -->
-<footer class="footer">
-  <div class="container">
-    <p>&copy; 2026 <strong>NIELIT Chandigarh</strong> — FutureSkills PRIME. All rights reserved.</p>
-    <p>An Initiative by Ministry of Electronics and Information Technology (MeitY), Government of India</p>
-  </div>
-</footer>
+  <!-- ===== NOMINATION FORM ===== -->
+  <section id="nomination" class="nomination-section section-padding">
+    <div class="container fade-in">
+      <div class="text-center" style="margin-bottom:2rem;">
+        <span class="section-label">Apply</span>
+        <h2 class="section-title">Nomination Form</h2>
+        <p class="section-subtitle">Submit your nomination for FutureSkills PRIME courses</p>
+      </div>
+      <div class="nomination-form-container">
+        <div class="form-header">
+          <img src="https://www.nielit.gov.in/images/NIELIT_logo.jpg" alt="NIELIT Logo"
+            onerror="this.style.display='none'">
+          <h2>NIELIT Nomination Form</h2>
+        </div>
 
-<script>
-// ==================== DATA ====================
-const courses = [
-  { course:1, title:"ARVR Govt. Official Training – Advanced", track:"arvr", level:"Advanced (GOT)",
-    objective:"Hands-on AR experience using Unity and Vuforia, suitable for those with some Unity knowledge.",
-    speakers:["Dr. Sarwan Singh","Mr. Nikshep Paliwal","Mr. Amrinder Singh"],
-    days:[{ theory:{ title:"GOT – Advanced (40 Hours)", topics:["Unity Advanced Features (8 hrs)","Complex AR with Vuforia (10 hrs)","Interactive VR with A-Frame (10 hrs)","Cross-Platform Testing & Optimization (6 hrs)","Capstone Project (6 hrs)"] } }] },
-  { course:2, title:"ARVR Govt. Official Training – Basic", track:"arvr", level:"Basic (GOT)",
-    objective:"Perfect for beginners to explore AR/VR fundamentals and get started with Unity.",
-    speakers:["Dr. Sarwan Singh","Mr. Nikshep Paliwal","Mr. Amrinder Singh"],
-    days:[{ theory:{ title:"GOT – Basic (30 Hours)", topics:["Introduction to AR/VR (4 hrs)","Getting Started with Unity (6 hrs)","Building AR Experiences with Vuforia (10 hrs)","Introduction to WebVR using A-Frame (6 hrs)","Capstone Project (4 hrs)"] } }] },
-  { course:3, title:"ARVR Bootcamp", track:"arvr-boot", level:"Bootcamp",
-    objective:"Intensive, fast-paced coverage from basics to project in a compact timeline.",
-    speakers:["Dr. Sarwan Singh","Mr. Nikshep Paliwal","Mr. Amrinder Singh"],
-    days:[{ theory:{ title:"Bootcamp (40 Hours)", topics:["Unity Basics + Environment Design (8 hrs)","Rapid AR Prototyping with Vuforia (10 hrs)","Real-World Simulations using A-Frame (10 hrs)","Multi-device Deployment Techniques (6 hrs)","Capstone Project (6 hrs)"] } }] },
-  { course:4, title:"BDDS Govt. Official Training – Advanced", track:"bdds", level:"Advanced (GOT)",
-    objective:"Deep dive into Big Data, Machine Learning, Neural Networks, and AI applications.",
-    speakers:["Dr. Sarwan Singh","Mr. Lovnish Verma","Mr. Ravi Kant"],
-    days:[{ theory:{ title:"GOT – Advanced Theory (40 Hours)", topics:["Hadoop Ecosystem: HDFS, YARN, MapReduce","Apache Hive, Sqoop, Flume","Apache Spark: RDDs, DataFrames, Spark SQL","NoSQL Concepts & MongoDB","Python for Data Science: NumPy, Pandas","Statistical Analysis & Data Visualization","Machine Learning: Supervised & Unsupervised","Neural Networks & Deep Learning","TensorFlow, Keras, CNNs, RNNs","AI in Government & Industry Trends"] }, practical:{ title:"Practical Labs (40 Hours)", topics:["Hadoop Cluster Setup & MapReduce","Hive Query Execution & Sqoop Import","PySpark RDDs & DataFrames","MongoDB CRUD Application","Pandas & NumPy Data Analysis","Matplotlib & Seaborn Visualizations","Scikit-Learn ML Models","Keras ANN & CNN (MNIST)","RNN/LSTM for Time Series","Capstone Project Development"] } }] },
-  { course:5, title:"BDDS Govt. Official Training – Basic", track:"bdds", level:"Basic (GOT)",
-    objective:"Foundation in Big Data concepts, Hadoop ecosystem, Python, and Data Science basics.",
-    speakers:["Dr. Sarwan Singh","Mr. Lovnish Verma","Mr. Ravi Kant"],
-    days:[{ theory:{ title:"GOT – Basic Theory (30 Hours)", topics:["RDBMS vs NoSQL","Big Data: 5Vs — Volume, Velocity, Variety, Veracity, Value","Introduction to Data Science","What is Deep Learning?","Hadoop Ecosystem & Architecture","HDFS & YARN Overview","OLAP vs OLTP Systems","Data Engineering & Analytics Roles"] }, practical:{ title:"Practical Labs (30 Hours)", topics:["Python & Jupyter Notebook Setup","Hadoop & Java Configuration","Basic Linux & Hadoop Commands","First MapReduce (Word Count)","NumPy, Pandas, Matplotlib Exploration","CSV Dataset Analysis with Pandas","MongoDB Install & First Query","Case Study: Public Sector Data"] } }] },
-  { course:6, title:"BDDS Bootcamp", track:"bdds-boot", level:"Bootcamp",
-    objective:"Fast-paced introduction to Big Data, SQL, Hadoop, Python, and Data Science essentials.",
-    speakers:["Dr. Sarwan Singh","Mr. Lovnish Verma","Mr. Ravi Kant"],
-    days:[{ theory:{ title:"Bootcamp Theory (40 Hours)", topics:["Big Data 5Vs & Applications","Introduction to Data Science","RDBMS & SQL Basics","SQL Joins & Normalization","Hadoop Architecture & Ecosystem","HDFS, YARN & MapReduce","ETL Process & Data Pipelines","MongoDB Overview"] }, practical:{ title:"Practical Labs (40 Hours)", topics:["Anaconda, TensorFlow, PyTorch Setup","Hadoop on Ubuntu VM (Single Node)","HDFS Shell & MapReduce Jobs","Apache Hive Queries","SQL Practice: JOINs, GROUP BY","MongoDB CRUD Operations","Pandas DataFrame & Matplotlib","Scikit-Learn Basics"] } }] }
-];
+        <form id="nominationForm">
+          <fieldset class="form-fieldset">
+            <legend class="form-legend">1. Programme Details</legend>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Track *</label>
+                <select name="Track" class="form-select" required>
+                  <option value="">Select Track</option>
+                  <option value="ARVR">Augmented &amp; Virtual Reality (ARVR)</option>
+                  <option value="BDDS">Big Data &amp; Data Science (BDDS)</option>
+                </select>
+              </div>
+              <div class="form-col">
+                <label class="form-label">Level *</label>
+                <select name="Level" id="levelSelect" class="form-select" required>
+                  <option value="">Select Level</option>
+                  <option value="Basic">Basic (GOT)</option>
+                  <option value="Advanced">Advanced (GOT)</option>
+                  <option value="Bootcamp">Bootcamp</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Course Start Date</label>
+                <input type="date" name="Course_Start_Date" class="form-input">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Resource Centre Name</label>
+                <input type="text" name="Resource_Centre_Name" class="form-input" value="NIELIT Chandigarh">
+              </div>
+            </div>
+          </fieldset>
 
-const trackBadge = { arvr:"badge-arvr", bdds:"badge-bdds", "arvr-boot":"badge-boot badge-arvr", "bdds-boot":"badge-boot badge-bdds" };
-const trackLabel = { arvr:"AR/VR", bdds:"Big Data", "arvr-boot":"AR/VR Bootcamp", "bdds-boot":"Data Science Bootcamp" };
+          <fieldset class="form-fieldset">
+            <legend class="form-legend">2. Applicant Details</legend>
+            <div class="form-row">
+              <div class="form-col" style="flex:0.3">
+                <label class="form-label">Title *</label>
+                <select name="Title" class="form-select" required>
+                  <option value="" disabled selected>Title</option>
+                  <option>Mr.</option>
+                  <option>Ms.</option>
+                  <option>Dr.</option>
+                  <option>Prof.</option>
+                </select>
+              </div>
+              <div class="form-col" style="flex:0.7">
+                <label class="form-label">Full Name *</label>
+                <input type="text" name="Name" class="form-input" required placeholder="As on Govt ID">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">DOB *</label>
+                <input type="date" name="DOB" class="form-input" required>
+              </div>
+              <div class="form-col">
+                <label class="form-label">Gender *</label>
+                <select name="Gender" class="form-select" required>
+                  <option value="M">Male</option>
+                  <option value="F">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Contact Number *</label>
+                <input type="tel" name="Contact_Number" class="form-input" pattern="[6-9][0-9]{9}" required>
+              </div>
+              <div class="form-col">
+                <label class="form-label">Email ID *</label>
+                <input type="email" name="Email" class="form-input" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Aadhar Number</label>
+                <input type="text" name="Aadhar" class="form-input" pattern="[0-9]{12}">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Native State &amp; District</label>
+                <div style="display:flex;gap:10px;">
+                  <input type="text" name="Native_State" class="form-input" placeholder="State">
+                  <input type="text" name="District" class="form-input" placeholder="District">
+                </div>
+              </div>
+            </div>
+          </fieldset>
 
-// Speaker data with individual photo URLs
-const speakers = [
-  { name:"Sh. Deepak Wasan", role:"Executive Director", institution:"NIELIT Chandigarh",
-    topic:"AI & Machine Learning",
-    bio:"Sh. Deepak Wasan leads NIELIT Chandigarh with expertise in AI and IT skill development, driving national upskilling initiatives.",
-    photo:"", initials:"DW", color:"#1a4f8a" },
-  { name:"Ms. Anita Budhiraja", role:"Scientist-E / Program Coordinator", institution:"NIELIT Chandigarh",
-    topic:"AI & Machine Learning",
-    bio:"Ms. Anita Budhiraja is a Scientist-E and Program Coordinator specialising in AI and Machine Learning research and training.",
-    photo:"", initials:"AB", color:"#6d28d9" },
-  { name:"Dr. Sarwan Singh", role:"Scientist-D / Co-Coordinator", institution:"NIELIT Chandigarh",
-    topic:"AI, AR/VR & Big Data",
-    bio:"Dr. Sarwan Singh is the Co-Coordinator covering AR/VR and Big Data tracks, with deep expertise in AI and immersive technologies.",
-    photo:"https://raw.githubusercontent.com/nielitropar/computer-vision/refs/heads/main/assets/Sarwan_Singh.JPG",
-    initials:"SS", color:"#0369a1" },
-  { name:"Dr. Sharmistha Bhattacharjee", role:"Scientist-D", institution:"NIELIT Chandigarh",
-    topic:"Big Data & Data Science",
-    bio:"Dr. Sharmistha Bhattacharjee brings extensive industry and research experience in Big Data Analytics and Data Science.",
-    photo:"", initials:"SB", color:"#b45309" },
-  { name:"Mr. Lovnish Verma", role:"Project Engineer", institution:"NIELIT Chandigarh",
-    topic:"Artificial Intelligence",
-    bio:"Mr. Lovnish Verma focuses on AI and Machine Learning applications, conducting hands-on training in deep learning frameworks.",
-    photo:"https://raw.githubusercontent.com/lovnishverma/datasets/refs/heads/main/Lovnish.jpg",
-    initials:"LV", color:"#166534" },
-  { name:"Mr. Nikshep Paliwal", role:"Project Engineer", institution:"NIELIT Chandigarh",
-    topic:"AR/VR & Mobile Dev",
-    bio:"Mr. Nikshep Paliwal specialises in AR/VR development using Unity, Vuforia, and A-Frame, delivering immersive tech training.",
-    photo:"", initials:"NP", color:"#7c3aed" },
-  { name:"Mr. Ravi Kant", role:"Project Assistant", institution:"NIELIT Chandigarh",
-    topic:"Big Data, Web Dev & Design",
-    bio:"Mr. Ravi Kant combines expertise in Big Data, Data Science, Web Development, and Graphic Design for comprehensive BDDS training.",
-    photo:"", initials:"RK", color:"#1a4f8a" },
-  { name:"Mr. Amrinder Singh", role:"Project Assistant", institution:"NIELIT Chandigarh",
-    topic:"AR/VR & Web Development",
-    bio:"Mr. Amrinder Singh works on AR/VR and web application projects at NIELIT Chandigarh, supporting Unity and A-Frame training.",
-    photo:"", initials:"AS", color:"#0f2d52" }
-];
+          <fieldset class="form-fieldset">
+            <legend class="form-legend">3. Organisation / Institute Details</legend>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Organisation / College Name *</label>
+                <input type="text" name="Organisation" class="form-input" required>
+              </div>
+              <div class="form-col">
+                <label class="form-label">Department</label>
+                <input type="text" name="Department" class="form-input">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Designation *</label>
+                <input type="text" name="Designation" class="form-input" required
+                  placeholder="e.g. Data Analyst, Student">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Status *</label>
+                <select name="Status" class="form-select" required>
+                  <option>Pursuing</option>
+                  <option>In-service</option>
+                  <option>Passed out</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-col">
+                <label class="form-label">Beneficiary Category *</label>
+                <select name="Beneficiary_Category" class="form-select" required>
+                  <option>Career aspirant/Student</option>
+                  <option>IT Employees</option>
+                  <option>Faculty</option>
+                  <option>Government Employee</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
 
-const alumniData = {
-  'Big Data and Data Science': {
-    'Government Official Training - Advanced': ['Batch 1','Batch 2','Batch 3'],
-    'Government Official Training - Basic': ['Batch 1','Batch 2','Batch 3'],
-    'BDDS BOOTCAMP': ['Batch 1','Batch 2','Batch 3'],
-  },
-  'Augmented and Virtual Reality': {
-    'Government Official Training - Advanced': ['Batch 1','Batch 2','Batch 3'],
-    'Government Official Training - Basic': ['Batch 1','Batch 2','Batch 3'],
-    'AVR BOOTCAMP': Array.from({length:20}, (_,i) => `Batch ${i+1}`),
-  },
-};
+          <fieldset class="form-fieldset">
+            <legend class="form-legend">4. Educational Qualifications</legend>
+            <label class="form-label">Highest Qualification</label>
+            <input type="text" name="Highest_Qualification" class="form-input" placeholder="e.g. B.Tech CSE">
+            <div id="detailedEducationSection" class="hidden" style="margin-top:15px;">
+              <p style="font-size:12px;color:#666;margin-bottom:10px;">Please list up to 3 detailed qualifications
+                (Required for GOT forms).</p>
+              <div class="grid-3">
+                <div><strong>Year</strong></div>
+                <div><strong>Degree / Programme</strong></div>
+                <div><strong>University / Board</strong></div>
+                <input type="text" name="Edu1_Year" class="form-input"><input type="text" name="Edu1_Degree"
+                  class="form-input"><input type="text" name="Edu1_University" class="form-input">
+                <input type="text" name="Edu2_Year" class="form-input"><input type="text" name="Edu2_Degree"
+                  class="form-input"><input type="text" name="Edu2_University" class="form-input">
+                <input type="text" name="Edu3_Year" class="form-input"><input type="text" name="Edu3_Degree"
+                  class="form-input"><input type="text" name="Edu3_University" class="form-input">
+              </div>
+            </div>
+          </fieldset>
 
-function abbreviate(str){ return str.split(' ').map(w=>w[0].toUpperCase()).join(''); }
+          <fieldset class="form-fieldset hidden" id="detailedExperienceSection">
+            <legend class="form-legend">5. Technical / Project Experience</legend>
+            <div class="grid-3">
+              <div><strong>Year</strong></div>
+              <div><strong>Area of Expertise</strong></div>
+              <div><strong>Centre / Organisation</strong></div>
+              <input type="text" name="Exp1_Year" class="form-input"><input type="text" name="Exp1_Area_of_Expertise"
+                class="form-input"><input type="text" name="Exp1_Centre" class="form-input">
+              <input type="text" name="Exp2_Year" class="form-input"><input type="text" name="Exp2_Area_of_Expertise"
+                class="form-input"><input type="text" name="Exp2_Centre" class="form-input">
+              <input type="text" name="Exp3_Year" class="form-input"><input type="text" name="Exp3_Area_of_Expertise"
+                class="form-input"><input type="text" name="Exp3_Centre" class="form-input">
+            </div>
+          </fieldset>
 
-// ==================== RENDER COURSES ====================
-function renderCourses(){
-  const grid = document.getElementById('coursesGrid');
-  grid.innerHTML = courses.map(c => `
+          <fieldset class="form-fieldset">
+            <legend class="form-legend">6. Previous FSP Details</legend>
+            <div class="form-row">
+              <div class="form-col" style="flex:0.3;">
+                <label class="form-label">Previous FSP Program? *</label>
+                <select name="Previous_FSP_Program" class="form-select" required>
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+              <div class="form-col" style="flex:0.7;">
+                <label class="form-label">If Yes, Provide Details</label>
+                <input type="text" name="Previous_FSP_Details_1" class="form-input"
+                  placeholder="Program / Centre / Date">
+              </div>
+            </div>
+          </fieldset>
+
+          <button type="submit" class="form-submit-btn" id="submitBtn">Submit Nomination</button>
+          <div class="status-message" id="statusMessage"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact" class="section-padding">
+    <div class="container fade-in">
+      <div class="contact-card">
+        <h2 class="gradient-text">Contact Information</h2>
+        <div class="contact-grid">
+          <div class="contact-subcard">
+            <h3>Program Coordinators</h3>
+            <div class="coordinator-item">Mrs. Anita Budhiraja (Coordinator)</div>
+            <div class="coordinator-item">Dr. Sarwan Singh (Co-Coordinator)</div>
+          </div>
+          <div class="contact-subcard">
+            <h3>Get in Touch</h3>
+            <div class="contact-info-item">
+              <svg class="contact-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+              nielitchdropar@gmail.com
+            </div>
+            <div class="contact-info-item">
+              <svg class="contact-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
+              8264098112
+            </div>
+            <div class="contact-info-item">
+              <svg class="contact-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              NIELIT ROPAR. Birla Farms, Bada Phull. Rupnagar 140001 (Punjab).
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 <strong>NIELIT Chandigarh</strong> — FutureSkills PRIME. All rights reserved.</p>
+      <p>An Initiative by Ministry of Electronics and Information Technology (MeitY), Government of India</p>
+    </div>
+  </footer>
+
+  <script>
+    // ==================== DATA ====================
+    const courses = [
+      {
+        course: 1, title: "ARVR Govt. Official Training – Advanced", track: "arvr", level: "Advanced (GOT)",
+        objective: "Hands-on AR experience using Unity and Vuforia, suitable for those with some Unity knowledge.",
+        brochure: "https://nielit.gov.in/sites/default/files/Chandigarh/FSP%20ARVR%20GOT-A%20Brochure.pdf",
+        speakers: ["Dr. Sarwan Singh", "Mr. Nikshep Paliwal", "Mr. Amrinder Singh"],
+        days: [{ theory: { title: "GOT – Advanced (40 Hours)", topics: ["Unity Advanced Features (8 hrs)", "Complex AR with Vuforia (10 hrs)", "Interactive VR with A-Frame (10 hrs)", "Cross-Platform Testing & Optimization (6 hrs)", "Capstone Project (6 hrs)"] } }]
+      },
+      {
+        course: 2, title: "ARVR Govt. Official Training – Basic", track: "arvr", level: "Basic (GOT)",
+        objective: "Perfect for beginners to explore AR/VR fundamentals and get started with Unity.",
+        brochure: "https://nielit.gov.in/sites/default/files/Chandigarh/FSP%20ARVR%20GOT-B%20Brochure.pdf",
+        speakers: ["Dr. Sarwan Singh", "Mr. Nikshep Paliwal", "Mr. Amrinder Singh"],
+        days: [{ theory: { title: "GOT – Basic (30 Hours)", topics: ["Introduction to AR/VR (4 hrs)", "Getting Started with Unity (6 hrs)", "Building AR Experiences with Vuforia (10 hrs)", "Introduction to WebVR using A-Frame (6 hrs)", "Capstone Project (4 hrs)"] } }]
+      },
+      {
+        course: 3, title: "ARVR Bootcamp", track: "arvr-boot", level: "Bootcamp",
+        objective: "Intensive, fast-paced coverage from basics to project in a compact timeline.",
+        brochure: "https://nielit.gov.in/sites/default/files/Chandigarh/ARVR%20Bootcamp%20%20Brochure.pdf",
+        speakers: ["Dr. Sarwan Singh", "Mr. Nikshep Paliwal", "Mr. Amrinder Singh"],
+        days: [{ theory: { title: "Bootcamp (40 Hours)", topics: ["Unity Basics + Environment Design (8 hrs)", "Rapid AR Prototyping with Vuforia (10 hrs)", "Real-World Simulations using A-Frame (10 hrs)", "Multi-device Deployment Techniques (6 hrs)", "Capstone Project (6 hrs)"] } }]
+      },
+      {
+        course: 4, title: "BDDS Govt. Official Training – Advanced", track: "bdds", level: "Advanced (GOT)",
+        objective: "Deep dive into Big Data, Machine Learning, Neural Networks, and AI applications.",
+        brochure: "https://nielit.gov.in/sites/default/files/Chandigarh/FSP%20BDDS%20GOT-Advanced%20%20Brochure.pdf",
+        speakers: ["Dr. Sarwan Singh", "Mr. Lovnish Verma", "Mr. Ravi Kant"],
+        days: [{ theory: { title: "GOT – Advanced Theory (40 Hours)", topics: ["Hadoop Ecosystem: HDFS, YARN, MapReduce", "Apache Hive, Sqoop, Flume", "Apache Spark: RDDs, DataFrames, Spark SQL", "NoSQL Concepts & MongoDB", "Python for Data Science: NumPy, Pandas", "Statistical Analysis & Data Visualization", "Machine Learning: Supervised & Unsupervised", "Neural Networks & Deep Learning", "TensorFlow, Keras, CNNs, RNNs", "AI in Government & Industry Trends"] }, practical: { title: "Practical Labs (40 Hours)", topics: ["Hadoop Cluster Setup & MapReduce", "Hive Query Execution & Sqoop Import", "PySpark RDDs & DataFrames", "MongoDB CRUD Application", "Pandas & NumPy Data Analysis", "Matplotlib & Seaborn Visualizations", "Scikit-Learn ML Models", "Keras ANN & CNN (MNIST)", "RNN/LSTM for Time Series", "Capstone Project Development"] } }]
+      },
+      {
+        course: 5, title: "BDDS Govt. Official Training – Basic", track: "bdds", level: "Basic (GOT)",
+        objective: "Foundation in Big Data concepts, Hadoop ecosystem, Python, and Data Science basics.",
+        brochure: "https://nielit.gov.in/sites/default/files/Chandigarh/FSP%20BDDS%20GOT-Basic%20Brochure.pdf",
+        speakers: ["Dr. Sarwan Singh", "Mr. Lovnish Verma", "Mr. Ravi Kant"],
+        days: [{ theory: { title: "GOT – Basic Theory (30 Hours)", topics: ["RDBMS vs NoSQL", "Big Data: 5Vs — Volume, Velocity, Variety, Veracity, Value", "Introduction to Data Science", "What is Deep Learning?", "Hadoop Ecosystem & Architecture", "HDFS & YARN Overview", "OLAP vs OLTP Systems", "Data Engineering & Analytics Roles"] }, practical: { title: "Practical Labs (30 Hours)", topics: ["Python & Jupyter Notebook Setup", "Hadoop & Java Configuration", "Basic Linux & Hadoop Commands", "First MapReduce (Word Count)", "NumPy, Pandas, Matplotlib Exploration", "CSV Dataset Analysis with Pandas", "MongoDB Install & First Query", "Case Study: Public Sector Data"] } }]
+      },
+      {
+        course: 6, title: "BDDS Bootcamp", track: "bdds-boot", level: "Bootcamp",
+        objective: "Fast-paced introduction to Big Data, SQL, Hadoop, Python, and Data Science essentials.",
+        brochure: "https://nielit.gov.in/chandigarh/sites/default/files/Chandigarh/FSP%20BDDS%20Bootcamp%20%20Brochure.pdf",
+        speakers: ["Dr. Sarwan Singh", "Mr. Lovnish Verma", "Mr. Ravi Kant"],
+        days: [{ theory: { title: "Bootcamp Theory (40 Hours)", topics: ["Big Data 5Vs & Applications", "Introduction to Data Science", "RDBMS & SQL Basics", "SQL Joins & Normalization", "Hadoop Architecture & Ecosystem", "HDFS, YARN & MapReduce", "ETL Process & Data Pipelines", "MongoDB Overview"] }, practical: { title: "Practical Labs (40 Hours)", topics: ["Anaconda, TensorFlow, PyTorch Setup", "Hadoop on Ubuntu VM (Single Node)", "HDFS Shell & MapReduce Jobs", "Apache Hive Queries", "SQL Practice: JOINs, GROUP BY", "MongoDB CRUD Operations", "Pandas DataFrame & Matplotlib", "Scikit-Learn Basics"] } }]
+      }
+    ];
+
+    const trackBadge = { arvr: "badge-arvr", bdds: "badge-bdds", "arvr-boot": "badge-boot badge-arvr", "bdds-boot": "badge-boot badge-bdds" };
+    const trackLabel = { arvr: "AR/VR", bdds: "Big Data", "arvr-boot": "AR/VR Bootcamp", "bdds-boot": "Data Science Bootcamp" };
+
+    // Speaker data with individual photo URLs
+    const speakers = [
+      {
+        name: "Sh. Deepak Wasan", role: "Executive Director", institution: "NIELIT Chandigarh",
+        topic: "AI & Machine Learning",
+        bio: "Sh. Deepak Wasan leads NIELIT Chandigarh with expertise in AI and IT skill development, driving national upskilling initiatives.",
+        photo: "", initials: "DW", color: "#1a4f8a"
+      },
+      {
+        name: "Ms. Anita Budhiraja", role: "Scientist-E / Program Coordinator", institution: "NIELIT Chandigarh",
+        topic: "AI & Machine Learning",
+        bio: "Ms. Anita Budhiraja is a Scientist-E and Program Coordinator specialising in AI and Machine Learning research and training.",
+        photo: "", initials: "AB", color: "#6d28d9"
+      },
+      {
+        name: "Dr. Sarwan Singh", role: "Scientist-D / Co-Coordinator", institution: "NIELIT Chandigarh",
+        topic: "AI, AR/VR & Big Data",
+        bio: "Dr. Sarwan Singh is the Co-Coordinator covering AR/VR and Big Data tracks, with deep expertise in AI and immersive technologies.",
+        photo: "https://raw.githubusercontent.com/nielitropar/computer-vision/refs/heads/main/assets/Sarwan_Singh.JPG",
+        initials: "SS", color: "#0369a1"
+      },
+      {
+        name: "Dr. Sharmistha Bhattacharjee", role: "Scientist-D", institution: "NIELIT Chandigarh",
+        topic: "Big Data & Data Science",
+        bio: "Dr. Sharmistha Bhattacharjee brings extensive industry and research experience in Big Data Analytics and Data Science.",
+        photo: "", initials: "SB", color: "#b45309"
+      },
+      {
+        name: "Mr. Lovnish Verma", role: "Project Engineer", institution: "NIELIT Chandigarh",
+        topic: "Artificial Intelligence",
+        bio: "Mr. Lovnish Verma focuses on AI and Machine Learning applications, conducting hands-on training in deep learning frameworks.",
+        photo: "https://raw.githubusercontent.com/lovnishverma/datasets/refs/heads/main/Lovnish.jpg",
+        initials: "LV", color: "#166534"
+      },
+      {
+        name: "Mr. Nikshep Paliwal", role: "Project Engineer", institution: "NIELIT Chandigarh",
+        topic: "AR/VR & Mobile Dev",
+        bio: "Mr. Nikshep Paliwal specialises in AR/VR development using Unity, Vuforia, and A-Frame, delivering immersive tech training.",
+        photo: "", initials: "NP", color: "#7c3aed"
+      },
+      {
+        name: "Mr. Ravi Kant", role: "Project Assistant", institution: "NIELIT Chandigarh",
+        topic: "Big Data, Web Dev & Design",
+        bio: "Mr. Ravi Kant combines expertise in Big Data, Data Science, Web Development, and Graphic Design for comprehensive BDDS training.",
+        photo: "", initials: "RK", color: "#1a4f8a"
+      },
+      {
+        name: "Mr. Amrinder Singh", role: "Project Assistant", institution: "NIELIT Chandigarh",
+        topic: "AR/VR & Web Development",
+        bio: "Mr. Amrinder Singh works on AR/VR and web application projects at NIELIT Chandigarh, supporting Unity and A-Frame training.",
+        photo: "", initials: "AS", color: "#0f2d52"
+      }
+    ];
+
+    const alumniData = {
+      'Big Data and Data Science': {
+        'Government Official Training - Advanced': ['Batch 1', 'Batch 2', 'Batch 3'],
+        'Government Official Training - Basic': ['Batch 1', 'Batch 2', 'Batch 3'],
+        'BDDS BOOTCAMP': ['Batch 1', 'Batch 2', 'Batch 3'],
+      },
+      'Augmented and Virtual Reality': {
+        'Government Official Training - Advanced': ['Batch 1', 'Batch 2', 'Batch 3'],
+        'Government Official Training - Basic': ['Batch 1', 'Batch 2', 'Batch 3'],
+        'AVR BOOTCAMP': Array.from({ length: 20 }, (_, i) => `Batch ${i + 1}`),
+      },
+    };
+
+    function abbreviate(str) { return str.split(' ').map(w => w[0].toUpperCase()).join(''); }
+
+    // ==================== RENDER COURSES ====================
+    function renderCourses() {
+      const grid = document.getElementById('coursesGrid');
+      grid.innerHTML = courses.map(c => `
     <div class="course-card">
       <div class="course-card-top ${c.track}"></div>
       <div class="course-card-body">
@@ -1069,16 +1966,22 @@ function renderCourses(){
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:2px"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           ${c.speakers.join(' · ')}
         </div>
-        <button class="course-toggle" data-course="${c.course}">
-          Course Details
-          <svg class="toggle-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
+        <div class="course-actions">
+          <a href="${c.brochure}" target="_blank" rel="noopener" class="btn-brochure">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Brochure
+          </a>
+          <button class="course-toggle" data-course="${c.course}">
+            Details
+            <svg class="toggle-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+        </div>
         <div class="course-details" id="course-${c.course}">
           ${c.days.map(day => `
             <div class="course-day">
               <h4>Topics Covered</h4>
-              ${day.theory ? `<div class="detail-title">${day.theory.title}</div><ul>${day.theory.topics.map(t=>`<li>${t}</li>`).join('')}</ul>` : ''}
-              ${day.practical ? `<div class="detail-title">${day.practical.title}</div><ul>${day.practical.topics.map(t=>`<li>${t}</li>`).join('')}</ul>` : ''}
+              ${day.theory ? `<div class="detail-title">${day.theory.title}</div><ul>${day.theory.topics.map(t => `<li>${t}</li>`).join('')}</ul>` : ''}
+              ${day.practical ? `<div class="detail-title">${day.practical.title}</div><ul>${day.practical.topics.map(t => `<li>${t}</li>`).join('')}</ul>` : ''}
             </div>
           `).join('')}
         </div>
@@ -1086,27 +1989,27 @@ function renderCourses(){
     </div>
   `).join('');
 
-  document.querySelectorAll('.course-toggle').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const details = document.getElementById(`course-${btn.dataset.course}`);
-      const icon = btn.querySelector('.toggle-icon');
-      const isOpen = details.classList.contains('open');
-      details.classList.toggle('open');
-      icon.style.transform = isOpen ? '' : 'rotate(180deg)';
-    });
-  });
-}
+      document.querySelectorAll('.course-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const details = document.getElementById(`course-${btn.dataset.course}`);
+          const icon = btn.querySelector('.toggle-icon');
+          const isOpen = details.classList.contains('open');
+          details.classList.toggle('open');
+          icon.style.transform = isOpen ? '' : 'rotate(180deg)';
+        });
+      });
+    }
 
-// ==================== RENDER SPEAKERS ====================
-function renderSpeakers(){
-  const grid = document.getElementById('speakersGrid');
-  grid.innerHTML = speakers.map(s => {
-    const imgTag = s.photo
-      ? `<img src="${s.photo}" alt="${s.name}" loading="lazy"
+    // ==================== RENDER SPEAKERS ====================
+    function renderSpeakers() {
+      const grid = document.getElementById('speakersGrid');
+      grid.innerHTML = speakers.map(s => {
+        const imgTag = s.photo
+          ? `<img src="${s.photo}" alt="${s.name}" loading="lazy"
               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-      : '';
-    const avatarStyle = `background:${s.color};display:${s.photo ? 'none' : 'flex'}`;
-    return `
+          : '';
+        const avatarStyle = `background:${s.color};display:${s.photo ? 'none' : 'flex'}`;
+        return `
       <div class="speaker-card fade-in">
         <div class="speaker-img-wrap">
           ${imgTag}
@@ -1121,155 +2024,156 @@ function renderSpeakers(){
         </div>
       </div>
     `;
-  }).join('');
-}
+      }).join('');
+    }
 
-// ==================== RENDER ALUMNI DROPDOWN ====================
-function renderAlumniDropdown(){
-  function buildHTML(){
-    return Object.entries(alumniData).map(([program, types]) => `
+    // ==================== RENDER ALUMNI DROPDOWN ====================
+    function renderAlumniDropdown() {
+      function buildHTML() {
+        return Object.entries(alumniData).map(([program, types]) => `
       <div class="alumni-program">
-        <button type="button" class="alumni-program-title" onclick="toggleAlumniProgram(this,'${program.replace(/'/g,"\\'")}')">▶ ${program}</button>
-        <div class="alumni-courses hidden" id="prog-${program.replace(/\s+/g,'-').replace(/&/g,'and')}">
+        <button type="button" class="alumni-program-title" onclick="toggleAlumniProgram(this,'${program.replace(/'/g, "\\'")}')">▶ ${program}</button>
+        <div class="alumni-courses hidden" id="prog-${program.replace(/\s+/g, '-').replace(/&/g, 'and')}">
           ${Object.entries(types).map(([type, batches]) => {
-            const pA = abbreviate(program), tA = abbreviate(type);
-            const key = `${program}-${type}`.replace(/\s+/g,'-').replace(/&/g,'and');
-            return `
+          const pA = abbreviate(program), tA = abbreviate(type);
+          const key = `${program}-${type}`.replace(/\s+/g, '-').replace(/&/g, 'and');
+          return `
               <div class="alumni-course-item">
                 <button type="button" class="alumni-course-title" onclick="toggleCourseType(this,'${key}')">→ ${type}</button>
                 <ul class="alumni-batches hidden" id="course-${key}">
-                  ${batches.map((batch,i) => {
-                    const n = batch.match(/\d+/)?.[0] || i+1;
-                    return `<li><a href="https://futureskillsprime.onrender.com/${pA}_${tA}_Batch${n}.html" target="_blank" rel="noopener">${batch}</a></li>`;
-                  }).join('')}
+                  ${batches.map((batch, i) => {
+            const n = batch.match(/\d+/)?.[0] || i + 1;
+            return `<li><a href="https://futureskillsprime.onrender.com/${pA}_${tA}_Batch${n}.html" target="_blank" rel="noopener">${batch}</a></li>`;
+          }).join('')}
                 </ul>
               </div>`;
-          }).join('')}
+        }).join('')}
         </div>
       </div>
     `).join('');
-  }
-  document.getElementById('alumniDropdown').innerHTML = buildHTML();
-  document.getElementById('mobileAlumniDropdown').innerHTML = buildHTML();
-}
+      }
+      document.getElementById('alumniDropdown').innerHTML = buildHTML();
+      document.getElementById('mobileAlumniDropdown').innerHTML = buildHTML();
+    }
 
-function toggleAlumniProgram(btn, program){
-  const id = 'prog-' + program.replace(/\s+/g,'-').replace(/&/g,'and');
-  document.getElementById(id)?.classList.toggle('hidden');
-}
-function toggleCourseType(btn, key){
-  document.getElementById('course-'+key)?.classList.toggle('hidden');
-}
+    function toggleAlumniProgram(btn, program) {
+      const id = 'prog-' + program.replace(/\s+/g, '-').replace(/&/g, 'and');
+      document.getElementById(id)?.classList.toggle('hidden');
+    }
+    function toggleCourseType(btn, key) {
+      document.getElementById('course-' + key)?.classList.toggle('hidden');
+    }
 
-// ==================== CAROUSEL ====================
-let currentSlide = 0;
-const slides = document.querySelectorAll('.carousel-slide');
-const dotsContainer = document.getElementById('carouselDots');
+    // ==================== CAROUSEL ====================
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dotsContainer = document.getElementById('carouselDots');
 
-function initCarousel(){
-  slides.forEach((_,i) => {
-    const dot = document.createElement('button');
-    dot.className = 'carousel-dot' + (i===0?' active':'');
-    dot.setAttribute('aria-label', `Go to slide ${i+1}`);
-    dot.addEventListener('click', () => goToSlide(i));
-    dotsContainer.appendChild(dot);
-  });
-  setInterval(() => goToSlide((currentSlide+1) % slides.length), 5000);
-}
+    function initCarousel() {
+      slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+        dot.addEventListener('click', () => goToSlide(i));
+        dotsContainer.appendChild(dot);
+      });
+      setInterval(() => goToSlide((currentSlide + 1) % slides.length), 5000);
+    }
 
-function goToSlide(index){
-  slides[currentSlide].classList.remove('active');
-  dotsContainer.children[currentSlide].classList.remove('active');
-  currentSlide = index;
-  slides[currentSlide].classList.add('active');
-  dotsContainer.children[currentSlide].classList.add('active');
-}
+    function goToSlide(index) {
+      slides[currentSlide].classList.remove('active');
+      dotsContainer.children[currentSlide].classList.remove('active');
+      currentSlide = index;
+      slides[currentSlide].classList.add('active');
+      dotsContainer.children[currentSlide].classList.add('active');
+    }
 
-document.getElementById('prevSlide').addEventListener('click', () => goToSlide((currentSlide-1+slides.length)%slides.length));
-document.getElementById('nextSlide').addEventListener('click', () => goToSlide((currentSlide+1)%slides.length));
+    document.getElementById('prevSlide').addEventListener('click', () => goToSlide((currentSlide - 1 + slides.length) % slides.length));
+    document.getElementById('nextSlide').addEventListener('click', () => goToSlide((currentSlide + 1) % slides.length));
 
-// ==================== MOBILE MENU ====================
-document.getElementById('mobileToggle').addEventListener('click', () => {
-  document.getElementById('mobileMenu').classList.toggle('open');
-});
-document.querySelectorAll('.mobile-link').forEach(link => {
-  link.addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open'));
-});
-
-// ==================== SCROLL SPY ====================
-const navbar = document.getElementById('navbar');
-const navLinks = document.querySelectorAll('.nav-link[data-section], .mobile-link[data-section]');
-const sections = document.querySelectorAll('section[id]');
-
-function onScroll(){
-  navbar.classList.toggle('scrolled', window.scrollY > 50);
-  let current = 'home';
-  sections.forEach(s => { if(window.scrollY >= s.offsetTop - 100) current = s.id; });
-  navLinks.forEach(l => l.classList.toggle('active', l.dataset.section === current));
-  document.querySelectorAll('.fade-in').forEach(el => {
-    if(el.getBoundingClientRect().top < window.innerHeight * 0.88) el.classList.add('visible');
-  });
-}
-window.addEventListener('scroll', onScroll, {passive:true});
-
-navLinks.forEach(link => {
-  link.addEventListener('click', e => {
-    e.preventDefault();
-    const target = document.getElementById(link.dataset.section);
-    if(target) window.scrollTo({top: target.offsetTop - 68, behavior:'smooth'});
-  });
-});
-
-// ==================== NOMINATION FORM ====================
-const levelSelect = document.getElementById('levelSelect');
-const detailedEdu = document.getElementById('detailedEducationSection');
-const detailedExp = document.getElementById('detailedExperienceSection');
-
-levelSelect.addEventListener('change', function(){
-  if(this.value === 'Bootcamp' || !this.value){
-    detailedEdu.classList.add('hidden');
-    detailedExp.classList.add('hidden');
-  } else {
-    detailedEdu.classList.remove('hidden');
-    detailedExp.classList.remove('hidden');
-  }
-});
-levelSelect.dispatchEvent(new Event('change'));
-
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4A7b3YNQsWeOkIiFvXnexRpVftBhRgOl7bVY5lV6MJdv2mQx_sKO1EbrDJ0LU5dVjvw/exec";
-
-document.getElementById('nominationForm').addEventListener('submit', async function(e){
-  e.preventDefault();
-  const btn = document.getElementById('submitBtn');
-  const msg = document.getElementById('statusMessage');
-  btn.disabled = true; btn.innerText = "Submitting…"; msg.className = 'status-message';
-  try {
-    const res = await fetch(WEB_APP_URL, {
-      method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body: JSON.stringify(Object.fromEntries(new FormData(this).entries()))
+    // ==================== MOBILE MENU ====================
+    document.getElementById('mobileToggle').addEventListener('click', () => {
+      document.getElementById('mobileMenu').classList.toggle('open');
     });
-    const result = await res.json();
-    if(result.status === "success"){
-      msg.className = 'status-message success';
-      msg.innerText = "✓ Nomination submitted successfully!";
-      this.reset(); levelSelect.dispatchEvent(new Event('change'));
-    } else throw new Error('fail');
-  } catch {
-    msg.className = 'status-message error';
-    msg.innerText = "Submission failed. Please try again.";
-  } finally {
-    btn.disabled = false; btn.innerText = "Submit Nomination";
-  }
-});
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open'));
+    });
 
-// ==================== INIT ====================
-document.addEventListener('DOMContentLoaded', () => {
-  renderCourses();
-  renderSpeakers();
-  renderAlumniDropdown();
-  initCarousel();
-  onScroll();
-});
-</script>
+    // ==================== SCROLL SPY ====================
+    const navbar = document.getElementById('navbar');
+    const navLinks = document.querySelectorAll('.nav-link[data-section], .mobile-link[data-section]');
+    const sections = document.querySelectorAll('section[id]');
+
+    function onScroll() {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+      let current = 'home';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+      navLinks.forEach(l => l.classList.toggle('active', l.dataset.section === current));
+      document.querySelectorAll('.fade-in').forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight * 0.88) el.classList.add('visible');
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.getElementById(link.dataset.section);
+        if (target) window.scrollTo({ top: target.offsetTop - 68, behavior: 'smooth' });
+      });
+    });
+
+    // ==================== NOMINATION FORM ====================
+    const levelSelect = document.getElementById('levelSelect');
+    const detailedEdu = document.getElementById('detailedEducationSection');
+    const detailedExp = document.getElementById('detailedExperienceSection');
+
+    levelSelect.addEventListener('change', function () {
+      if (this.value === 'Bootcamp' || !this.value) {
+        detailedEdu.classList.add('hidden');
+        detailedExp.classList.add('hidden');
+      } else {
+        detailedEdu.classList.remove('hidden');
+        detailedExp.classList.remove('hidden');
+      }
+    });
+    levelSelect.dispatchEvent(new Event('change'));
+
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4A7b3YNQsWeOkIiFvXnexRpVftBhRgOl7bVY5lV6MJdv2mQx_sKO1EbrDJ0LU5dVjvw/exec";
+
+    document.getElementById('nominationForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      const msg = document.getElementById('statusMessage');
+      btn.disabled = true; btn.innerText = "Submitting…"; msg.className = 'status-message';
+      try {
+        const res = await fetch(WEB_APP_URL, {
+          method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(Object.fromEntries(new FormData(this).entries()))
+        });
+        const result = await res.json();
+        if (result.status === "success") {
+          msg.className = 'status-message success';
+          msg.innerText = "✓ Nomination submitted successfully!";
+          this.reset(); levelSelect.dispatchEvent(new Event('change'));
+        } else throw new Error('fail');
+      } catch {
+        msg.className = 'status-message error';
+        msg.innerText = "Submission failed. Please try again.";
+      } finally {
+        btn.disabled = false; btn.innerText = "Submit Nomination";
+      }
+    });
+
+    // ==================== INIT ====================
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCourses();
+      renderSpeakers();
+      renderAlumniDropdown();
+      initCarousel();
+      onScroll();
+    });
+  </script>
 </body>
+
 </html>
