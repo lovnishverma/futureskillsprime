@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="https://www.nielit.gov.in/images/NIELIT_logo.jpg">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -514,12 +515,18 @@
     .coordinator-item:hover { box-shadow:0 4px 16px rgba(37,99,235,0.1); transform:translateX(2px); }
 
     /* ── FOOTER ── */
-    .footer {
+    /* .footer {
       background:var(--gray-900); color:var(--gray-400);
       padding:2rem 0; text-align:center; font-size:0.82rem;
+    } */
+    
+    .footer {
+     background: var(--gray-900);
+     color: #ffffff;
+     padding: 2rem 0;
+     text-align: center;
+     font-size: 0.82rem;
     }
-    .footer p { margin-bottom:0.4rem; }
-    .footer strong { color:var(--gray-200); }
 
     /* ── SCROLL ANIMATIONS ── */
     .fade-in { opacity:0; transform:translateY(24px); transition:all 0.6s ease-out; }
@@ -1133,7 +1140,7 @@ function renderAlumniDropdown(){
                 <ul class="alumni-batches hidden" id="course-${key}">
                   ${batches.map((batch,i) => {
                     const n = batch.match(/\d+/)?.[0] || i+1;
-                    return `<li><a href="https://futureskillsprime.glitch.me/${pA}_${tA}_Batch${n}.html" target="_blank" rel="noopener">${batch}</a></li>`;
+                    return `<li><a href="https://futureskillsprime.onrender.com/${pA}_${tA}_Batch${n}.html" target="_blank" rel="noopener">${batch}</a></li>`;
                   }).join('')}
                 </ul>
               </div>`;
