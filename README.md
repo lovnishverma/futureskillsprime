@@ -1,5 +1,9 @@
 # FutureSkills PRIME - NIELIT Chandigarh
 
+**Demo:** https://www.lovnishverma.in/futureskillsprime/
+
+**Live:** https://futureskillsprime.onrender.com/
+
 A responsive, single-page web application designed for the FutureSkills PRIME initiative at NIELIT Chandigarh. This landing page serves as a central hub for discovering upcoming courses, viewing distinguished speakers, browsing alumni batches, and submitting program nominations.
 
 ## Features
