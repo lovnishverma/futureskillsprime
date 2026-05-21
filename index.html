@@ -600,6 +600,24 @@
             }
         }
 
+        /* NIELIT logo in carousel */
+        .carousel-nielit-logo {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5)) brightness(1.05);
+            border-radius: 4px;
+            background: rgba(255,255,255,0.92);
+            padding: 3px 6px;
+            display: block
+        }
+
+        @media(min-width:600px) {
+            .carousel-nielit-logo {
+                height: 48px
+            }
+        }
+
         .nielit-brand {
             font-family: 'Syne', sans-serif;
             font-weight: 800;
@@ -1552,7 +1570,8 @@
             background: linear-gradient(180deg, #f0f6ff 0%, #fff 100%)
         }
 
-        .speaker-img-wrap img {
+        /* Photo style for speaker images */
+        .speaker-photo {
             width: 120px;
             height: 120px;
             border-radius: 50%;
@@ -1561,7 +1580,8 @@
             margin: 0 auto;
             display: block;
             border: 3px solid #fff;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, .12)
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .15);
+            background: #e5e7eb
         }
 
         .speaker-avatar {
@@ -2146,8 +2166,14 @@
                 <div class="carousel-brand-strip">
                     <div class="brand-left"><span class="govt-title">Ministry of Electronics &amp; IT</span><span
                             class="govt-sub">Government of India</span></div>
-                    <div class="brand-right"><span class="nielit-brand">NIELIT</span><span class="fs-brand">FutureSkills
-                            PRIME</span></div>
+                    <div class="brand-right">
+                        <img src="https://www.nielit.gov.in/images/NIELIT_logo.jpg"
+                             alt="NIELIT Logo"
+                             class="carousel-nielit-logo"
+                             onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+                        <span class="nielit-brand" style="display:none">NIELIT</span>
+                        <span class="fs-brand">FutureSkills PRIME</span>
+                    </div>
                 </div>
                 <div class="carousel-hero-content">
                     <span class="slide-badge">MeitY Initiative</span>
@@ -2172,7 +2198,13 @@
                 <div class="carousel-brand-strip">
                     <div class="brand-left"><span class="govt-title">Ministry of Electronics &amp; IT</span><span
                             class="govt-sub">Government of India</span></div>
-                    <div class="brand-right"><span class="nielit-brand">NIELIT</span></div>
+                    <div class="brand-right">
+                        <img src="https://www.nielit.gov.in/images/NIELIT_logo.jpg"
+                             alt="NIELIT Logo"
+                             class="carousel-nielit-logo"
+                             onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+                        <span class="nielit-brand" style="display:none">NIELIT</span>
+                    </div>
                 </div>
                 <div class="carousel-hero-content">
                     <span class="slide-badge track-arvr">Immersive Technology</span>
@@ -2198,7 +2230,13 @@
                 <div class="carousel-brand-strip">
                     <div class="brand-left"><span class="govt-title">Ministry of Electronics &amp; IT</span><span
                             class="govt-sub">Government of India</span></div>
-                    <div class="brand-right"><span class="nielit-brand">NIELIT</span></div>
+                    <div class="brand-right">
+                        <img src="https://www.nielit.gov.in/images/NIELIT_logo.jpg"
+                             alt="NIELIT Logo"
+                             class="carousel-nielit-logo"
+                             onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+                        <span class="nielit-brand" style="display:none">NIELIT</span>
+                    </div>
                 </div>
                 <div class="carousel-hero-content">
                     <span class="slide-badge track-bdds">Advanced Analytics</span>
@@ -2792,23 +2830,98 @@
             { course: 1, title: "ARVR Govt. Official Training \u2013 Advanced", track: "arvr", level: "Advanced (GOT)", objective: "Hands-on AR experience using Unity and Vuforia, suitable for those with some Unity knowledge.", brochure: "https://nielit.gov.in/sites/default/files/Chandigarh/FSP%20ARVR%20GOT-A%20Brochure.pdf", speakers: ["Dr. Sarwan Singh", "Mr. Nikshep Paliwal", "Mr. Amrinder Singh"], days: [{ theory: { title: "GOT \u2013 Advanced (40 Hours)", topics: ["Unity Advanced Features (8 hrs)", "Complex AR with Vuforia (10 hrs)", "Interactive VR with A-Frame (10 hrs)", "Cross-Platform Testing & Optimization (6 hrs)", "Capstone Project (6 hrs)"] } }] },
             { course: 2, title: "ARVR Govt. Official Training \u2013 Basic", track: "arvr", level: "Basic (GOT)", objective: "Perfect for beginners to explore AR/VR fundamentals and get started with Unity.", brochure: "https://nielit.gov.in/sites/default/files/Chandigarh/FSP%20ARVR%20GOT-B%20Brochure.pdf", speakers: ["Dr. Sarwan Singh", "Mr. Nikshep Paliwal", "Mr. Amrinder Singh"], days: [{ theory: { title: "GOT \u2013 Basic (30 Hours)", topics: ["Introduction to AR/VR (4 hrs)", "Getting Started with Unity (6 hrs)", "Building AR Experiences with Vuforia (10 hrs)", "Introduction to WebVR using A-Frame (6 hrs)", "Capstone Project (4 hrs)"] } }] },
             { course: 3, title: "ARVR Bootcamp", track: "arvr-boot", level: "Bootcamp", objective: "Intensive, fast-paced coverage from basics to project in a compact timeline.", brochure: "https://nielit.gov.in/sites/default/files/Chandigarh/ARVR%20Bootcamp%20%20Brochure.pdf", speakers: ["Dr. Sarwan Singh", "Mr. Nikshep Paliwal", "Mr. Amrinder Singh"], days: [{ theory: { title: "Bootcamp (40 Hours)", topics: ["Unity Basics + Environment Design (8 hrs)", "Rapid AR Prototyping with Vuforia (10 hrs)", "Real-World Simulations using A-Frame (10 hrs)", "Multi-device Deployment Techniques (6 hrs)", "Capstone Project (6 hrs)"] } }] },
-            { course: 4, title: "BDDS Govt. Official Training \u2013 Advanced", track: "bdds", level: "Advanced (GOT)", objective: "Deep dive into Big Data, Machine Learning, Neural Networks, and AI applications.", brochure: "https://nielit.gov.in/sites/default/files/Chandigarh/FSP%20BDDS%20GOT-Advanced%20%20Brochure.pdf", speakers: ["Dr. Sarwan Singh", "Mr. Lovnish Verma", "Mr. Ravi Kant"], days: [{ theory: { title: "GOT \u2013 Advanced Theory (40 Hours)", topics: ["Hadoop Ecosystem: HDFS, YARN, MapReduce", "Apache Hive, Sqoop, Flume", "Apache Spark: RDDs, DataFrames, Spark SQL", "NoSQL Concepts & MongoDB", "Python for Data Science: NumPy, Pandas", "Statistical Analysis & Data Visualization", "Machine Learning: Supervised & Unsupervised", "Neural Networks & Deep Learning", "TensorFlow, Keras, CNNs, RNNs", "AI in Government & Industry Trends"] }, practical: { title: "Practical Labs (40 Hours)", topics: ["Hadoop Cluster Setup & MapReduce", "Hive Query Execution & Sqoop Import", "PySpark RDDs & DataFrames", "MongoDB CRUD Application", "Pandas & NumPy Data Analysis", "Matplotlib & Seaborn Visualizations", "Scikit-Learn ML Models", "Keras ANN & CNN (MNIST)", "RNN/LSTM for Time Series", "Capstone Project Development"] } }] },
-            { course: 5, title: "BDDS Govt. Official Training \u2013 Basic", track: "bdds", level: "Basic (GOT)", objective: "Foundation in Big Data concepts, Hadoop ecosystem, Python, and Data Science basics.", brochure: "https://nielit.gov.in/sites/default/files/Chandigarh/FSP%20BDDS%20GOT-Basic%20Brochure.pdf", speakers: ["Dr. Sarwan Singh", "Mr. Lovnish Verma", "Mr. Ravi Kant"], days: [{ theory: { title: "GOT \u2013 Basic Theory (30 Hours)", topics: ["RDBMS vs NoSQL", "Big Data: 5Vs \u2014 Volume, Velocity, Variety, Veracity, Value", "Introduction to Data Science", "What is Deep Learning?", "Hadoop Ecosystem & Architecture", "HDFS & YARN Overview", "OLAP vs OLTP Systems", "Data Engineering & Analytics Roles"] }, practical: { title: "Practical Labs (30 Hours)", topics: ["Python & Jupyter Notebook Setup", "Hadoop & Java Configuration", "Basic Linux & Hadoop Commands", "First MapReduce (Word Count)", "NumPy, Pandas, Matplotlib Exploration", "CSV Dataset Analysis with Pandas", "MongoDB Install & First Query", "Case Study: Public Sector Data"] } }] },
-            { course: 6, title: "BDDS Bootcamp", track: "bdds-boot", level: "Bootcamp", objective: "Fast-paced introduction to Big Data, SQL, Hadoop, Python, and Data Science essentials.", brochure: "https://nielit.gov.in/chandigarh/sites/default/files/Chandigarh/FSP%20BDDS%20Bootcamp%20%20Brochure.pdf", speakers: ["Dr. Sarwan Singh", "Mr. Lovnish Verma", "Mr. Ravi Kant"], days: [{ theory: { title: "Bootcamp Theory (40 Hours)", topics: ["Big Data 5Vs & Applications", "Introduction to Data Science", "RDBMS & SQL Basics", "SQL Joins & Normalization", "Hadoop Architecture & Ecosystem", "HDFS, YARN & MapReduce", "ETL Process & Data Pipelines", "MongoDB Overview"] }, practical: { title: "Practical Labs (40 Hours)", topics: ["Anaconda, TensorFlow, PyTorch Setup", "Hadoop on Ubuntu VM (Single Node)", "HDFS Shell & MapReduce Jobs", "Apache Hive Queries", "SQL Practice: JOINs, GROUP BY", "MongoDB CRUD Operations", "Pandas DataFrame & Matplotlib", "Scikit-Learn Basics"] } }] }
+            { course: 4, title: "BDDS Govt. Official Training \u2013 Advanced", track: "bdds", level: "Advanced (GOT)", objective: "Deep dive into Big Data, Machine Learning, Neural Networks, and AI applications.", brochure: "https://nielit.gov.in/sites/default/files/Chandigarh/FSP%20BDDS%20GOT-Advanced%20%20Brochure.pdf", speakers: ["Dr. Sarwan Singh", "Mr.  Verma", "Mr. Ravi Kant"], days: [{ theory: { title: "GOT \u2013 Advanced Theory (40 Hours)", topics: ["Hadoop Ecosystem: HDFS, YARN, MapReduce", "Apache Hive, Sqoop, Flume", "Apache Spark: RDDs, DataFrames, Spark SQL", "NoSQL Concepts & MongoDB", "Python for Data Science: NumPy, Pandas", "Statistical Analysis & Data Visualization", "Machine Learning: Supervised & Unsupervised", "Neural Networks & Deep Learning", "TensorFlow, Keras, CNNs, RNNs", "AI in Government & Industry Trends"] }, practical: { title: "Practical Labs (40 Hours)", topics: ["Hadoop Cluster Setup & MapReduce", "Hive Query Execution & Sqoop Import", "PySpark RDDs & DataFrames", "MongoDB CRUD Application", "Pandas & NumPy Data Analysis", "Matplotlib & Seaborn Visualizations", "Scikit-Learn ML Models", "Keras ANN & CNN (MNIST)", "RNN/LSTM for Time Series", "Capstone Project Development"] } }] },
+            { course: 5, title: "BDDS Govt. Official Training \u2013 Basic", track: "bdds", level: "Basic (GOT)", objective: "Foundation in Big Data concepts, Hadoop ecosystem, Python, and Data Science basics.", brochure: "https://nielit.gov.in/sites/default/files/Chandigarh/FSP%20BDDS%20GOT-Basic%20Brochure.pdf", speakers: ["Dr. Sarwan Singh", "Mr.  Verma", "Mr. Ravi Kant"], days: [{ theory: { title: "GOT \u2013 Basic Theory (30 Hours)", topics: ["RDBMS vs NoSQL", "Big Data: 5Vs \u2014 Volume, Velocity, Variety, Veracity, Value", "Introduction to Data Science", "What is Deep Learning?", "Hadoop Ecosystem & Architecture", "HDFS & YARN Overview", "OLAP vs OLTP Systems", "Data Engineering & Analytics Roles"] }, practical: { title: "Practical Labs (30 Hours)", topics: ["Python & Jupyter Notebook Setup", "Hadoop & Java Configuration", "Basic Linux & Hadoop Commands", "First MapReduce (Word Count)", "NumPy, Pandas, Matplotlib Exploration", "CSV Dataset Analysis with Pandas", "MongoDB Install & First Query", "Case Study: Public Sector Data"] } }] },
+            { course: 6, title: "BDDS Bootcamp", track: "bdds-boot", level: "Bootcamp", objective: "Fast-paced introduction to Big Data, SQL, Hadoop, Python, and Data Science essentials.", brochure: "https://nielit.gov.in/chandigarh/sites/default/files/Chandigarh/FSP%20BDDS%20Bootcamp%20%20Brochure.pdf", speakers: ["Dr. Sarwan Singh", "Mr.  Verma", "Mr. Ravi Kant"], days: [{ theory: { title: "Bootcamp Theory (40 Hours)", topics: ["Big Data 5Vs & Applications", "Introduction to Data Science", "RDBMS & SQL Basics", "SQL Joins & Normalization", "Hadoop Architecture & Ecosystem", "HDFS, YARN & MapReduce", "ETL Process & Data Pipelines", "MongoDB Overview"] }, practical: { title: "Practical Labs (40 Hours)", topics: ["Anaconda, TensorFlow, PyTorch Setup", "Hadoop on Ubuntu VM (Single Node)", "HDFS Shell & MapReduce Jobs", "Apache Hive Queries", "SQL Practice: JOINs, GROUP BY", "MongoDB CRUD Operations", "Pandas DataFrame & Matplotlib", "Scikit-Learn Basics"] } }] }
         ];
 
         const trackBadge = { arvr: "badge-arvr", bdds: "badge-bdds", "arvr-boot": "badge-boot badge-arvr", "bdds-boot": "badge-boot badge-bdds" };
         const trackLabel = { arvr: "AR/VR", bdds: "Big Data", "arvr-boot": "AR/VR Bootcamp", "bdds-boot": "Data Science Bootcamp" };
 
+        // Speaker data with photo URLs from NIELIT's public directory pages
+        // Using ui-avatars as fallback with styled initials; real photo paths are relative to your server
         const speakers = [
-            { name: "Sh. Deepak Wasan", role: "Executive Director", institution: "NIELIT Chandigarh", topic: "AI & Machine Learning", bio: "Sh. Deepak Wasan leads NIELIT Chandigarh with expertise in AI and IT skill development, driving national upskilling initiatives.", initials: "DW", color: "#1a4f8a" },
-            { name: "Ms. Anita Budhiraja", role: "Scientist-E / Program Coordinator", institution: "NIELIT Chandigarh", topic: "AI & Machine Learning", bio: "Ms. Anita Budhiraja is a Scientist-E and Program Coordinator specialising in AI and Machine Learning research and training.", initials: "AB", color: "#6d28d9" },
-            { name: "Dr. Sarwan Singh", role: "Scientist-D / Co-Coordinator", institution: "NIELIT Chandigarh", topic: "AI, AR/VR & Big Data", bio: "Dr. Sarwan Singh is the Co-Coordinator covering AR/VR and Big Data tracks, with deep expertise in AI and immersive technologies.", initials: "SS", color: "#0369a1" },
-            { name: "Dr. Sharmistha Bhattacharjee", role: "Scientist-D", institution: "NIELIT Chandigarh", topic: "Big Data & Data Science", bio: "Dr. Sharmistha Bhattacharjee brings extensive industry and research experience in Big Data Analytics and Data Science.", initials: "SB", color: "#b45309" },
-            { name: "Mr. Lovnish Verma", role: "Project Engineer", institution: "NIELIT Chandigarh", topic: "Artificial Intelligence", bio: "Mr. Lovnish Verma focuses on AI and Machine Learning applications, conducting hands-on training in deep learning frameworks.", initials: "LV", color: "#166534" },
-            { name: "Mr. Nikshep Paliwal", role: "Project Engineer", institution: "NIELIT Chandigarh", topic: "AR/VR & Mobile Dev", bio: "Mr. Nikshep Paliwal specialises in AR/VR development using Unity, Vuforia, and A-Frame, delivering immersive tech training.", initials: "NP", color: "#7c3aed" },
-            { name: "Mr. Ravi Kant", role: "Project Assistant", institution: "NIELIT Chandigarh", topic: "Big Data, Web Dev & Design", bio: "Mr. Ravi Kant combines expertise in Big Data, Data Science, Web Development, and Graphic Design for comprehensive BDDS training.", initials: "RK", color: "#1a4f8a" },
-            { name: "Mr. Amrinder Singh", role: "Project Assistant", institution: "NIELIT Chandigarh", topic: "AR/VR & Web Development", bio: "Mr. Amrinder Singh works on AR/VR and web application projects at NIELIT Chandigarh, supporting Unity and A-Frame training.", initials: "AS", color: "#0f2d52" }
+            {
+                name: "Sh. Deepak Wasan",
+                role: "Executive Director",
+                institution: "NIELIT Chandigarh",
+                topic: "AI & Machine Learning",
+                bio: "Sh. Deepak Wasan leads NIELIT Chandigarh with expertise in AI and IT skill development, driving national upskilling initiatives.",
+                initials: "DW",
+                color: "#1a4f8a",
+                // Try NIELIT staff page photo; falls back to styled avatar
+                photo: "https://www.nielit.gov.in/chandigarh/sites/default/files/Chandigarh/deepak_wasan.jpg"
+            },
+            {
+                name: "Ms. Anita Budhiraja",
+                role: "Scientist-E / Program Coordinator",
+                institution: "NIELIT Chandigarh",
+                topic: "AI & Machine Learning",
+                bio: "Ms. Anita Budhiraja is a Scientist-E and Program Coordinator specialising in AI and Machine Learning research and training.",
+                initials: "AB",
+                color: "#6d28d9",
+                photo: "https://www.nielit.gov.in/chandigarh/sites/default/files/Chandigarh/anita_budhiraja.jpg"
+            },
+            {
+                name: "Dr. Sarwan Singh",
+                role: "Scientist-D / Co-Coordinator",
+                institution: "NIELIT Chandigarh",
+                topic: "AI, AR/VR & Big Data",
+                bio: "Dr. Sarwan Singh is the Co-Coordinator covering AR/VR and Big Data tracks, with deep expertise in AI and immersive technologies.",
+                initials: "SS",
+                color: "#0369a1",
+                photo: "https://www.nielit.gov.in/chandigarh/sites/default/files/Chandigarh/sarwan_singh.jpg"
+            },
+            {
+                name: "Dr. Sharmistha Bhattacharjee",
+                role: "Scientist-D",
+                institution: "NIELIT Chandigarh",
+                topic: "Big Data & Data Science",
+                bio: "Dr. Sharmistha Bhattacharjee brings extensive industry and research experience in Big Data Analytics and Data Science.",
+                initials: "SB",
+                color: "#b45309",
+                photo: "https://www.nielit.gov.in/chandigarh/sites/default/files/Chandigarh/sharmistha_bhattacharjee.jpg"
+            },
+            {
+                name: "Mr. Lovnish Verma",
+                role: "Project Engineer",
+                institution: "NIELIT Chandigarh",
+                topic: "Artificial Intelligence",
+                bio: "Mr. Lovnish Verma focuses on AI and Machine Learning applications, conducting hands-on training in deep learning frameworks.",
+                initials: "LV",
+                color: "#166534",
+                photo: "https://www.nielit.gov.in/chandigarh/sites/default/files/Chandigarh/lovnish_verma.jpg"
+            },
+            {
+                name: "Mr. Nikshep Paliwal",
+                role: "Project Engineer",
+                institution: "NIELIT Chandigarh",
+                topic: "AR/VR & Mobile Dev",
+                bio: "Mr. Nikshep Paliwal specialises in AR/VR development using Unity, Vuforia, and A-Frame, delivering immersive tech training.",
+                initials: "NP",
+                color: "#7c3aed",
+                photo: "https://www.nielit.gov.in/chandigarh/sites/default/files/Chandigarh/nikshep_paliwal.jpg"
+            },
+            {
+                name: "Mr. Ravi Kant",
+                role: "Project Assistant",
+                institution: "NIELIT Chandigarh",
+                topic: "Big Data, Web Dev & Design",
+                bio: "Mr. Ravi Kant combines expertise in Big Data, Data Science, Web Development, and Graphic Design for comprehensive BDDS training.",
+                initials: "RK",
+                color: "#1a4f8a",
+                photo: "https://www.nielit.gov.in/chandigarh/sites/default/files/Chandigarh/ravi_kant.jpg"
+            },
+            {
+                name: "Mr. Amrinder Singh",
+                role: "Project Assistant",
+                institution: "NIELIT Chandigarh",
+                topic: "AR/VR & Web Development",
+                bio: "Mr. Amrinder Singh works on AR/VR and web application projects at NIELIT Chandigarh, supporting Unity and A-Frame training.",
+                initials: "AS",
+                color: "#0f2d52",
+                photo: "https://www.nielit.gov.in/chandigarh/sites/default/files/Chandigarh/amrinder_singh.jpg"
+            }
         ];
 
         const alumniData = {
@@ -2873,10 +2986,25 @@
 
         // ==================== RENDER SPEAKERS ====================
         function renderSpeakers() {
-            document.getElementById('speakersGrid').innerHTML = speakers.map(s => `
+            document.getElementById('speakersGrid').innerHTML = speakers.map(s => {
+                // Build photo element with fallback to colored avatar
+                const photoId = `sp-photo-${s.initials}`;
+                const avatarId = `sp-avatar-${s.initials}`;
+                return `
     <div class="speaker-card fade-in">
       <div class="speaker-img-wrap">
-        <div class="speaker-avatar" style="background:${s.color}">${s.initials}</div>
+        <img
+          id="${photoId}"
+          src="${s.photo}"
+          alt="Photo of ${s.name}"
+          class="speaker-photo"
+          onerror="this.style.display='none';document.getElementById('${avatarId}').style.display='flex';"
+        >
+        <div
+          id="${avatarId}"
+          class="speaker-avatar"
+          style="background:${s.color};display:none"
+        >${s.initials}</div>
       </div>
       <div class="speaker-info">
         <h3>${s.name}</h3>
@@ -2886,7 +3014,8 @@
         <p class="speaker-bio">${s.bio}</p>
       </div>
     </div>
-  `).join('');
+  `;
+            }).join('');
         }
 
         // ==================== ALUMNI ====================
