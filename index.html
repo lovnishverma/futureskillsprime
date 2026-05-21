@@ -40,7 +40,7 @@
     .nav-link{font-size:.82rem;font-weight:600;color:var(--gray-600);letter-spacing:.03em;text-transform:uppercase;padding:.4rem .85rem;border-radius:6px;transition:all .2s;cursor:pointer}
     .nav-link:hover,.nav-link.active{color:var(--blue-600);background:var(--blue-50)}
 
-    /* ── ALUMNI DROPDOWN – simple & robust ── */
+    /* ALUMNI DROPDOWN */
     .alumni-nav-wrap{position:relative}
     .alumni-nav-btn{
       font-size:.82rem;font-weight:600;color:var(--gray-600);letter-spacing:.03em;text-transform:uppercase;
@@ -50,7 +50,6 @@
     .alumni-nav-btn:hover,.alumni-nav-btn[aria-expanded="true"]{color:var(--blue-600);background:var(--blue-50)}
     .alumni-nav-btn svg{transition:transform .2s;flex-shrink:0}
     .alumni-nav-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
-
     .alumni-panel{
       position:absolute;top:calc(100% + 8px);left:0;min-width:320px;
       background:#fff;border:1px solid var(--gray-200);border-radius:.875rem;
@@ -58,10 +57,7 @@
       display:none;z-index:2000;
     }
     .alumni-panel.open{display:block}
-
-    /* scroll if many items */
     .alumni-panel-inner{max-height:340px;overflow-y:auto;padding-right:2px}
-
     .ap-program{margin-bottom:.25rem}
     .ap-program-btn{
       width:100%;text-align:left;background:none;border:none;cursor:pointer;
@@ -72,10 +68,8 @@
     .ap-program-btn:hover{background:var(--blue-50)}
     .ap-program-btn .ap-arrow{transition:transform .2s;flex-shrink:0;opacity:.6}
     .ap-program-btn[aria-expanded="true"] .ap-arrow{transform:rotate(90deg)}
-
     .ap-types{display:none;padding-left:.75rem;margin-top:.15rem}
     .ap-types.open{display:block}
-
     .ap-type{margin-bottom:.15rem}
     .ap-type-btn{
       width:100%;text-align:left;background:none;border:none;cursor:pointer;
@@ -86,7 +80,6 @@
     .ap-type-btn:hover{background:var(--blue-50);color:var(--blue-600)}
     .ap-type-btn .ap-arrow{transition:transform .2s;flex-shrink:0;opacity:.5;font-size:.7rem}
     .ap-type-btn[aria-expanded="true"] .ap-arrow{transform:rotate(90deg)}
-
     .ap-batches{display:none;padding-left:.85rem;margin-top:.15rem}
     .ap-batches.open{display:block}
     .ap-batches a{
@@ -103,8 +96,6 @@
     .mobile-menu.open{display:block}
     .mobile-link{display:block;padding:.75rem 1rem;font-weight:600;font-size:.85rem;color:var(--gray-700);border-radius:.5rem;transition:all .2s}
     .mobile-link:hover,.mobile-link.active{background:var(--blue-50);color:var(--blue-600)}
-
-    /* Mobile alumni uses native <details> – zero JS needed */
     .mobile-alumni-section{padding:.25rem 0}
     .mobile-alumni-section details{margin-bottom:.15rem}
     .mobile-alumni-section summary{
@@ -118,35 +109,237 @@
     .mobile-alumni-section summary:hover{background:var(--blue-50);color:var(--blue-600)}
     .mobile-alumni-section details[open]>summary{color:var(--primary)}
     .mobile-alumni-label{padding:.5rem 1rem;font-weight:800;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-500)}
-
     .m-types{padding-left:1rem}
     .m-types details summary{font-weight:600;font-size:.79rem}
     .m-batches{padding-left:1rem;display:flex;flex-wrap:wrap;gap:.25rem;padding-bottom:.5rem}
     .m-batches a{font-size:.75rem;color:var(--blue-600);font-weight:500;padding:.15rem .4rem;border-radius:.25rem}
     .m-batches a:hover{background:var(--blue-50)}
 
-    /* HERO CAROUSEL */
-    .carousel-container{position:relative;width:100%;height:520px;overflow:hidden;background:#0f1b2d}
-    @media(min-width:768px){.carousel-container{height:640px}}
-    .carousel-slide{position:absolute;inset:0;opacity:0;transition:opacity .7s ease}
-    .carousel-slide.active{opacity:1}
-    .carousel-slide img{width:100%;height:100%;object-fit:cover;display:block}
-    .slide-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;color:rgba(255,255,255,.6);font-size:1rem;font-weight:500}
-    .slide-fallback-1{background:linear-gradient(135deg,#0f1b2d 0%,#1a4f8a 50%,#2563eb 100%)}
-    .slide-fallback-2{background:linear-gradient(135deg,#1a1a2e 0%,#6d28d9 60%,#4338ca 100%)}
-    .slide-fallback-3{background:linear-gradient(135deg,#0c1445 0%,#1a4f8a 40%,#0ea5e9 100%)}
-    .carousel-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,20,40,.6) 0%,transparent 50%);pointer-events:none}
-    .carousel-hero-text{position:absolute;bottom:0;left:0;right:0;padding:2.5rem 2rem;color:#fff;pointer-events:none}
-    .carousel-hero-text h2{font-family:'Syne',sans-serif;font-size:clamp(1.4rem,3vw,2.2rem);font-weight:800;line-height:1.2;text-shadow:0 2px 12px rgba(0,0,0,.4);margin-bottom:.5rem}
-    .carousel-hero-text p{font-size:.95rem;opacity:.85;text-shadow:0 1px 6px rgba(0,0,0,.4)}
-    .carousel-nav{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:1.5rem;pointer-events:none}
-    .carousel-btn{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.2);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.3);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;pointer-events:all;color:#fff}
-    .carousel-btn:hover{background:rgba(255,255,255,.35);transform:scale(1.05)}
-    .carousel-dots{position:absolute;bottom:1.75rem;left:0;right:0;display:flex;justify-content:center;gap:.5rem;z-index:2}
-    .carousel-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4);border:none;cursor:pointer;transition:all .3s}
-    .carousel-dot.active{background:#fff;width:24px;border-radius:4px}
+    /* =============================================
+       HERO CAROUSEL — FIXED VERSION
+       Text is rendered via HTML overlay layers,
+       NOT baked into background images.
+       ============================================= */
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      height: 540px;
+      overflow: hidden;
+      background: #0b1320;
+    }
+    @media(min-width:768px) {
+      .carousel-container { height: 640px; }
+    }
 
-    /* HERO CONTENT */
+    .carousel-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity .8s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1;
+    }
+    .carousel-slide.active {
+      opacity: 1;
+      z-index: 2;
+    }
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* Fallback gradient backgrounds when images fail to load */
+    .slide-fallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      color: rgba(255,255,255,.5);
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    .slide-fallback-1 { background: linear-gradient(135deg,#0b1320 0%,#1a4f8a 55%,#2563eb 100%); }
+    .slide-fallback-2 { background: linear-gradient(135deg,#1a1a2e 0%,#6d28d9 60%,#4338ca 100%); }
+    .slide-fallback-3 { background: linear-gradient(135deg,#0c1445 0%,#1a4f8a 40%,#0ea5e9 100%); }
+
+    /* Dual-axis dark overlay for text legibility */
+    .carousel-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right, rgba(11,19,32,0.88) 0%, rgba(11,19,32,0.45) 55%, rgba(11,19,32,0.1) 100%),
+        linear-gradient(to top,   rgba(11,19,32,0.55) 0%, transparent 35%);
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    /* Floating brand strip — top of each slide */
+    .carousel-brand-strip {
+      position: absolute;
+      top: 1.5rem;
+      left: 2rem;
+      right: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .brand-left { display: flex; flex-direction: column; }
+    .govt-title {
+      font-size: .73rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      text-shadow: 0 1px 6px rgba(0,0,0,.5);
+    }
+    .govt-sub {
+      font-size: .6rem;
+      font-weight: 500;
+      color: rgba(255,255,255,.75);
+      text-shadow: 0 1px 4px rgba(0,0,0,.4);
+    }
+    .brand-right { display: flex; align-items: center; gap: 1rem; }
+    .nielit-brand {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #fff;
+      text-shadow: 0 2px 8px rgba(0,0,0,.4);
+    }
+    .fs-brand {
+      font-size: .72rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: .05em;
+    }
+
+    /* Hero content block — vertically centred on slide */
+    .carousel-hero-content {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 5%;
+      width: 90%;
+      max-width: 640px;
+      z-index: 10;
+      color: #fff;
+      pointer-events: none;
+      padding: 1rem;
+    }
+    .slide-badge {
+      display: inline-block;
+      padding: .35rem .9rem;
+      background: var(--blue-600);
+      color: white;
+      border-radius: 50px;
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 1.25rem;
+    }
+    .slide-badge.track-arvr { background: var(--secondary); }
+    .slide-badge.track-bdds { background: var(--primary); border: 1px solid rgba(255,255,255,.25); }
+
+    .carousel-hero-content h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.75rem, 4vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      text-shadow: 0 4px 24px rgba(0,0,0,.55);
+    }
+    .carousel-hero-content p {
+      font-size: clamp(.9rem, 1.5vw, 1.05rem);
+      line-height: 1.65;
+      opacity: .92;
+      margin-bottom: 2rem;
+      text-shadow: 0 2px 12px rgba(0,0,0,.45);
+    }
+
+    /* CTA buttons */
+    .slide-actions {
+      display: flex;
+      gap: 1rem;
+      pointer-events: auto;
+      flex-wrap: wrap;
+    }
+    .slide-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: .72rem 1.5rem;
+      border-radius: 8px;
+      font-size: .88rem;
+      font-weight: 700;
+      transition: all .2s ease;
+      text-decoration: none;
+    }
+    .slide-btn.btn-solid { background: var(--blue-600); color: white; }
+    .slide-btn.btn-solid:hover { background: var(--blue-700); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,99,235,.4); }
+    .slide-btn.btn-outline { border: 2px solid rgba(255,255,255,.85); color: white; }
+    .slide-btn.btn-outline:hover { background: white; color: var(--gray-900); transform: translateY(-2px); }
+
+    /* Nav arrows & dots */
+    .carousel-nav {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      z-index: 15;
+      pointer-events: none;
+    }
+    .carousel-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.2);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,.3);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .3s;
+      pointer-events: all;
+      color: #fff;
+    }
+    .carousel-btn:hover { background: rgba(255,255,255,.35); transform: scale(1.05); }
+    .carousel-dots {
+      position: absolute;
+      bottom: 1.75rem;
+      left: 0; right: 0;
+      display: flex;
+      justify-content: center;
+      gap: .5rem;
+      z-index: 15;
+    }
+    .carousel-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.4);
+      border: none; cursor: pointer;
+      transition: all .3s;
+    }
+    .carousel-dot.active { background: #fff; width: 24px; border-radius: 4px; }
+
+    /* Mobile adjustments */
+    @media(max-width:767px) {
+      .carousel-brand-strip { top: 1rem; left: 1rem; right: 1rem; }
+      .carousel-hero-content { left: 4%; width: 92%; }
+      .slide-actions { flex-direction: column; gap: .5rem; }
+      .slide-btn { width: 100%; justify-content: center; }
+      .govt-title { font-size: .65rem; }
+      .brand-right { gap: .6rem; }
+    }
+
+    /* HERO CONTENT (below carousel) */
     .hero-content{background:linear-gradient(180deg,#f0f6ff 0%,#fff 100%);padding:3.5rem 0 2.5rem}
     .hero-content h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:800;margin-bottom:.75rem;letter-spacing:-.03em}
     .hero-content .subtitle{font-size:1.15rem;color:var(--gray-600);margin-bottom:2rem}
@@ -295,7 +488,6 @@
   <div class="container">
     <a href="#" class="nav-logo">FutureSkills <span>PRIME</span></a>
 
-    <!-- Desktop nav -->
     <div class="nav-desktop" id="navDesktop">
       <a href="#home" class="nav-link active" data-section="home">Home</a>
       <a href="#courses" class="nav-link" data-section="courses">Courses</a>
@@ -304,7 +496,6 @@
       <a href="#nomination" class="nav-link" data-section="nomination">Nomination</a>
       <a href="#contact" class="nav-link" data-section="contact">Contact</a>
 
-      <!-- Alumni dropdown (desktop) -->
       <div class="alumni-nav-wrap" id="desktopAlumniWrap">
         <button class="alumni-nav-btn" id="desktopAlumniBtn" aria-expanded="false" aria-haspopup="true">
           Alumni
@@ -323,7 +514,6 @@
     </button>
   </div>
 
-  <!-- Mobile menu -->
   <div class="mobile-menu" id="mobileMenu">
     <a href="#home" class="mobile-link active" data-section="home">Home</a>
     <a href="#courses" class="mobile-link" data-section="courses">Courses</a>
@@ -331,7 +521,6 @@
     <a href="#registration" class="mobile-link" data-section="registration">Registration</a>
     <a href="#nomination" class="mobile-link" data-section="nomination">Nomination</a>
     <a href="#contact" class="mobile-link" data-section="contact">Contact</a>
-    <!-- Alumni uses native <details> — no JS required, works perfectly on all devices -->
     <div class="mobile-alumni-section">
       <div class="mobile-alumni-label">Alumni</div>
       <div id="mobileAlumniAccordion"></div>
@@ -342,43 +531,117 @@
 <!-- ===== HERO ===== -->
 <section id="home">
   <div class="carousel-container" id="carousel">
+
+    <!-- SLIDE 1 -->
     <div class="carousel-slide active">
-      <img src="assets/img/hero1.png" alt="FutureSkills PRIME" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <img src="assets/img/hero1.png" alt="FutureSkills PRIME Background"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
       <div class="slide-fallback slide-fallback-1" style="display:none">
-        <svg width="64" height="64" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-        <span>FutureSkills PRIME</span>
+        <svg width="64" height="64" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" viewBox="0 0 24 24">
+          <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+        </svg>
       </div>
-      <div class="carousel-hero-text"><h2>Upskilling India's Digital Workforce</h2><p>A MeitY Initiative — NIELIT Chandigarh</p></div>
+      <!-- Brand strip (top of slide) -->
+      <div class="carousel-brand-strip">
+        <div class="brand-left">
+          <span class="govt-title">Ministry of Electronics &amp; IT</span>
+          <span class="govt-sub">Government of India</span>
+        </div>
+        <div class="brand-right">
+          <span class="nielit-brand">NIELIT</span>
+          <span class="fs-brand">FutureSkills PRIME</span>
+        </div>
+      </div>
+      <!-- Hero text (centred on slide) -->
+      <div class="carousel-hero-content">
+        <span class="slide-badge">MeitY Initiative</span>
+        <h2>Upskilling India's Digital Workforce</h2>
+        <p>Empowering professionals and students with industry-relevant skills at NIELIT Chandigarh.</p>
+        <div class="slide-actions">
+          <a href="#courses" class="slide-btn btn-solid">Explore Courses</a>
+          <a href="#about" class="slide-btn btn-outline">Learn More</a>
+        </div>
+      </div>
     </div>
+
+    <!-- SLIDE 2 -->
     <div class="carousel-slide">
-      <img src="assets/img/hero2.png" alt="AR/VR Training" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <img src="assets/img/hero2.png" alt="AR/VR Training Background"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
       <div class="slide-fallback slide-fallback-2" style="display:none">
-        <svg width="64" height="64" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-        <span>Augmented &amp; Virtual Reality</span>
+        <svg width="64" height="64" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" viewBox="0 0 24 24">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+        </svg>
       </div>
-      <div class="carousel-hero-text"><h2>Augmented &amp; Virtual Reality</h2><p>Build immersive experiences with Unity, Vuforia &amp; A-Frame</p></div>
+      <div class="carousel-brand-strip">
+        <div class="brand-left">
+          <span class="govt-title">Ministry of Electronics &amp; IT</span>
+          <span class="govt-sub">Government of India</span>
+        </div>
+        <div class="brand-right">
+          <span class="nielit-brand">NIELIT</span>
+        </div>
+      </div>
+      <div class="carousel-hero-content">
+        <span class="slide-badge track-arvr">Immersive Technology</span>
+        <h2>Augmented &amp; Virtual Reality</h2>
+        <p>Build real-world production setups and apps using Unity, Vuforia, and A-Frame engines.</p>
+        <div class="slide-actions">
+          <a href="#nomination" class="slide-btn btn-solid">Apply Online</a>
+          <a href="#courses" class="slide-btn btn-outline">View Courses</a>
+        </div>
+      </div>
     </div>
+
+    <!-- SLIDE 3 -->
     <div class="carousel-slide">
-      <img src="assets/img/hero3.webp" alt="Big Data Training" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <img src="assets/img/hero3.webp" alt="Big Data &amp; Data Science Background"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
       <div class="slide-fallback slide-fallback-3" style="display:none">
-        <svg width="64" height="64" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-        <span>Big Data &amp; Data Science</span>
+        <svg width="64" height="64" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" viewBox="0 0 24 24">
+          <ellipse cx="12" cy="5" rx="9" ry="3"/>
+          <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+        </svg>
       </div>
-      <div class="carousel-hero-text"><h2>Big Data &amp; Data Science</h2><p>Hadoop, Spark, MongoDB, Machine Learning &amp; Deep Learning</p></div>
+      <div class="carousel-brand-strip">
+        <div class="brand-left">
+          <span class="govt-title">Ministry of Electronics &amp; IT</span>
+          <span class="govt-sub">Government of India</span>
+        </div>
+        <div class="brand-right">
+          <span class="nielit-brand">NIELIT</span>
+        </div>
+      </div>
+      <div class="carousel-hero-content">
+        <span class="slide-badge track-bdds">Advanced Analytics</span>
+        <h2>Big Data &amp; Data Science</h2>
+        <p>Master complex pipelines with Hadoop, Apache Spark, NoSQL MongoDB, and Deep Learning models.</p>
+        <div class="slide-actions">
+          <a href="#nomination" class="slide-btn btn-solid">Register Now</a>
+          <a href="#courses" class="slide-btn btn-outline">View Courses</a>
+        </div>
+      </div>
     </div>
+
+    <!-- Shared overlay, controls & dots — these sit on top of all slides -->
     <div class="carousel-overlay"></div>
     <div class="carousel-nav">
       <button class="carousel-btn" id="prevSlide" aria-label="Previous">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+        </svg>
       </button>
       <button class="carousel-btn" id="nextSlide" aria-label="Next">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
       </button>
     </div>
     <div class="carousel-dots" id="carouselDots"></div>
   </div>
 
-  <!-- Hero Content -->
+  <!-- Hero Content (below carousel) -->
   <div class="hero-content">
     <div class="container text-center fade-in">
       <h1 class="gradient-text">FutureSkills PRIME</h1>
@@ -401,7 +664,7 @@
   </div>
 
   <!-- About -->
-  <div class="about-section">
+  <div class="about-section" id="about">
     <div class="container fade-in">
       <div class="about-card">
         <div class="about-card-text">
@@ -707,7 +970,7 @@
 <footer class="footer">
   <div class="container">
     <p>&copy; 2026 <strong>NIELIT Chandigarh</strong> — FutureSkills PRIME. All rights reserved.</p>
-    <p>An Initiative by Ministry of Electronics and Information Technology (MeitY), Government of India</p>
+    <p style="margin-top:.35rem;opacity:.7">An Initiative by Ministry of Electronics and Information Technology (MeitY), Government of India</p>
   </div>
 </footer>
 
@@ -781,7 +1044,6 @@ const speakers=[
   {name:"Mr. Amrinder Singh",role:"Project Assistant",institution:"NIELIT Chandigarh",topic:"AR/VR & Web Development",bio:"Mr. Amrinder Singh works on AR/VR and web application projects at NIELIT Chandigarh, supporting Unity and A-Frame training.",photo:"",initials:"AS",color:"#0f2d52"}
 ];
 
-// Alumni data with URL mapping
 const alumniData = {
   'Big Data and Data Science': {
     'Government Official Training - Advanced': { batches:['Batch 1','Batch 2','Batch 3'], url:'https://nielitropar-dte.hf.space/' },
@@ -865,7 +1127,7 @@ function renderSpeakers(){
   }).join('');
 }
 
-// ==================== ALUMNI DROPDOWN (SIMPLE & ROBUST) ====================
+// ==================== ALUMNI ====================
 function buildBatchLinks(batchArr, url){
   return batchArr.map(b=>`<a href="${url}" target="_blank" rel="noopener">${b}</a>`).join('');
 }
@@ -895,7 +1157,6 @@ function renderAlumniDesktop(){
   });
   inner.innerHTML=html;
 
-  // Attach toggle handlers — simple click only, no touch hacks
   inner.querySelectorAll('.ap-program-btn').forEach(btn=>{
     btn.addEventListener('click',()=>{
       const panel=document.getElementById(btn.getAttribute('aria-controls'));
@@ -927,25 +1188,20 @@ function renderAlumniMobile(){
   acc.innerHTML=html;
 }
 
-// Desktop dropdown open/close
+// ==================== DESKTOP DROPDOWN ====================
 (function setupDesktopDropdown(){
   const btn=document.getElementById('desktopAlumniBtn');
   const panel=document.getElementById('desktopAlumniPanel');
-
   btn.addEventListener('click', e=>{
     e.stopPropagation();
     const nowOpen=!panel.classList.contains('open');
     panel.classList.toggle('open', nowOpen);
     btn.setAttribute('aria-expanded', nowOpen);
   });
-
-  // Close when clicking anywhere outside
   document.addEventListener('click', ()=>{
     panel.classList.remove('open');
     btn.setAttribute('aria-expanded','false');
   });
-
-  // Prevent inner clicks from closing the panel
   panel.addEventListener('click', e=>e.stopPropagation());
 })();
 
@@ -953,6 +1209,7 @@ function renderAlumniMobile(){
 let currentSlide=0;
 const slides=document.querySelectorAll('.carousel-slide');
 const dotsContainer=document.getElementById('carouselDots');
+let autoTimer;
 
 function initCarousel(){
   slides.forEach((_,i)=>{
@@ -962,7 +1219,12 @@ function initCarousel(){
     dot.addEventListener('click',()=>goToSlide(i));
     dotsContainer.appendChild(dot);
   });
-  setInterval(()=>goToSlide((currentSlide+1)%slides.length),5000);
+  startAuto();
+}
+
+function startAuto(){
+  clearInterval(autoTimer);
+  autoTimer=setInterval(()=>goToSlide((currentSlide+1)%slides.length),5000);
 }
 
 function goToSlide(index){
@@ -973,8 +1235,14 @@ function goToSlide(index){
   dotsContainer.children[currentSlide].classList.add('active');
 }
 
-document.getElementById('prevSlide').addEventListener('click',()=>goToSlide((currentSlide-1+slides.length)%slides.length));
-document.getElementById('nextSlide').addEventListener('click',()=>goToSlide((currentSlide+1)%slides.length));
+document.getElementById('prevSlide').addEventListener('click',()=>{
+  goToSlide((currentSlide-1+slides.length)%slides.length);
+  startAuto();
+});
+document.getElementById('nextSlide').addEventListener('click',()=>{
+  goToSlide((currentSlide+1)%slides.length);
+  startAuto();
+});
 
 // ==================== MOBILE MENU ====================
 document.getElementById('mobileToggle').addEventListener('click',()=>{
