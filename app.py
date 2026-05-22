@@ -325,8 +325,8 @@ def generate_pdf(form_data: dict) -> BytesIO:
         usable_w = A4[0] - 2.4*cm
         
         data = [
-            [Paragraph("Resource Centre Name", bold_st), "", ":", Paragraph(form_data.get("Resource_Centre_Name", ""), norm_st)],
-            [Paragraph("Technology", bold_st), "", ":", Paragraph(f"{form_data.get('Technology', '')}      Role: Co-Lead", norm_st)],
+            [Paragraph("Resource Centre Name", bold_st), ":", Paragraph(form_data.get("Resource_Centre_Name", ""), norm_st)],
+            [Paragraph("Technology", bold_st), ":", Paragraph(f"{form_data.get('Technology', '')}      Role: {form_data.get('xxx', 'Co-Lead')}", norm_st)],
             ["1", Paragraph("Course Name", norm_st), ":", Paragraph(form_data.get("Course_Name", ""), norm_st)],
             ["2", Paragraph("Course Start Date", norm_st), ":", Paragraph(form_data.get("Course_Start_Date", ""), norm_st)],
             ["3", Paragraph("Applicant Name (as per Gov ID)", norm_st), ":", Paragraph(form_data.get("Applicant_Name", ""), norm_st)],
