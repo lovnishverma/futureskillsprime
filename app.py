@@ -235,7 +235,7 @@ def generate_docx(form_data: dict) -> BytesIO:
                     img_buf = fetch_image_as_jpeg(photo_url, target_size=(300, 375))
                     para.clear()
                     run = para.add_run()
-                    run.add_picture(img_buf, width=Inches(1.2))
+                    run.add_picture(img_buf, width=Inches(1.2), height=Inches(1.5))
                 except Exception:
                     para.text = "[Photo]"
             continue
@@ -246,7 +246,7 @@ def generate_docx(form_data: dict) -> BytesIO:
                     img_buf = fetch_image_as_jpeg(sign_url, target_size=(300, 100))
                     para.clear()
                     run = para.add_run()
-                    run.add_picture(img_buf, width=Inches(1.5))
+                    run.add_picture(img_buf, width=Inches(1.5), height=Inches(0.5))
                 except Exception:
                     para.text = "[Signature]"
             continue
@@ -266,7 +266,7 @@ def generate_docx(form_data: dict) -> BytesIO:
                             for para in cell.paragraphs:
                                 para.clear()
                             run = cell.paragraphs[0].add_run()
-                            run.add_picture(img_buf, width=Inches(1.2))
+                            run.add_picture(img_buf, width=Inches(1.2), height=Inches(1.5))
                         except Exception:
                             cell.paragraphs[0].text = "[Photo]"
                     continue
@@ -277,7 +277,7 @@ def generate_docx(form_data: dict) -> BytesIO:
                             img_buf = fetch_image_as_jpeg(sign_url, target_size=(300, 100))
                             cell.text = ""
                             run = cell.paragraphs[0].add_run()
-                            run.add_picture(img_buf, width=Inches(1.5))
+                            run.add_picture(img_buf, width=Inches(1.5), height=Inches(0.5))
                             from docx.enum.text import WD_ALIGN_PARAGRAPH
                             cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
                         except Exception:
