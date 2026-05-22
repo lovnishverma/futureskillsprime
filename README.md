@@ -65,7 +65,8 @@ FLASK_SECRET_KEY=your_secret_key_here
 ADMIN_PASSWORD=nielit@admin
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-# Optional: MONGO_URI=your_mongo_connection_string
+MONGO_URI=your_mongo_connection_string
+# Optional: PORT=5000
 ```
 
 ### 4. Running the Application
