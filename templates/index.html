@@ -2743,7 +2743,7 @@
                     <fieldset class="form-fieldset">
                         <legend class="form-legend">7. Documents</legend>
                         <div class="form-row">
-                            <div class="form-col">
+                            <div class="form-col" id="photoCol">
                                 <label class="form-label">Passport Size Photo *</label>
                                 <input type="file" name="photo" accept="image/*" class="form-input" required>
                             </div>
@@ -3176,8 +3176,22 @@
 
         levelSelect.addEventListener('change', function () {
             const isGOT = (this.value === 'Basic' || this.value === 'Advanced');
+            const isBootcamp = (this.value === 'Bootcamp');
+            
             detailedEdu.classList.toggle('hidden', !isGOT);
             detailedExp.classList.toggle('hidden', !isGOT);
+            
+            const photoCol = document.getElementById('photoCol');
+            const photoInput = document.querySelector('input[name="photo"]');
+            if(photoCol && photoInput) {
+                if (isBootcamp) {
+                    photoCol.style.display = 'none';
+                    photoInput.required = false;
+                } else {
+                    photoCol.style.display = 'block';
+                    photoInput.required = true;
+                }
+            }
         });
 
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4A7b3YNQsWeOkIiFvXnexRpVftBhRgOl7bVY5lV6MJdv2mQx_sKO1EbrDJ0LU5dVjvw/exec";

@@ -129,6 +129,15 @@ def row_to_form_data(row):
         "Name": d.get("name", ""),
         "Full_Name": name_full,
         "Course_Name": _course_name(d.get("track", ""), d.get("level", "")),
+        "Level": d.get("level", ""),
+        "Applicant_Name": name_full,
+        "Gov_ID_Number": d.get("aadhar", ""),
+        "Organization_Academic_Institute": d.get("organisation", ""),
+        "Role": d.get("designation", ""),
+        "Highest_Qualification": f"{d.get('highest_qual', '')}",
+        "Previous_FSP_Program": d.get("prev_fsp", ""),
+        "Previous_FSP_Details_1": d.get("prev_fsp_details", ""),
+        "Previous_FSP_Details_2": "",
         "Technology": _technology(d.get("track", "")),
         "Resource_Centre_Name": d.get("resource_centre", "NIELIT Chandigarh"),
         "Date_of_Training": fmt_date(d.get("course_start_date", "")),
@@ -203,7 +212,8 @@ def _replace_in_para(para, replacements):
 
 def generate_docx(form_data: dict) -> BytesIO:
     """Fill the DOCX template and return as BytesIO. Inserts photo into Photo cell."""
-    doc = Document(str(DOCX_TEMPLATE))
+    template_path = Path("docxtemplates/Bootcamp_Nomination_Form.docx") if form_data.get("Level") == "Bootcamp" else DOCX_TEMPLATE
+    doc = Document(str(template_path))
     replacements = {k: (str(v) if v else "") for k, v in form_data.items()
                     if k not in ("photo_url", "sign_url")}
 
