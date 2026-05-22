@@ -129,6 +129,11 @@ def row_to_form_data(row):
         "Name": d.get("name", ""),
         "Full_Name": name_full,
         "Course_Name": _course_name(d.get("track", ""), d.get("level", "")),
+        "Course_Start_Date": fmt_date(d.get("course_start_date", "")),
+        "Native_State": d.get("native_state", ""),
+        "District": d.get("district", ""),
+        "Status": d.get("status", ""),
+        "Beneficiary_Category": d.get("beneficiary_category", ""),
         "Level": d.get("level", ""),
         "Applicant_Name": name_full,
         "Gov_ID_Number": d.get("aadhar", ""),
@@ -293,6 +298,98 @@ def generate_docx(form_data: dict) -> BytesIO:
 def generate_pdf(form_data: dict) -> BytesIO:
     """Generate a simple A4 PDF nomination form matching the DOCX template."""
     buf = BytesIO()
+    
+    if form_data.get("Level") == "Bootcamp":
+        doc = SimpleDocTemplate(
+            buf, pagesize=A4,
+            topMargin=0.8*cm, bottomMargin=0.8*cm,
+            leftMargin=1.2*cm, rightMargin=1.2*cm,
+        )
+        elements = []
+        
+        # Styles
+        styles = getSampleStyleSheet()
+        title_st = ParagraphStyle('title', fontName='Helvetica-Bold', fontSize=12, alignment=1, spaceAfter=4)
+        norm_st = ParagraphStyle('norm', fontName='Helvetica', fontSize=9)
+        bold_st = ParagraphStyle('bold', fontName='Helvetica-Bold', fontSize=9)
+        
+        # Header
+        elements.append(Paragraph("National Institute of Electronics and Information Technology Chandigarh", title_st))
+        elements.append(Paragraph("An autonomous scientific society under administrative control of<br/>Ministry of Electronics and Information Technology (MeitY), Government of India", ParagraphStyle('sub', fontName='Helvetica-Bold', fontSize=10, alignment=1, spaceAfter=8)))
+        elements.append(Paragraph("FutureSkills PRIME (Programme for Re-skilling/Up-skilling of IT Manpower for Employability)", ParagraphStyle('sub2', fontName='Helvetica-Bold', fontSize=10, alignment=1, spaceAfter=14)))
+        
+        usable_w = A4[0] - 2.4*cm
+        
+        data = [
+            [Paragraph("Resource Centre Name", bold_st), ":", Paragraph(form_data.get("Resource_Centre_Name", ""), norm_st)],
+            [Paragraph("Technology", bold_st), ":", Paragraph(f"{form_data.get('Technology', '')}      Role: {form_data.get('Role', '')}", norm_st)],
+            ["1", Paragraph("Course Name", norm_st), ":", Paragraph(form_data.get("Course_Name", ""), norm_st)],
+            ["2", Paragraph("Course Start Date", norm_st), ":", Paragraph(form_data.get("Course_Start_Date", ""), norm_st)],
+            ["3", Paragraph("Applicant Name (as per Gov ID)", norm_st), ":", Paragraph(form_data.get("Applicant_Name", ""), norm_st)],
+            ["4", Paragraph("Date of Birth", norm_st), ":", Paragraph(form_data.get("DOB", ""), norm_st)],
+            ["5", Paragraph("Gender", norm_st), ":", Paragraph(form_data.get("Gender", ""), norm_st)],
+            ["6", Paragraph("Mobile Number", norm_st), ":", Paragraph(form_data.get("Contact_Number", ""), norm_st)],
+            ["7", Paragraph("Email ID (official ID preferred)", norm_st), ":", Paragraph(form_data.get("Email", ""), norm_st)],
+            ["8", Paragraph("Native State", norm_st), ":", Paragraph(form_data.get("Native_State", ""), norm_st)],
+            ["9", Paragraph("District", norm_st), ":", Paragraph(form_data.get("District", ""), norm_st)],
+            ["10", Paragraph("Government-issued ID Number<br/>(Aadhar copy enclosed)", norm_st), ":", Paragraph(form_data.get("Gov_ID_Number", ""), norm_st)],
+            ["11", Paragraph("Organization/Academic Institute (if applicable)", norm_st), ":", Paragraph(form_data.get("Organization_Academic_Institute", ""), norm_st)],
+            ["12", Paragraph("Highest Qualification (with Degree & Branch)", norm_st), ":", Paragraph(form_data.get("Highest_Qualification", ""), norm_st)],
+            ["13", Paragraph("Status (Pursuing/ Passed out)", norm_st), ":", Paragraph(form_data.get("Status", ""), norm_st)],
+            ["14", Paragraph("Beneficiary Category (Tick as applicable)", norm_st), ":", Paragraph(form_data.get("Beneficiary_Category", ""), norm_st)],
+            ["15", Paragraph("Involved in previous FSP Program", norm_st), ":", Paragraph(form_data.get("Previous_FSP_Program", ""), norm_st)],
+            ["16", Paragraph("If previous answer is, yes provide details<br/>(Program Name / Conducting Institute / Date)", norm_st), ":", Paragraph(f"1. {form_data.get('Previous_FSP_Details_1', '')}<br/>2. {form_data.get('Previous_FSP_Details_2', '')}", norm_st)],
+        ]
+        
+        t_style = TableStyle([
+            ('GRID', (0,0), (-1,-1), 0.5, colors.black),
+            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+            ('PADDING', (0,0), (-1,-1), 4),
+            ('SPAN', (0, 0), (1, 0)), 
+            ('SPAN', (0, 1), (1, 1)), 
+        ])
+        
+        data[0].insert(1, "")
+        data[1].insert(1, "")
+        
+        t = Table(data, colWidths=[usable_w*0.05, usable_w*0.35, usable_w*0.05, usable_w*0.55])
+        t.setStyle(t_style)
+        elements.append(t)
+        elements.append(Spacer(1, 20))
+        
+        elements.append(Paragraph("I hereby declare that all the information provided above is true.", norm_st))
+        elements.append(Spacer(1, 10))
+        
+        sign_img = None
+        if form_data.get("sign_url"):
+            try:
+                sign_buf = fetch_image_as_jpeg(form_data["sign_url"])
+                sign_img = RLImage(sign_buf, width=1.5*inch, height=0.5*inch)
+                sign_img.hAlign = 'RIGHT'
+            except Exception:
+                pass
+
+        if sign_img:
+            elements.append(sign_img)
+        else:
+            elements.append(Spacer(1, 0.5*inch))
+            
+        elements.append(Paragraph("Applicant Signature", ParagraphStyle('r', fontName='Helvetica-Bold', fontSize=9, alignment=2)))
+        
+        elements.append(Spacer(1, 20))
+        elements.append(Paragraph("(For office purpose)<br/>The above submitted information has been verified and recommended.", norm_st))
+        elements.append(Spacer(1, 30))
+        elements.append(Paragraph("(Signature)<br/>Course Co-ordinator", ParagraphStyle('r2', fontName='Helvetica-Bold', fontSize=9, alignment=2)))
+        
+        elements.append(Spacer(1, 10))
+        elements.append(Paragraph("1 Any of the government issued ID: Aadhaar card<br/>2 Participants are not allowed to enroll in the same program for more than once", ParagraphStyle('small', fontName='Helvetica-Oblique', fontSize=8)))
+        
+        doc.build(elements)
+        buf.seek(0)
+        return buf
+        
+    # --- END BOOTCAMP BRANCH ---
+
 
     doc = SimpleDocTemplate(
         buf, pagesize=A4,
