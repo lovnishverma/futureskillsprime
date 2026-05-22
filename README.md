@@ -93,7 +93,7 @@ Make sure all your files (including `requirements.txt`) are pushed to a GitHub, 
 1. Log in to Render and click **New +** > **Web Service**.
 2. Connect your GitHub/GitLab repository.
 3. Configure the following settings:
-   - **Name**: `nielit-nominations` (or your preferred name)
+   - **Name**: `futureskillsprime`
    - **Environment**: `Python`
    - **Build Command**: `pip install -r requirements.txt`
    - **Start Command**: `gunicorn app:app`
