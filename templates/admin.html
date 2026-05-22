@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel - Nominations</title>
+    <style>
+        body { font-family: sans-serif; margin: 30px; background-color: #f9fafb; color: #333; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #e5e7eb; padding: 12px 15px; text-align: left; }
+        th { background-color: #f3f4f6; font-weight: 600; color: #4b5563; }
+        .btn { padding: 8px 15px; background: #2563eb; color: white; text-decoration: none; border-radius: 4px; font-size: 14px; font-weight: 500; display: inline-block;}
+        .btn:hover { background: #1d4ed8; }
+        .btn-danger { background: #ef4444; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px; font-size: 14px; font-weight: 500;}
+        .btn-danger:hover { background: #dc2626; }
+        .actions { display: flex; gap: 8px; }
+        .alert { margin-top: 10px; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .alert-success { background: #d1fae5; color: #065f46; }
+        .alert-error { background: #fee2e2; color: #991b1b; }
+        .alert-warning { background: #fef3c7; color: #92400e; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Nominations Admin Panel</h2>
+        <a href="{{ url_for('admin_logout') }}" style="color: #4b5563; font-weight: 600; text-decoration: none;">Logout</a>
+    </div>
+    
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('admin_csv') }}" class="btn">Export CSV</a>
+        <a href="{{ url_for('admin_pdf_all') }}" class="btn">Download All PDFs</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+              {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Track</th>
+            <th>Level</th>
+            <th>Organisation</th>
+            <th>Contact</th>
+            <th>Token</th>
+            <th>Actions</th>
+        </tr>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row.submitted_at[:10] if row.submitted_at else '' }}</td>
+            <td>{{ row.name }}</td>
+            <td>{{ row.track }}</td>
+            <td>{{ row.level }}</td>
+            <td>{{ row.organisation }}</td>
+            <td>{{ row.contact }}</td>
+            <td style="font-family: monospace; font-size: 0.9em; color: #6b7280;">{{ row.token[:8] }}...</td>
+            <td class="actions">
+                <a href="{{ url_for('admin_pdf_single', row_id=row.id) }}" class="btn">PDF</a>
+                <form action="{{ url_for('admin_delete', row_id=row.id) }}" method="POST" onsubmit="return confirm('Delete this nomination permanently?');" style="margin:0;">
+                    <button type="submit" class="btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="8" style="text-align: center; padding: 30px; color: #6b7280;">No nominations found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

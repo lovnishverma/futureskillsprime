@@ -1,98 +1,119 @@
-# FutureSkills PRIME - NIELIT Chandigarh
+# FutureSkills PRIME - NIELIT Chandigarh Nomination System
 
-**Demo:** https://www.lovnishverma.in/futureskillsprime/
-
-**Live:** https://futureskillsprime.onrender.com/
-
-A responsive, single-page web application designed for the FutureSkills PRIME initiative at NIELIT Chandigarh. This landing page serves as a central hub for discovering upcoming courses, viewing distinguished speakers, browsing alumni batches, and submitting program nominations.
+A complete web-based nomination and registration portal developed for the **FutureSkills PRIME** initiative by **NIELIT Chandigarh**. The platform allows government officials and participants to register for emerging technology training programs (such as Big Data & Data Science and AR/VR), seamlessly generating standardized PDF and DOCX nomination forms from their submissions.
 
 ## Features
 
-*   **Modern, Responsive UI:** Built with a mobile-first approach, featuring a collapsible mobile menu and sticky glass-morphism navigation bar.
-*   **Dynamic Hero Carousel:** Auto-advancing image slider with manual dot/arrow navigation to highlight key programs.
-*   **Data-Driven Content:** Courses, speakers, and alumni data are separated from the HTML structure using JavaScript objects, making it incredibly easy to update content without touching the UI layout.
-*   **Interactive Course Modules:** Expandable accordion-style course cards detailing daily theory and practical lab schedules.
-*   **Multi-Level Alumni Dropdown:** Categorized by track (BDDS, ARVR), level, and batch, dynamically generating links to specific batch pages.
-*   **Integrated Nomination Form:** A comprehensive registration form with conditional logic (e.g., hiding education/experience fields for Bootcamps) that seamlessly submits data to a Google Sheets backend via Apps Script.
-*   **Custom 404 Page:** A branded, cohesive error page (`404.html`) guiding users safely back to the main site.
+- **Dynamic Landing Page**: Detailed information on courses, speakers, and the FutureSkills PRIME program.
+- **Online Nomination Form**: Interactive, multi-step form to collect participant details, educational qualifications, and professional experience.
+- **File Uploads & Cloud Storage**: Secure handling of passport photos and signatures. PDFs are dynamically generated upon submission and securely archived to **Cloudinary**.
+- **Automated Document Generation**: Automatically injects form data into an official DOCX template and generates a polished, print-ready PDF using ReportLab.
+- **Participant Dashboard**: Generates a unique tracking token for each submission and allows the user to immediately download their filled DOCX and PDF documents.
+- **Admin Portal**: A secure dashboard (`/admin`) that allows administrators to:
+  - View all submitted nominations.
+  - Export all data to a CSV file.
+  - Generate a bulk all-in-one PDF containing all submitted nominations.
+  - Download individual PDFs or delete entries.
 
-## 📁 File Structure
+## Tech Stack
+
+- **Backend**: Python, Flask
+- **Database**: MongoDB (via `pymongo`)
+- **Cloud Storage**: Cloudinary (for secure PDF archiving)
+- **Document Processing**: `python-docx` (for Word documents), `reportlab` & `pypdf` (for PDF generation)
+- **Image Processing**: `Pillow` (PIL)
+- **Frontend**: HTML5, Vanilla JavaScript, CSS3 (Custom responsive design with modern styling)
+
+## Directory Structure
 
 ```text
-├── index.html       # Main landing page (Home, Courses, Speakers, Form)
-├── 404.html         # Custom error page for broken links
-└── README.md        # Project documentation
-
+.
+├── .env                        # Environment variables (Create this file locally)
+├── app.py                      # Main Flask application and routes
+├── requirements.txt            # Python dependencies for deployment
+├── docxtemplates/              
+│   └── GOT_Nomination_Form.docx # Base Word template for generating documents
+├── static/
+│   └── uploads/                # Directory where user-uploaded photos and signatures are stored locally
+├── templates/
+│   ├── index.html              # Main landing page and nomination form
+│   ├── success.html            # Success page with PDF/DOCX download links
+│   ├── admin_login.html        # Admin authentication page
+│   └── admin.html              # Admin dashboard
+└── README.md                   # Project documentation
 ```
 
-## 🛠️ Technologies Used
+## Local Setup & Installation
 
-* **HTML5:** Semantic markup and structure.
-* **CSS3 (Vanilla):** Custom CSS variables (`:root`), flexbox, CSS grid, scroll-behavior, and keyframe animations. No external CSS frameworks were used, ensuring a lightweight footprint.
-* **JavaScript (Vanilla):** DOM manipulation, event listeners, dynamic HTML rendering, and asynchronous form submission (`Fetch API`).
+### 1. Prerequisites
 
-## 💻 Local Setup & Installation
+Ensure you have **Python 3.8+** installed. You will also need access to a MongoDB cluster (like MongoDB Atlas) and a Cloudinary account.
 
-Since this project uses entirely vanilla frontend technologies with no build steps or dependencies, setup is instantaneous:
+### 2. Install Dependencies
 
-1. Clone or download the repository to your local machine.
-2. Open `index.html` directly in any modern web browser.
-3. *Optional:* For the best development experience, use a local server like the **Live Server** extension in VS Code to test the form submission and routing.
+Install the required Python packages using pip:
 
-## ⚙️ Configuration & Content Management
-
-To update the content on the website, scroll to the `<script>` tag at the bottom of `index.html`. You can modify the following JavaScript arrays/objects:
-
-### 1. Updating Courses
-
-Add or edit objects in the `courses` array. The UI will automatically generate the accordion cards.
-
-```javascript
-{
-  course: 7,
-  title: "New Course Title",
-  objective: "Course objective description.",
-  speakers: ["Speaker 1", "Speaker 2"],
-  days: [ ... ] // Add daily modules here
-}
-
+```bash
+pip install -r requirements.txt
 ```
 
-### 2. Updating Speakers
+### 3. Environment Variables
 
-Add new speaker profiles to the `speakers` array. The grid will automatically adjust.
+Create a `.env` file in the root directory and configure it with your credentials:
 
-```javascript
-{ 
-  name: "New Speaker", 
-  role: "Designation", 
-  institution: "NIELIT", 
-  topic: "Topic Name", 
-  bio: "Short biography." 
-}
-
+```env
+FLASK_SECRET_KEY=your_secret_key_here
+ADMIN_PASSWORD=nielit@admin
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+# Optional: MONGO_URI=your_mongo_connection_string
 ```
 
-### 3. Google Form Webhook
+### 4. Running the Application
 
-The nomination form currently submits to a Google Apps Script deployment. To link this to your own Google Sheet:
+Run the application locally using Python:
 
-1. Create a Google Sheet and attach an Apps Script.
-2. Deploy the script as a Web App.
-3. Replace the `WEB_APP_URL` variable in `index.html` with your new deployment link:
-
-```javascript
-const WEB_APP_URL = "YOUR_NEW_GOOGLE_APPS_SCRIPT_URL";
-
+```bash
+python app.py
 ```
 
-## 👨‍💻 Author & Maintainer
+The application will start on `http://127.0.0.1:5000/`. 
+- The public nomination form is available at `/`
+- The admin dashboard is available at `/admin`
 
-**Lovnish Verma**
+## Deploying on Render
 
-Project Engineer, AI/ML
+To deploy this Flask application live to the internet using [Render.com](https://render.com), follow these steps:
 
-NIELIT Chandigarh / Ropar
+### 1. Prepare your Repository
+Make sure all your files (including `requirements.txt`) are pushed to a GitHub, GitLab, or Bitbucket repository.
 
-*An Initiative by the Ministry of Electronics and Information Technology (MeitY), Government of India.*
+### 2. Create a Web Service on Render
+1. Log in to Render and click **New +** > **Web Service**.
+2. Connect your GitHub/GitLab repository.
+3. Configure the following settings:
+   - **Name**: `nielit-nominations` (or your preferred name)
+   - **Environment**: `Python`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn app:app`
 
+### 3. Set Environment Variables
+In the Render dashboard under your Web Service settings, go to the **Environment** tab and add the variables from your `.env` file:
+- `FLASK_SECRET_KEY` (Set a strong random string)
+- `ADMIN_PASSWORD`
+- `CLOUDINARY_API_KEY`
+- `CLOUDINARY_API_SECRET`
+
+### 4. Deploy
+Click **Deploy**. Render will automatically build your environment, install the dependencies, and launch your Flask app using `gunicorn`. Once the deployment is live, your application will be accessible via a `*.onrender.com` URL.
+
+## Usage
+
+1. **Submit a Nomination**: Visit the homepage, scroll to the Nomination section, fill out all required details including uploading a photo and signature, and click Submit.
+2. **Download Documents**: Upon successful submission, you will receive a unique tracking token. Use the provided buttons to download your finalized PDF or DOCX form.
+3. **Admin Actions**: Navigate to `/admin` and log in (default password: `nielit@admin`). From here, you can view all applicants, export data to CSV, or download a bulk PDF of all nominations.
+
+## License
+
+&copy; 2026 NIELIT Chandigarh &mdash; FutureSkills PRIME. All rights reserved. 
+An Initiative by Ministry of Electronics and Information Technology (MeitY), Government of India.
