@@ -44,7 +44,7 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "nielit_dev_secret_2026")
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10 MB
 app.config["UPLOAD_FOLDER"] = BASE_DIR / "static" / "uploads"
-app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
+app.config["MONGO_URI"] = os.environ.get("MONGO_URI", "mongodb+srv://indiaaischeme:nielit4321@cluster0.ler36mh.mongodb.net/?appName=Cluster0")
 app.config["ADMIN_PASSWORD"] = os.environ.get("ADMIN_PASSWORD")
 
 cloudinary.config(
@@ -72,31 +72,27 @@ def get_db():
 def init_db():
     nominations_col.create_index("token", unique=True)
 
+# Call it immediately when the module is imported by Gunicorn
+init_db()
+
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
-def allowed_file(filename):
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_IMG
 
 
-def save_upload(file_storage, prefix):
-    """Save an uploaded image; return relative path or None."""
-    if not file_storage or file_storage.filename == "":
+
+
+import urllib.request
+
+def upload_to_cloudinary(file_obj, folder_name):
+    """Upload file directly to Cloudinary and return secure URL."""
+    if not file_obj or file_obj.filename == '':
         return None
-    if not allowed_file(file_storage.filename):
-        return None
-    ext = file_storage.filename.rsplit(".", 1)[1].lower()
-    fname = f"{prefix}_{uuid.uuid4().hex[:8]}.{ext}"
-    save_path = app.config["UPLOAD_FOLDER"] / fname
-    file_storage.save(str(save_path))
-    # Resize large images to keep storage sane
     try:
-        img = Image.open(str(save_path))
-        img.thumbnail((600, 800), Image.LANCZOS)
-        img.save(str(save_path))
-    except Exception:
-        pass
-    return fname
-
+        res = cloudinary.uploader.upload(file_obj, folder=folder_name, resource_type="image")
+        return res.get("secure_url")
+    except Exception as e:
+        logging.error(f"Cloudinary upload failed: {e}")
+        return None
 
 def fmt_date(val):
     """Convert YYYY-MM-DD → DD-MM-YYYY."""
@@ -136,8 +132,8 @@ def row_to_form_data(row):
         "Exp2_Year": d.get("exp2_year", ""), "Exp2_Area_of_Expertise": d.get("exp2_area", ""), "Exp2_Centre": d.get("exp2_centre", ""),
         "Exp3_Year": d.get("exp3_year", ""), "Exp3_Area_of_Expertise": d.get("exp3_area", ""), "Exp3_Centre": d.get("exp3_centre", ""),
         "Today_Date": datetime.today().strftime("%d-%m-%Y"),
-        "photo_path": d.get("photo_path"),
-        "sign_path": d.get("sign_path"),
+        "photo_url": d.get("photo_url"),
+        "sign_url": d.get("sign_url"),
     }
 
 
@@ -190,7 +186,7 @@ def generate_docx(form_data: dict) -> BytesIO:
     """Fill the DOCX template and return as BytesIO. Inserts photo into Photo cell."""
     doc = Document(str(DOCX_TEMPLATE))
     replacements = {k: (str(v) if v else "") for k, v in form_data.items()
-                    if k not in ("photo_path", "sign_path")}
+                    if k not in ("photo_url", "sign_url")}
 
     for para in doc.paragraphs:
         _replace_in_para(para, replacements)
@@ -201,18 +197,17 @@ def generate_docx(form_data: dict) -> BytesIO:
                 # Check if this cell is the "Photo" placeholder cell
                 cell_text = cell.text.strip()
                 if cell_text in ("Photo", "{Photo}", "<<Photo>>"):
-                    photo_fname = form_data.get("photo_path")
-                    if photo_fname:
-                        photo_full = app.config["UPLOAD_FOLDER"] / photo_fname
-                        if photo_full.exists():
+                    photo_url = form_data.get("photo_url")
+                    if photo_url:
+                        try:
+                            req = urllib.request.urlopen(photo_url)
+                            img_buf = BytesIO(req.read())
                             for para in cell.paragraphs:
                                 para.clear()
                             run = cell.paragraphs[0].add_run()
-                            try:
-                                run.add_picture(
-                                    str(photo_full), width=Inches(1.0))
-                            except Exception:
-                                cell.paragraphs[0].text = "[Photo]"
+                            run.add_picture(img_buf, width=Inches(1.0))
+                        except Exception:
+                            cell.paragraphs[0].text = "[Photo]"
                     continue
                 for para in cell.paragraphs:
                     _replace_in_para(para, replacements)
@@ -318,16 +313,15 @@ def generate_pdf(form_data: dict) -> BytesIO:
     story.append(Spacer(1, 8))
 
     # ── Programme details with photo ──
-    photo_fname = form_data.get("photo_path")
+    photo_url = form_data.get("photo_url")
     photo_elem = None
-    if photo_fname:
-        photo_full = app.config["UPLOAD_FOLDER"] / photo_fname
-        if photo_full.exists():
-            try:
-                photo_elem = RLImage(
-                    str(photo_full), width=2.8*cm, height=3.2*cm)
-            except Exception:
-                photo_elem = None
+    if photo_url:
+        try:
+            req = urllib.request.urlopen(photo_url)
+            img_buf = BytesIO(req.read())
+            photo_elem = RLImage(img_buf, width=2.8*cm, height=3.2*cm)
+        except Exception:
+            photo_elem = None
 
     prog_rows = [
         [Paragraph("PROGRAMME DETAILS", section_st), ""],
@@ -521,8 +515,8 @@ def generate_pdf(form_data: dict) -> BytesIO:
 def index():
     if request.method == "POST":
         f = request.form
-        photo_fname = save_upload(request.files.get("photo"), "photo")
-        sign_fname = save_upload(request.files.get("signature"), "sign")
+        photo_url = upload_to_cloudinary(request.files.get("photo"), "photos")
+        sign_url = upload_to_cloudinary(request.files.get("signature"), "signatures")
         token = uuid.uuid4().hex
 
         db = get_db()
@@ -543,7 +537,7 @@ def index():
             "exp3_year": f.get("Exp3_Year"), "exp3_area": f.get("Exp3_Area_of_Expertise"), "exp3_centre": f.get("Exp3_Centre"),
             "prev_fsp": f.get("Previous_FSP_Program"), "prev_fsp_details": f.get("Previous_FSP_Details_1"),
             "course_start_date": f.get("Course_Start_Date"), "resource_centre": f.get("Resource_Centre_Name"),
-            "photo_path": photo_fname, "sign_path": sign_fname
+            "photo_url": photo_url, "sign_url": sign_url
         }
 
         # Generate PDF and upload to Cloudinary
@@ -723,12 +717,6 @@ def admin_delete(row_id):
         abort(400)
     row = db.find_one({"_id": obj_id})
     if row:
-        for f in [row.get("photo_path"), row.get("sign_path")]:
-            if f:
-                try:
-                    (app.config["UPLOAD_FOLDER"] / f).unlink(missing_ok=True)
-                except Exception:
-                    pass
         db.delete_one({"_id": obj_id})
     flash("Entry deleted.", "success")
     return redirect(url_for("admin"))
@@ -742,8 +730,5 @@ def page_not_found(e):
 
 
 if __name__ == "__main__":
-
-    app.config["UPLOAD_FOLDER"].mkdir(parents=True, exist_ok=True)
-    app.config["MONGO_URI"] = "mongodb+srv://indiaaischeme:nielit4321@cluster0.ler36mh.mongodb.net/?appName=Cluster0"
-    init_db()
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)

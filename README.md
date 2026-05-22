@@ -6,7 +6,7 @@ A complete web-based nomination and registration portal developed for the **Futu
 
 - **Dynamic Landing Page**: Detailed information on courses, speakers, and the FutureSkills PRIME program.
 - **Online Nomination Form**: Interactive, multi-step form to collect participant details, educational qualifications, and professional experience.
-- **File Uploads & Cloud Storage**: Secure handling of passport photos and signatures. PDFs are dynamically generated upon submission and securely archived to **Cloudinary**.
+- **100% Cloud-Native File Storage**: Secure handling of passport photos, signatures, and dynamically generated PDFs. All files are uploaded directly to **Cloudinary**, making the application entirely stateless and resilient to ephemeral server restarts.
 - **Automated Document Generation**: Automatically injects form data into an official DOCX template and generates a polished, print-ready PDF using ReportLab.
 - **Participant Dashboard**: Generates a unique tracking token for each submission and allows the user to immediately download their filled DOCX and PDF documents.
 - **Admin Portal**: A secure dashboard (`/admin`) that allows administrators to:
@@ -19,7 +19,7 @@ A complete web-based nomination and registration portal developed for the **Futu
 
 - **Backend**: Python, Flask
 - **Database**: MongoDB (via `pymongo`)
-- **Cloud Storage**: Cloudinary (for secure PDF archiving)
+- **Cloud Storage**: Cloudinary (for secure storage of photos, signatures, and PDFs)
 - **Document Processing**: `python-docx` (for Word documents), `reportlab` & `pypdf` (for PDF generation)
 - **Image Processing**: `Pillow` (PIL)
 - **Frontend**: HTML5, Vanilla JavaScript, CSS3 (Custom responsive design with modern styling)
@@ -33,8 +33,7 @@ A complete web-based nomination and registration portal developed for the **Futu
 ├── requirements.txt            # Python dependencies for deployment
 ├── docxtemplates/              
 │   └── GOT_Nomination_Form.docx # Base Word template for generating documents
-├── static/
-│   └── uploads/                # Directory where user-uploaded photos and signatures are stored locally
+├── static/                 # Static assets (CSS, images)
 ├── templates/
 │   ├── index.html              # Main landing page and nomination form
 │   ├── success.html            # Success page with PDF/DOCX download links
