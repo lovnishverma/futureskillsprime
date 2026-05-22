@@ -84,15 +84,19 @@ init_db()
 import urllib.request
 
 
-def fetch_image_as_jpeg(url):
+def fetch_image_as_jpeg(url, target_size=None):
     import urllib.request
     import tempfile
     from io import BytesIO
-    from PIL import Image
+    from PIL import Image, ImageOps
     req = urllib.request.urlopen(url)
     img = Image.open(BytesIO(req.read()))
     if img.mode in ("RGBA", "P"):
         img = img.convert("RGB")
+        
+    if target_size:
+        img = ImageOps.fit(img, target_size, Image.Resampling.LANCZOS if hasattr(Image, 'Resampling') else Image.ANTIALIAS)
+        
     fd, path = tempfile.mkstemp(suffix=".jpg")
     import os
     os.close(fd)
@@ -228,7 +232,7 @@ def generate_docx(form_data: dict) -> BytesIO:
             photo_url = form_data.get("photo_url")
             if photo_url:
                 try:
-                    img_buf = fetch_image_as_jpeg(photo_url)
+                    img_buf = fetch_image_as_jpeg(photo_url, target_size=(300, 375))
                     para.clear()
                     run = para.add_run()
                     run.add_picture(img_buf, width=Inches(1.2))
@@ -239,7 +243,7 @@ def generate_docx(form_data: dict) -> BytesIO:
             sign_url = form_data.get("sign_url")
             if sign_url:
                 try:
-                    img_buf = fetch_image_as_jpeg(sign_url)
+                    img_buf = fetch_image_as_jpeg(sign_url, target_size=(300, 100))
                     para.clear()
                     run = para.add_run()
                     run.add_picture(img_buf, width=Inches(1.5))
@@ -258,7 +262,7 @@ def generate_docx(form_data: dict) -> BytesIO:
                     photo_url = form_data.get("photo_url")
                     if photo_url:
                         try:
-                            img_buf = fetch_image_as_jpeg(photo_url)
+                            img_buf = fetch_image_as_jpeg(photo_url, target_size=(300, 375))
                             for para in cell.paragraphs:
                                 para.clear()
                             run = cell.paragraphs[0].add_run()
@@ -270,7 +274,7 @@ def generate_docx(form_data: dict) -> BytesIO:
                     sign_url = form_data.get("sign_url")
                     if sign_url:
                         try:
-                            img_buf = fetch_image_as_jpeg(sign_url)
+                            img_buf = fetch_image_as_jpeg(sign_url, target_size=(300, 100))
                             cell.text = ""
                             run = cell.paragraphs[0].add_run()
                             run.add_picture(img_buf, width=Inches(1.5))
@@ -363,7 +367,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
         sign_img = None
         if form_data.get("sign_url"):
             try:
-                sign_buf = fetch_image_as_jpeg(form_data["sign_url"])
+                sign_buf = fetch_image_as_jpeg(form_data["sign_url"], target_size=(300, 100))
                 sign_img = RLImage(sign_buf, width=1.5*inch, height=0.5*inch)
                 sign_img.hAlign = 'RIGHT'
             except Exception:
@@ -502,7 +506,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
     photo_url = form_data.get("photo_url")
     if photo_url:
         try:
-            img_buf = fetch_image_as_jpeg(photo_url)
+            img_buf = fetch_image_as_jpeg(photo_url, target_size=(300, 375))
             photo_elem = RLImage(img_buf, width=1.2*inch, height=1.5*inch)
         except Exception:
             photo_elem = "[Photo]"
@@ -511,7 +515,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
     sign_url = form_data.get("sign_url")
     if sign_url:
         try:
-            img_buf = fetch_image_as_jpeg(sign_url)
+            img_buf = fetch_image_as_jpeg(sign_url, target_size=(300, 100))
             sign_elem = RLImage(img_buf, width=1.5*inch, height=0.5*inch)
         except Exception:
             sign_elem = "[Signature]"
