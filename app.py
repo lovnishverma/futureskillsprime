@@ -7,36 +7,36 @@ Features:
   - Admin panel: view all submissions, download CSV, download individual or all-in-one PDF
 """
 
+from reportlab.platypus import (Image as RLImage, Paragraph, SimpleDocTemplate,
+                                Spacer, Table, TableStyle)
+from reportlab.lib.units import cm, mm
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from pypdf import PdfReader, PdfWriter
+from PIL import Image
+from flask import (Flask, abort, flash, g, redirect, render_template,
+                   request, send_file, session, url_for)
+from docx.shared import Inches, Pt
+from docx import Document
+from pathlib import Path
+from io import BytesIO
+from datetime import datetime
+import zipfile
+import uuid
+import tempfile
+from bson.objectid import ObjectId
+import cloudinary.uploader
+import cloudinary
+from pymongo import MongoClient
+import re
+import os
+import logging
+import json
 import io
 from dotenv import load_dotenv
 load_dotenv()
-import json
-import logging
-import os
-import re
-from pymongo import MongoClient
-import cloudinary
-import cloudinary.uploader
-from bson.objectid import ObjectId
-import tempfile
-import uuid
-import zipfile
-from datetime import datetime
-from io import BytesIO
-from pathlib import Path
 
-from docx import Document
-from docx.shared import Inches, Pt
-from flask import (Flask, abort, flash, g, redirect, render_template,
-                   request, send_file, session, url_for)
-from PIL import Image
-from pypdf import PdfReader, PdfWriter
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-from reportlab.lib.units import cm, mm
-from reportlab.platypus import (Image as RLImage, Paragraph, SimpleDocTemplate,
-                                Spacer, Table, TableStyle)
 
 # ── App setup ────────────────────────────────────────────────────────────────
 BASE_DIR = Path(__file__).resolve().parent
@@ -44,8 +44,8 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "nielit_dev_secret_2026")
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10 MB
 app.config["UPLOAD_FOLDER"] = BASE_DIR / "static" / "uploads"
-app.config["MONGO_URI"] = "mongodb+srv://indiaaischeme:nielit4321@cluster0.ler36mh.mongodb.net/?appName=Cluster0"
-app.config["ADMIN_PASSWORD"] = os.environ.get("ADMIN_PASSWORD", "nielit@admin")
+app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
+app.config["ADMIN_PASSWORD"] = os.environ.get("ADMIN_PASSWORD")
 
 cloudinary.config(
     cloud_name="dyq802zwa",
@@ -64,8 +64,10 @@ mongo_client = MongoClient(app.config["MONGO_URI"])
 db_client = mongo_client["nielit_db"]
 nominations_col = db_client["nominations"]
 
+
 def get_db():
     return nominations_col
+
 
 def init_db():
     nominations_col.create_index("token", unique=True)
@@ -543,14 +545,14 @@ def index():
             "course_start_date": f.get("Course_Start_Date"), "resource_centre": f.get("Resource_Centre_Name"),
             "photo_path": photo_fname, "sign_path": sign_fname
         }
-        
+
         # Generate PDF and upload to Cloudinary
         form_data = row_to_form_data(doc)
         try:
             pdf_buf = generate_pdf(form_data)
             upload_result = cloudinary.uploader.upload(
-                pdf_buf.getvalue(), 
-                resource_type="raw", 
+                pdf_buf.getvalue(),
+                resource_type="raw",
                 public_id=f"nominations/nomination_{token}.pdf"
             )
             doc["pdf_url"] = upload_result.get("secure_url", "")
@@ -582,7 +584,8 @@ def download_pdf(token):
         abort(404)
     form_data = row_to_form_data(row)
     pdf_buf = generate_pdf(form_data)
-    safe_name = re.sub(r"[^a-zA-Z0-9_\-]", "_", row.get("name") or "Nomination")
+    safe_name = re.sub(r"[^a-zA-Z0-9_\-]", "_",
+                       row.get("name") or "Nomination")
     return send_file(
         pdf_buf,
         mimetype="application/pdf",
@@ -625,7 +628,8 @@ def admin():
 
     db = get_db()
     rows = list(db.find().sort("submitted_at", -1))
-    for r in rows: r["id"] = str(r["_id"])
+    for r in rows:
+        r["id"] = str(r["_id"])
     return render_template("admin.html", rows=rows)
 
 
@@ -641,7 +645,8 @@ def admin_csv():
         abort(403)
     db = get_db()
     rows = list(db.find().sort("submitted_at", -1))
-    for r in rows: r["id"] = str(r["_id"])
+    for r in rows:
+        r["id"] = str(r["_id"])
     if not rows:
         flash("No submissions yet.", "warning")
         return redirect(url_for("admin"))
@@ -675,7 +680,8 @@ def admin_pdf_single(row_id):
         abort(404)
     form_data = row_to_form_data(row)
     pdf_buf = generate_pdf(form_data)
-    safe_name = re.sub(r"[^a-zA-Z0-9_\-]", "_", row.get("name") or "Nomination")
+    safe_name = re.sub(r"[^a-zA-Z0-9_\-]", "_",
+                       row.get("name") or "Nomination")
     return send_file(pdf_buf, mimetype="application/pdf", as_attachment=True,
                      download_name=f"Nomination_{safe_name}.pdf")
 
@@ -734,12 +740,10 @@ def admin_delete(row_id):
 def page_not_found(e):
     return render_template('404.html'), 404
 
+
 if __name__ == "__main__":
 
     app.config["UPLOAD_FOLDER"].mkdir(parents=True, exist_ok=True)
     app.config["MONGO_URI"] = "mongodb+srv://indiaaischeme:nielit4321@cluster0.ler36mh.mongodb.net/?appName=Cluster0"
     init_db()
     app.run(debug=True, port=5000)
-
-
-
