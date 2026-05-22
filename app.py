@@ -458,16 +458,15 @@ def generate_pdf(form_data: dict) -> BytesIO:
     story.append(Spacer(1, 8))
 
     # ── Signature / recommendation row ──
-    sign_fname = form_data.get("sign_path")
+    sign_url = form_data.get("sign_url")
     sign_elem = Paragraph("Signature of Applicant", small_st)
-    if sign_fname:
-        sign_full = app.config["UPLOAD_FOLDER"] / sign_fname
-        if sign_full.exists():
-            try:
-                sign_elem = RLImage(
-                    str(sign_full), width=3.5*cm, height=1.5*cm)
-            except Exception:
-                pass
+    if sign_url:
+        try:
+            req = urllib.request.urlopen(sign_url)
+            img_buf = BytesIO(req.read())
+            sign_elem = RLImage(img_buf, width=3.5*cm, height=1.5*cm)
+        except Exception:
+            pass
 
     sig_row = Table(
         [[
