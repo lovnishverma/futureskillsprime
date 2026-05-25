@@ -44,7 +44,7 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "nielit_dev_secret_2026")
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10 MB
 app.config["UPLOAD_FOLDER"] = BASE_DIR / "static" / "uploads"
-app.config["MONGO_URI"] = os.environ.get("MONGO_URI", "mongodb+srv://indiaaischeme:nielit4321@cluster0.ler36mh.mongodb.net/?appName=Cluster0")
+app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.config["ADMIN_PASSWORD"] = os.environ.get("ADMIN_PASSWORD")
 
 cloudinary.config(
