@@ -95,7 +95,8 @@ def fetch_image_as_jpeg(url, target_size=None):
         img = img.convert("RGB")
         
     if target_size:
-        img = ImageOps.fit(img, target_size, Image.Resampling.LANCZOS if hasattr(Image, 'Resampling') else Image.ANTIALIAS)
+        # Replaced ImageOps.fit with ImageOps.contain
+        img = ImageOps.contain(img, target_size, Image.Resampling.LANCZOS if hasattr(Image, 'Resampling') else Image.ANTIALIAS)
         
     fd, path = tempfile.mkstemp(suffix=".jpg")
     import os
