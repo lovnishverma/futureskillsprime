@@ -236,7 +236,8 @@ def generate_docx(form_data: dict) -> BytesIO:
                     img_buf = fetch_image_as_jpeg(photo_url, target_size=(300, 375))
                     para.clear()
                     run = para.add_run()
-                    run.add_picture(img_buf, width=Inches(1.2), height=Inches(1.5))
+                    # run.add_picture(img_buf, width=Inches(1.2), height=Inches(1.5))
+                    run.add_picture(img_buf, width=Inches(0.96), height=Inches(1.2))
                 except Exception:
                     para.text = "[Photo]"
             continue
@@ -247,7 +248,8 @@ def generate_docx(form_data: dict) -> BytesIO:
                     img_buf = fetch_image_as_jpeg(sign_url, target_size=(300, 100))
                     para.clear()
                     run = para.add_run()
-                    run.add_picture(img_buf, width=Inches(1.5), height=Inches(0.5))
+                    # run.add_picture(img_buf, width=Inches(1.5), height=Inches(0.5))
+                    run.add_picture(img_buf, width=Inches(1.2), height=Inches(0.4))
                 except Exception:
                     para.text = "[Signature]"
             continue
