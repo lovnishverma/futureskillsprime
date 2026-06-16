@@ -29,6 +29,19 @@
             <a href="{{ url_for('download_pdf', token=token) }}" class="btn">Download PDF</a>
             <a href="{{ url_for('download_docx', token=token) }}" class="btn btn-outline">Download DOCX</a>
         </div>
+
+        <div style="margin-top: 25px; padding: 20px; background-color: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; text-align: left; font-size: 0.9em; line-height: 1.5; color: #1e3a8a;">
+            <strong>Important Next Steps:</strong>
+            <ul style="margin-top: 10px; margin-bottom: 0; padding-left: 20px;">
+                <li style="margin-bottom: 8px;">Please download both the <strong>PDF</strong> and <strong>Word (DOCX)</strong> documents using the buttons above.</li>
+                <li style="margin-bottom: 8px;">If you find any mistakes in your submitted details, you can make corrections directly in the Word document.</li>
+                <li style="margin-bottom: 8px;">Print the final form, sign it, and get it <strong>signed and stamped by your Head of Department</strong>.</li>
+                <li>Upload the scanned copy of the fully signed and stamped form using this link:<br>
+                    <a href="https://forms.gle/6UhTmbsWbKhvkFP19" target="_blank" style="color: #2563eb; font-weight: 600; text-decoration: underline; display: inline-block; margin-top: 5px;">Submit Signed Form Here &rarr;</a>
+                </li>
+            </ul>
+        </div>
+
         {% if whatsapp_link %}
         <div style="margin-top: 25px; padding-top: 25px; border-top: 1px solid #e5e7eb;">
             <p style="font-size: 0.95em; color: #065f46; margin-bottom: 15px; font-weight: 600;">Join your course cohort on WhatsApp!</p>
