@@ -2726,14 +2726,14 @@
                         <div class="form-row">
                             <div class="form-col" style="flex:0.3">
                                 <label class="form-label">Previous FSP Program? *</label>
-                                <select name="Previous_FSP_Program" class="form-select" required>
+                                <select name="Previous_FSP_Program" id="prevFspSelect" class="form-select" required>
                                     <option value="No">No</option>
                                     <option value="Yes">Yes</option>
                                 </select>
                             </div>
                             <div class="form-col" style="flex:0.7">
                                 <label class="form-label">If Yes, Provide Details</label>
-                                <input type="text" name="Previous_FSP_Details_1" class="form-input"
+                                <input type="text" name="Previous_FSP_Details_1" id="prevFspDetails" class="form-input"
                                     placeholder="Program / Centre / Date">
                             </div>
                         </div>
@@ -3203,6 +3203,15 @@
                 }
             }
         });
+
+        const prevFspSelect = document.getElementById('prevFspSelect');
+        const prevFspDetails = document.getElementById('prevFspDetails');
+        if (prevFspSelect && prevFspDetails) {
+            prevFspSelect.addEventListener('change', function () {
+                prevFspDetails.required = (this.value === 'Yes');
+            });
+            prevFspSelect.dispatchEvent(new Event('change'));
+        }
 
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4A7b3YNQsWeOkIiFvXnexRpVftBhRgOl7bVY5lV6MJdv2mQx_sKO1EbrDJ0LU5dVjvw/exec";
 
