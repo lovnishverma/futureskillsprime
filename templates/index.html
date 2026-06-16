@@ -2084,6 +2084,18 @@
                 grid-template-columns: 1fr
             }
 
+            .mobile-hidden {
+                display: none !important;
+            }
+
+            .grid-3-row {
+                background: var(--gray-50);
+                padding: 1rem;
+                border-radius: 0.5rem;
+                border: 1px solid var(--gray-200);
+                margin-bottom: 1rem;
+            }
+
             .hero-tags {
                 flex-direction: column;
                 align-items: center
@@ -2715,37 +2727,49 @@
                         <div id="detailedEducationSection" class="hidden" style="margin-top:15px">
                             <p style="font-size:12px;color:#666;margin-bottom:10px">Please list up to 3 detailed
                                 qualifications (Required for GOT forms).</p>
-                            <div class="grid-3">
+                            <div class="grid-3 mobile-hidden" style="margin-bottom: 0;">
                                 <div><strong>Year <span class="req-star" style="color:red; display:none;">*</span></strong></div>
                                 <div><strong>Degree / Programme <span class="req-star" style="color:red; display:none;">*</span></strong></div>
                                 <div><strong>University / Board <span class="req-star" style="color:red; display:none;">*</span></strong></div>
-                                <input type="text" name="Edu1_Year" class="form-input"><input type="text"
-                                    name="Edu1_Degree" class="form-input"><input type="text" name="Edu1_University"
-                                    class="form-input">
-                                <input type="text" name="Edu2_Year" class="form-input"><input type="text"
-                                    name="Edu2_Degree" class="form-input"><input type="text" name="Edu2_University"
-                                    class="form-input">
-                                <input type="text" name="Edu3_Year" class="form-input"><input type="text"
-                                    name="Edu3_Degree" class="form-input"><input type="text" name="Edu3_University"
-                                    class="form-input">
+                            </div>
+                            <div class="grid-3 grid-3-row">
+                                <input type="text" name="Edu1_Year" class="form-input" placeholder="Year"><input type="text"
+                                    name="Edu1_Degree" class="form-input" placeholder="Degree / Programme"><input type="text" name="Edu1_University"
+                                    class="form-input" placeholder="University / Board">
+                            </div>
+                            <div class="grid-3 grid-3-row">
+                                <input type="text" name="Edu2_Year" class="form-input" placeholder="Year"><input type="text"
+                                    name="Edu2_Degree" class="form-input" placeholder="Degree / Programme"><input type="text" name="Edu2_University"
+                                    class="form-input" placeholder="University / Board">
+                            </div>
+                            <div class="grid-3 grid-3-row">
+                                <input type="text" name="Edu3_Year" class="form-input" placeholder="Year"><input type="text"
+                                    name="Edu3_Degree" class="form-input" placeholder="Degree / Programme"><input type="text" name="Edu3_University"
+                                    class="form-input" placeholder="University / Board">
                             </div>
                         </div>
                     </fieldset>
                     <fieldset class="form-fieldset hidden" id="detailedExperienceSection">
                         <legend class="form-legend">5. Technical / Project Experience</legend>
-                        <div class="grid-3">
+                        <div class="grid-3 mobile-hidden" style="margin-bottom: 0;">
                             <div><strong>Year</strong></div>
                             <div><strong>Area of Expertise</strong></div>
                             <div><strong>Centre / Organisation</strong></div>
-                            <input type="text" name="Exp1_Year" class="form-input"><input type="text"
-                                name="Exp1_Area_of_Expertise" class="form-input"><input type="text" name="Exp1_Centre"
-                                class="form-input">
-                            <input type="text" name="Exp2_Year" class="form-input"><input type="text"
-                                name="Exp2_Area_of_Expertise" class="form-input"><input type="text" name="Exp2_Centre"
-                                class="form-input">
-                            <input type="text" name="Exp3_Year" class="form-input"><input type="text"
-                                name="Exp3_Area_of_Expertise" class="form-input"><input type="text" name="Exp3_Centre"
-                                class="form-input">
+                        </div>
+                        <div class="grid-3 grid-3-row">
+                            <input type="text" name="Exp1_Year" class="form-input" placeholder="Year"><input type="text"
+                                name="Exp1_Area_of_Expertise" class="form-input" placeholder="Area of Expertise"><input type="text" name="Exp1_Centre"
+                                class="form-input" placeholder="Centre / Organisation">
+                        </div>
+                        <div class="grid-3 grid-3-row">
+                            <input type="text" name="Exp2_Year" class="form-input" placeholder="Year"><input type="text"
+                                name="Exp2_Area_of_Expertise" class="form-input" placeholder="Area of Expertise"><input type="text" name="Exp2_Centre"
+                                class="form-input" placeholder="Centre / Organisation">
+                        </div>
+                        <div class="grid-3 grid-3-row">
+                            <input type="text" name="Exp3_Year" class="form-input" placeholder="Year"><input type="text"
+                                name="Exp3_Area_of_Expertise" class="form-input" placeholder="Area of Expertise"><input type="text" name="Exp3_Centre"
+                                class="form-input" placeholder="Centre / Organisation">
                         </div>
                     </fieldset>
                     <fieldset class="form-fieldset">
