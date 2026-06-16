@@ -2716,9 +2716,9 @@
                             <p style="font-size:12px;color:#666;margin-bottom:10px">Please list up to 3 detailed
                                 qualifications (Required for GOT forms).</p>
                             <div class="grid-3">
-                                <div><strong>Year</strong></div>
-                                <div><strong>Degree / Programme</strong></div>
-                                <div><strong>University / Board</strong></div>
+                                <div><strong>Year <span class="req-star" style="color:red; display:none;">*</span></strong></div>
+                                <div><strong>Degree / Programme <span class="req-star" style="color:red; display:none;">*</span></strong></div>
+                                <div><strong>University / Board <span class="req-star" style="color:red; display:none;">*</span></strong></div>
                                 <input type="text" name="Edu1_Year" class="form-input"><input type="text"
                                     name="Edu1_Degree" class="form-input"><input type="text" name="Edu1_University"
                                     class="form-input">
@@ -3215,6 +3215,10 @@
                 edu1D.required = isGOT;
                 edu1U.required = isGOT;
             }
+            
+            document.querySelectorAll('.req-star').forEach(el => {
+                el.style.display = isGOT ? 'inline' : 'none';
+            });
             
             if (isGOT) {
                 beneficiarySelect.innerHTML = '<option value="Government Employee">Government Employee</option>';

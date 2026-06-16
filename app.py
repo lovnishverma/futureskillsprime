@@ -633,6 +633,13 @@ def index():
                 gf_link = b.get("gf", "")
 
         db = get_db()
+        
+        # Enforce server-side validation for GOT forms (Educational Qualifications)
+        if level in ["Basic", "Advanced"]:
+            if not f.get("Edu1_Year") or not f.get("Edu1_Degree") or not f.get("Edu1_University"):
+                flash("error", "Educational Qualifications are mandatory for GOT forms.")
+                return redirect(url_for("index") + "#nomination")
+
         doc = {
             "token": token, "submitted_at": datetime.now().isoformat(),
             "track": track, "level": level, "batch_index": batch_index_str,
