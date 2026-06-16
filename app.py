@@ -148,10 +148,21 @@ def row_to_form_data(row):
     level = (d.get("level") or "").capitalize()
     course_key = f"{track}_{level}"
     
-    config_col = db_client["config"]
-    course_dates_doc = config_col.find_one({"_id": "course_dates"}) or {}
-    c_dates = course_dates_doc.get(course_key, {})
-    formatted_dates = fmt_course_dates(c_dates.get("start"), c_dates.get("end"))
+    c_start = d.get("course_start_date")
+    c_end = d.get("course_end_date")
+    
+    if not c_start or not c_end:
+        # Fallback for old nominations that didn't save dates directly
+        config_col = db_client["config"]
+        course_dates_doc = config_col.find_one({"_id": "course_dates"}) or {}
+        batches = course_dates_doc.get(course_key, [])
+        if isinstance(batches, dict):
+            batches = [batches] if batches.get("start") else []
+        if batches:
+            c_start = c_start or batches[0].get("start")
+            c_end = c_end or batches[0].get("end")
+
+    formatted_dates = fmt_course_dates(c_start, c_end) if c_start and c_end else ""
     
     return {
         "Title": d.get("title", ""),
