@@ -3206,6 +3206,15 @@
             
             detailedEdu.classList.toggle('hidden', !isGOT);
             detailedExp.classList.toggle('hidden', !isGOT);
+
+            const edu1Y = document.querySelector('input[name="Edu1_Year"]');
+            const edu1D = document.querySelector('input[name="Edu1_Degree"]');
+            const edu1U = document.querySelector('input[name="Edu1_University"]');
+            if (edu1Y && edu1D && edu1U) {
+                edu1Y.required = isGOT;
+                edu1D.required = isGOT;
+                edu1U.required = isGOT;
+            }
             
             if (isGOT) {
                 beneficiarySelect.innerHTML = '<option value="Government Employee">Government Employee</option>';
