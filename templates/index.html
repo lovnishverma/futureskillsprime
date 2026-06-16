@@ -2591,11 +2591,9 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-col"><label class="form-label">Course Start Date</label><input type="date"
-                                    name="Course_Start_Date" class="form-input"></div>
                             <div class="form-col"><label class="form-label">Resource Centre Name</label><input
                                     type="text" name="Resource_Centre_Name" class="form-input"
-                                    value="NIELIT Chandigarh"></div>
+                                    value="NIELIT Chandigarh" readonly style="background-color: #f3f4f6; cursor: not-allowed; color: #6b7280;"></div>
                         </div>
                     </fieldset>
                     <fieldset class="form-fieldset">
@@ -2656,7 +2654,7 @@
                         <div class="form-row">
     <div class="form-col"><label class="form-label">Institute Address</label><input type="text" name="Institute_Address" class="form-input" placeholder="Complete Address"></div>
     <div class="form-col"><label class="form-label">Institute Contact Number</label><input type="text" name="Institute_Contact" class="form-input"></div>
-    <div class="form-col"><label class="form-label">Institute Email</label><input type="email" name="Institute_Email" class="form-input"></div>
+    <div class="form-col"><label class="form-label">Institute Email (optional)</label><input type="email" name="Institute_Email" class="form-input"></div>
 </div>
 <div class="form-row">
     <div class="form-col"><label class="form-label">Designation *</label><input type="text"
@@ -2673,7 +2671,7 @@
                             </div>
                             <div class="form-col">
                                 <label class="form-label">Beneficiary Category *</label>
-                                <select name="Beneficiary_Category" class="form-select" required>
+                                <select name="Beneficiary_Category" id="beneficiarySelect" class="form-select" required>
                                     <option>Career aspirant/Student</option>
                                     <option>IT Employees</option>
                                     <option>Faculty</option>
@@ -3171,6 +3169,7 @@
 
         // ==================== NOMINATION FORM ====================
         const levelSelect = document.getElementById('levelSelect');
+        const beneficiarySelect = document.getElementById('beneficiarySelect');
         const detailedEdu = document.getElementById('detailedEducationSection');
         const detailedExp = document.getElementById('detailedExperienceSection');
 
@@ -3180,6 +3179,17 @@
             
             detailedEdu.classList.toggle('hidden', !isGOT);
             detailedExp.classList.toggle('hidden', !isGOT);
+            
+            if (isGOT) {
+                beneficiarySelect.innerHTML = '<option value="Government Employee">Government Employee</option>';
+            } else {
+                beneficiarySelect.innerHTML = `
+                    <option>Career aspirant/Student</option>
+                    <option>IT Employees</option>
+                    <option>Faculty</option>
+                    <option>Government Employee</option>
+                `;
+            }
             
             const photoCol = document.getElementById('photoCol');
             const photoInput = document.querySelector('input[name="photo"]');

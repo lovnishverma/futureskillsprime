@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel - Course Dates</title>
+    <style>
+        body { font-family: sans-serif; margin: 30px; background-color: #f9fafb; color: #333; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: #4b5563; }
+        input[type="date"] { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 4px; box-sizing: border-box; }
+        .btn { padding: 10px 15px; background: #2563eb; color: white; text-decoration: none; border-radius: 4px; font-size: 14px; font-weight: 500; display: inline-block; cursor: pointer; border: none; }
+        .btn:hover { background: #1d4ed8; }
+        .alert { margin-top: 10px; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .alert-success { background: #d1fae5; color: #065f46; }
+        .alert-error { background: #fee2e2; color: #991b1b; }
+        .course-card { background: #f3f4f6; padding: 15px; margin-bottom: 15px; border-radius: 5px; }
+        .course-title { font-weight: 700; margin-bottom: 10px; font-size: 1.1em; color: #1f2937; }
+        .date-row { display: flex; gap: 15px; }
+        .date-col { flex: 1; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Course Dates Configuration</h2>
+        <div>
+            <a href="{{ url_for('admin') }}" class="btn" style="background:#4b5563;">Back to Admin</a>
+            <a href="{{ url_for('admin_logout') }}" style="color: #4b5563; font-weight: 600; text-decoration: none; margin-left: 15px;">Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">
+                  {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            {% for course_key, course_name in courses.items() %}
+            <div class="course-card">
+                <div class="course-title">{{ course_name }}</div>
+                <div class="date-row">
+                    <div class="date-col">
+                        <label>Start Date</label>
+                        <input type="date" name="{{ course_key }}_start" value="{{ config_dates.get(course_key, {}).get('start', '') }}">
+                    </div>
+                    <div class="date-col">
+                        <label>End Date</label>
+                        <input type="date" name="{{ course_key }}_end" value="{{ config_dates.get(course_key, {}).get('end', '') }}">
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn">Save Dates</button>
+        </form>
+    </div>
+</body>
+</html>

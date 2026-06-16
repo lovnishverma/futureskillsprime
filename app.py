@@ -124,17 +124,41 @@ def fmt_date(val):
             pass
     return val or ""
 
+def get_ordinal(n):
+    return str(n) + ('th' if 11 <= n % 100 <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th'))
+
+def fmt_course_dates(start_str, end_str):
+    if not start_str or not end_str:
+        return ""
+    try:
+        s = datetime.strptime(start_str, "%Y-%m-%d")
+        e = datetime.strptime(end_str, "%Y-%m-%d")
+        s_fmt = f"{get_ordinal(s.day)} {s.strftime('%B')}, {s.year}"
+        e_fmt = f"{get_ordinal(e.day)} {e.strftime('%B')}, {e.year}"
+        return f"{s_fmt} - {e_fmt}"
+    except Exception:
+        return ""
 
 def row_to_form_data(row):
     """Map DB row to the placeholder dict used by DOCX/PDF generation."""
     d = dict(row)
     name_full = f"{d.get('title','')} {d.get('name','')}".strip()
+    
+    track = (d.get("track") or "").upper()
+    level = (d.get("level") or "").capitalize()
+    course_key = f"{track}_{level}"
+    
+    config_col = db_client["config"]
+    course_dates_doc = config_col.find_one({"_id": "course_dates"}) or {}
+    c_dates = course_dates_doc.get(course_key, {})
+    formatted_dates = fmt_course_dates(c_dates.get("start"), c_dates.get("end"))
+    
     return {
         "Title": d.get("title", ""),
         "Name": d.get("name", ""),
         "Full_Name": name_full,
         "Course_Name": _course_name(d.get("track", ""), d.get("level", "")),
-        "Course_Start_Date": fmt_date(d.get("course_start_date", "")),
+        "Course_Start_Date": formatted_dates,
         "Native_State": d.get("native_state", ""),
         "District": d.get("district", ""),
         "Status": d.get("status", ""),
@@ -150,7 +174,7 @@ def row_to_form_data(row):
         "Previous_FSP_Details_2": "",
         "Technology": _technology(d.get("track", "")),
         "Resource_Centre_Name": d.get("resource_centre", "NIELIT Chandigarh"),
-        "Date_of_Training": fmt_date(d.get("course_start_date", "")),
+        "Date_of_Training": formatted_dates,
         "Designation": d.get("designation", ""),
         "Organisation": d.get("organisation", ""),
         "DOB": fmt_date(d.get("dob", "")),
@@ -662,6 +686,35 @@ def download_docx(token):
 
 
 # ── Admin routes ──────────────────────────────────────────────────────────────
+
+@app.route("/admin/dates", methods=["GET", "POST"])
+def admin_dates():
+    if not session.get("admin"):
+        return redirect(url_for("admin"))
+    
+    config_col = db_client["config"]
+    courses = {
+        "ARVR_Basic": "GOT – AR & VR (Basic)",
+        "ARVR_Advanced": "GOT – AR & VR (Advanced)",
+        "ARVR_Bootcamp": "Bootcamp – AR & VR",
+        "BDDS_Basic": "GOT – Big Data & Data Science (Basic)",
+        "BDDS_Advanced": "GOT – Big Data & Data Science (Advanced)",
+        "BDDS_Bootcamp": "Bootcamp – Big Data & Data Science"
+    }
+
+    if request.method == "POST":
+        updates = {}
+        for key in courses.keys():
+            s = request.form.get(f"{key}_start")
+            e = request.form.get(f"{key}_end")
+            updates[key] = {"start": s, "end": e}
+        
+        config_col.update_one({"_id": "course_dates"}, {"$set": updates}, upsert=True)
+        flash("Course dates updated successfully.", "success")
+        return redirect(url_for("admin_dates"))
+
+    doc = config_col.find_one({"_id": "course_dates"}) or {}
+    return render_template("admin_dates.html", courses=courses, config_dates=doc)
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
