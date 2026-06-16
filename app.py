@@ -636,7 +636,20 @@ def index():
         flash("success", "ok")
         return redirect(url_for("success", token=token))
 
-    return render_template("index.html")
+    config_col = db_client["config"]
+    course_dates_doc = config_col.find_one({"_id": "course_dates"}) or {}
+    available_courses = {}
+    for track_level, dates in course_dates_doc.items():
+        if track_level == "_id":
+            continue
+        start = dates.get("start")
+        end = dates.get("end")
+        if start and end:
+            formatted = fmt_course_dates(start, end)
+            if formatted:
+                available_courses[track_level] = formatted
+
+    return render_template("index.html", available_courses=available_courses)
 
 
 @app.route("/success/<token>")

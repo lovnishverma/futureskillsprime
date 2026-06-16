@@ -2574,7 +2574,7 @@
                         <div class="form-row">
                             <div class="form-col">
                                 <label class="form-label">Track *</label>
-                                <select name="Track" class="form-select" required>
+                                <select name="Track" id="trackSelect" class="form-select" required>
                                     <option value="">Select Track</option>
                                     <option value="ARVR">Augmented &amp; Virtual Reality (ARVR)</option>
                                     <option value="BDDS">Big Data &amp; Data Science (BDDS)</option>
@@ -2588,6 +2588,7 @@
                                     <option value="Advanced">Advanced (GOT)</option>
                                     <option value="Bootcamp">Bootcamp</option>
                                 </select>
+                                <div id="courseDateDisplay" style="color: #2563eb; font-size: 0.85em; margin-top: 8px; font-weight: 500;"></div>
                             </div>
                         </div>
                         <div class="form-row">
@@ -3204,16 +3205,65 @@
             }
         });
 
-        const prevFspSelect = document.getElementById('prevFspSelect');
-        const prevFspDetails = document.getElementById('prevFspDetails');
-        if (prevFspSelect && prevFspDetails) {
-            prevFspSelect.addEventListener('change', function () {
-                prevFspDetails.required = (this.value === 'Yes');
-            });
-            prevFspSelect.dispatchEvent(new Event('change'));
-        }
+
 
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4A7b3YNQsWeOkIiFvXnexRpVftBhRgOl7bVY5lV6MJdv2mQx_sKO1EbrDJ0LU5dVjvw/exec";
+
+        // ==================== DYNAMIC COURSE DATES ====================
+        const availableCourses = {{ available_courses | default({}) | tojson | safe }};
+        const trackSelect = document.getElementById('trackSelect');
+        const courseDateDisplay = document.getElementById('courseDateDisplay');
+
+        function updateCourseOptions() {
+            const track = trackSelect.value;
+            const level = levelSelect.value;
+
+            // Filter levels based on track
+            if (track) {
+                Array.from(levelSelect.options).forEach(opt => {
+                    if (!opt.value) return; // Skip placeholder
+                    const key = `${track}_${opt.value}`;
+                    if (availableCourses[key]) {
+                        opt.disabled = false;
+                        opt.style.display = '';
+                    } else {
+                        opt.disabled = true;
+                        opt.style.display = 'none';
+                        if (level === opt.value) {
+                            levelSelect.value = ''; // Reset if current selection becomes invalid
+                        }
+                    }
+                });
+            } else {
+                // If no track selected, disable all level options except placeholder
+                Array.from(levelSelect.options).forEach(opt => {
+                    if (opt.value) {
+                        opt.disabled = true;
+                        opt.style.display = 'none';
+                    }
+                });
+                levelSelect.value = '';
+            }
+
+            // Display dates if both selected
+            const currentTrack = trackSelect.value;
+            const currentLevel = levelSelect.value;
+            if (currentTrack && currentLevel) {
+                const currentKey = `${currentTrack}_${currentLevel}`;
+                if (availableCourses[currentKey]) {
+                    courseDateDisplay.textContent = "Course Dates: " + availableCourses[currentKey];
+                } else {
+                    courseDateDisplay.textContent = "";
+                }
+            } else {
+                courseDateDisplay.textContent = "";
+            }
+        }
+
+        if (trackSelect && levelSelect) {
+            trackSelect.addEventListener('change', updateCourseOptions);
+            levelSelect.addEventListener('change', updateCourseOptions);
+        }
 
         // Standard form submission handles request
 
@@ -3225,6 +3275,22 @@
             renderAlumniMobile();
             initCarousel();
             onScroll();
+            if (typeof updateCourseOptions === 'function') updateCourseOptions();
+
+            // Previous FSP Validation
+            const prevFspSelect = document.getElementById('prevFspSelect');
+            const prevFspDetails = document.getElementById('prevFspDetails');
+            if (prevFspSelect && prevFspDetails) {
+                const fspLabel = prevFspDetails.previousElementSibling;
+                prevFspSelect.addEventListener('change', function () {
+                    const isYes = (this.value === 'Yes');
+                    prevFspDetails.required = isYes;
+                    if (fspLabel) {
+                        fspLabel.innerHTML = isYes ? 'If Yes, Provide Details <span style="color:red">*</span>' : 'If Yes, Provide Details';
+                    }
+                });
+                prevFspSelect.dispatchEvent(new Event('change'));
+            }
         });
     </script>
 </body>
