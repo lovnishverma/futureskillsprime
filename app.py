@@ -227,7 +227,17 @@ def generate_docx(form_data: dict) -> BytesIO:
     replacements = {k: (str(v) if v else "") for k, v in form_data.items()
                     if k not in ("photo_url", "sign_url")}
 
+    level_val = (form_data.get("Level") or "").capitalize()
+    if level_val in ("Advanced", "Basic"):
+        prog_title = f"Government Officials Training ({level_val}) Programme"
+    else:
+        prog_title = "Government Officials Training Programme"
+
     for para in doc.paragraphs:
+        if "Government Officials Training Programme" in para.text:
+            for run in para.runs:
+                run.text = run.text.replace("Government Officials Training Programme", prog_title)
+
         cell_text = para.text.strip()
         if "{Photo}" in cell_text or "<<Photo>>" in cell_text or cell_text == "Photo":
             photo_url = form_data.get("photo_url")
@@ -419,7 +429,14 @@ def generate_pdf(form_data: dict) -> BytesIO:
     story = []
     
     story.append(Paragraph("Nomination Form", title_st))
-    story.append(Paragraph("Government Officials Training Programme", sub_st))
+    
+    level_val = (form_data.get("Level") or "").capitalize()
+    if level_val in ("Advanced", "Basic"):
+        prog_title = f"Government Officials Training ({level_val}) Programme"
+    else:
+        prog_title = "Government Officials Training Programme"
+        
+    story.append(Paragraph(prog_title, sub_st))
     
     # Table 0: Training Programme Details
     story.append(Paragraph("Training Programme Details", bold_st))
