@@ -69,6 +69,10 @@
                             <label>WhatsApp Link</label>
                             <input type="url" name="{{ course_key }}_wa[]" value="{{ batch.wa }}" placeholder="https://chat.whatsapp.com/...">
                         </div>
+                        <div class="date-col">
+                            <label>Google Form Link</label>
+                            <input type="url" name="{{ course_key }}_gf[]" value="{{ batch.gf }}" placeholder="https://forms.gle/...">
+                        </div>
                         <div class="date-col" style="flex: 0 0 50px; display: flex; align-items: flex-end;">
                             <button type="button" class="btn" onclick="this.parentElement.parentElement.remove()" style="background: #ef4444; width: 100%; padding: 10px 0;">X</button>
                         </div>
@@ -97,6 +101,10 @@
                 <div class="date-col">
                     <label>WhatsApp Link</label>
                     <input type="url" name="${courseKey}_wa[]" placeholder="https://chat.whatsapp.com/...">
+                </div>
+                <div class="date-col">
+                    <label>Google Form Link</label>
+                    <input type="url" name="${courseKey}_gf[]" placeholder="https://forms.gle/...">
                 </div>
                 <div class="date-col" style="flex: 0 0 50px; display: flex; align-items: flex-end;">
                     <button type="button" class="btn" onclick="this.parentElement.parentElement.remove()" style="background: #ef4444; width: 100%; padding: 10px 0;">X</button>

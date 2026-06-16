@@ -614,6 +614,7 @@ def index():
         c_start = ""
         c_end = ""
         wa_link = ""
+        gf_link = ""
 
         if track and level and batch_index_str and batch_index_str.isdigit():
             b_idx = int(batch_index_str)
@@ -628,6 +629,7 @@ def index():
                 c_start = b.get("start", "")
                 c_end = b.get("end", "")
                 wa_link = b.get("wa", "")
+                gf_link = b.get("gf", "")
 
         db = get_db()
         doc = {
@@ -647,7 +649,7 @@ def index():
             "exp2_year": f.get("Exp2_Year"), "exp2_area": f.get("Exp2_Area_of_Expertise"), "exp2_centre": f.get("Exp2_Centre"),
             "exp3_year": f.get("Exp3_Year"), "exp3_area": f.get("Exp3_Area_of_Expertise"), "exp3_centre": f.get("Exp3_Centre"),
             "prev_fsp": f.get("Previous_FSP_Program"), "prev_fsp_details": f.get("Previous_FSP_Details_1"),
-            "course_start_date": c_start, "course_end_date": c_end, "whatsapp_link": wa_link,
+            "course_start_date": c_start, "course_end_date": c_end, "whatsapp_link": wa_link, "google_form_link": gf_link,
             "resource_centre": f.get("Resource_Centre_Name"),
             "photo_url": photo_url, "sign_url": sign_url
         }
@@ -702,7 +704,7 @@ def success(token):
     row = db.find_one({"token": token})
     if not row:
         abort(404)
-    return render_template("success.html", token=token, name=row.get("name", "Applicant"), whatsapp_link=row.get("whatsapp_link"))
+    return render_template("success.html", token=token, name=row.get("name", "Applicant"), whatsapp_link=row.get("whatsapp_link"), google_form_link=row.get("google_form_link"))
 
 
 @app.route("/download/pdf/<token>")
@@ -765,10 +767,11 @@ def admin_dates():
             starts = request.form.getlist(f"{key}_start[]")
             ends = request.form.getlist(f"{key}_end[]")
             was = request.form.getlist(f"{key}_wa[]")
+            gfs = request.form.getlist(f"{key}_gf[]")
             batches = []
-            for s, e, w in zip(starts, ends, was):
+            for s, e, w, g in zip(starts, ends, was, gfs):
                 if s and e:
-                    batches.append({"start": s, "end": e, "wa": w})
+                    batches.append({"start": s, "end": e, "wa": w, "gf": g})
             updates[key] = batches
         
         config_col.update_one({"_id": "course_dates"}, {"$set": updates}, upsert=True)
