@@ -170,6 +170,7 @@ def row_to_form_data(row):
         "Full_Name": name_full,
         "Course_Name": _course_name(d.get("track", ""), d.get("level", "")),
         "Course_Start_Date": formatted_dates,
+        "Date_of_Training": formatted_dates,
         "Native_State": d.get("native_state", ""),
         "District": d.get("district", ""),
         "Status": d.get("status", ""),
