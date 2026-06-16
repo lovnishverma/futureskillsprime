@@ -42,22 +42,69 @@
 
         <form method="POST">
             {% for course_key, course_name in courses.items() %}
-            <div class="course-card">
-                <div class="course-title">{{ course_name }}</div>
-                <div class="date-row">
-                    <div class="date-col">
-                        <label>Start Date</label>
-                        <input type="date" name="{{ course_key }}_start" value="{{ config_dates.get(course_key, {}).get('start', '') }}">
+            <div class="course-card" id="course_{{ course_key }}">
+                <div class="course-title" style="display: flex; justify-content: space-between; align-items: center;">
+                    {{ course_name }}
+                    <button type="button" class="btn btn-sm" onclick="addBatch('{{ course_key }}')" style="background: #10b981; padding: 5px 10px; font-size: 12px;">+ Add Batch</button>
+                </div>
+                
+                <div id="batches_{{ course_key }}">
+                    {% set batches = config_dates.get(course_key, []) %}
+                    {% if batches.__class__.__name__ == 'dict' %}
+                        <!-- Backward compatibility for old format -->
+                        {% set batches = [batches] if batches.start else [] %}
+                    {% endif %}
+                    
+                    {% for batch in batches %}
+                    <div class="date-row batch-row" style="margin-bottom: 15px; padding: 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 5px;">
+                        <div class="date-col">
+                            <label>Start Date</label>
+                            <input type="date" name="{{ course_key }}_start[]" value="{{ batch.start }}">
+                        </div>
+                        <div class="date-col">
+                            <label>End Date</label>
+                            <input type="date" name="{{ course_key }}_end[]" value="{{ batch.end }}">
+                        </div>
+                        <div class="date-col">
+                            <label>WhatsApp Link</label>
+                            <input type="url" name="{{ course_key }}_wa[]" value="{{ batch.wa }}" placeholder="https://chat.whatsapp.com/...">
+                        </div>
+                        <div class="date-col" style="flex: 0 0 50px; display: flex; align-items: flex-end;">
+                            <button type="button" class="btn" onclick="this.parentElement.parentElement.remove()" style="background: #ef4444; width: 100%; padding: 10px 0;">X</button>
+                        </div>
                     </div>
-                    <div class="date-col">
-                        <label>End Date</label>
-                        <input type="date" name="{{ course_key }}_end" value="{{ config_dates.get(course_key, {}).get('end', '') }}">
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
             {% endfor %}
-            <button type="submit" class="btn">Save Dates</button>
+            <button type="submit" class="btn" style="width: 100%; font-size: 16px; padding: 12px;">Save All Dates</button>
         </form>
     </div>
+
+    <script>
+        function addBatch(courseKey) {
+            const container = document.getElementById(`batches_${courseKey}`);
+            const html = `
+            <div class="date-row batch-row" style="margin-bottom: 15px; padding: 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 5px;">
+                <div class="date-col">
+                    <label>Start Date</label>
+                    <input type="date" name="${courseKey}_start[]">
+                </div>
+                <div class="date-col">
+                    <label>End Date</label>
+                    <input type="date" name="${courseKey}_end[]">
+                </div>
+                <div class="date-col">
+                    <label>WhatsApp Link</label>
+                    <input type="url" name="${courseKey}_wa[]" placeholder="https://chat.whatsapp.com/...">
+                </div>
+                <div class="date-col" style="flex: 0 0 50px; display: flex; align-items: flex-end;">
+                    <button type="button" class="btn" onclick="this.parentElement.parentElement.remove()" style="background: #ef4444; width: 100%; padding: 10px 0;">X</button>
+                </div>
+            </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        }
+    </script>
 </body>
 </html>

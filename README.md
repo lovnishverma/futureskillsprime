@@ -5,12 +5,16 @@ A complete web-based nomination and registration portal developed for the **Futu
 ## Features
 
 - **Dynamic Landing Page**: Detailed information on courses, speakers, and the FutureSkills PRIME program.
+- **Dynamic Course Scheduling**: Administrators can dynamically configure multiple simultaneous batches for courses with custom start/end dates via the `/admin/dates` panel.
+- **Smart Form Guidance**: The public nomination form features an "Ongoing Courses" banner and intelligently prevents users from selecting course batches that are not currently active.
+- **Cohort WhatsApp Integration**: Participants are automatically provided with the exact WhatsApp group link corresponding to their uniquely selected course batch upon successful submission.
 - **Online Nomination Form**: Interactive, multi-step form to collect participant details, educational qualifications, professional experience, and Institute details.
 - **100% Cloud-Native File Storage**: Secure handling of passport photos, signatures, and dynamically generated PDFs. All files are uploaded directly to **Cloudinary**, making the application entirely stateless and resilient to ephemeral server restarts.
 - **Automated Document Generation**: Automatically injects form data into an official DOCX template and generates a polished, 1-page print-ready PDF using ReportLab that perfectly mimics the official grid layout.
 - **Participant Dashboard**: Generates a unique tracking token for each submission and allows the user to immediately download their filled DOCX and PDF documents.
 - **Advanced Admin Portal**: A secure dashboard (`/admin`) powered by DataTables that allows administrators to:
   - Instantly Search, Sort, and Paginate through all submitted nominations.
+  - Manage **Course Dates** and WhatsApp Links.
   - Export all data to a CSV file.
   - **Download All PDFs (ZIP)**: Generates and packages every individual PDF submission into a downloadable `.zip` archive.
   - **Download All DOCXs (ZIP)**: Generates and packages every editable DOCX submission into a downloadable `.zip` archive.

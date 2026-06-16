@@ -596,10 +596,32 @@ def index():
         sign_url = upload_to_cloudinary(request.files.get("signature"), "signatures")
         token = uuid.uuid4().hex
 
+        track = f.get("Track")
+        level = f.get("Level")
+        batch_index_str = f.get("Batch_Index")
+        
+        c_start = ""
+        c_end = ""
+        wa_link = ""
+
+        if track and level and batch_index_str and batch_index_str.isdigit():
+            b_idx = int(batch_index_str)
+            config_col = db_client["config"]
+            course_dates_doc = config_col.find_one({"_id": "course_dates"}) or {}
+            key = f"{track}_{level}"
+            batches = course_dates_doc.get(key, [])
+            if isinstance(batches, dict):
+                batches = [batches] if batches.get("start") else []
+            if b_idx < len(batches):
+                b = batches[b_idx]
+                c_start = b.get("start", "")
+                c_end = b.get("end", "")
+                wa_link = b.get("wa", "")
+
         db = get_db()
         doc = {
             "token": token, "submitted_at": datetime.now().isoformat(),
-            "track": f.get("Track"), "level": f.get("Level"),
+            "track": track, "level": level, "batch_index": batch_index_str,
             "title": f.get("Title"), "name": f.get("Name"), "dob": f.get("DOB"), "gender": f.get("Gender"),
             "contact": f.get("Contact_Number"), "email": f.get("Email"), "aadhar": f.get("Aadhar"),
             "native_state": f.get("Native_State"), "district": f.get("District"),
@@ -614,7 +636,8 @@ def index():
             "exp2_year": f.get("Exp2_Year"), "exp2_area": f.get("Exp2_Area_of_Expertise"), "exp2_centre": f.get("Exp2_Centre"),
             "exp3_year": f.get("Exp3_Year"), "exp3_area": f.get("Exp3_Area_of_Expertise"), "exp3_centre": f.get("Exp3_Centre"),
             "prev_fsp": f.get("Previous_FSP_Program"), "prev_fsp_details": f.get("Previous_FSP_Details_1"),
-            "course_start_date": f.get("Course_Start_Date"), "resource_centre": f.get("Resource_Centre_Name"),
+            "course_start_date": c_start, "course_end_date": c_end, "whatsapp_link": wa_link,
+            "resource_centre": f.get("Resource_Centre_Name"),
             "photo_url": photo_url, "sign_url": sign_url
         }
 
@@ -639,15 +662,25 @@ def index():
     config_col = db_client["config"]
     course_dates_doc = config_col.find_one({"_id": "course_dates"}) or {}
     available_courses = {}
-    for track_level, dates in course_dates_doc.items():
+    for track_level, batches in course_dates_doc.items():
         if track_level == "_id":
             continue
-        start = dates.get("start")
-        end = dates.get("end")
-        if start and end:
-            formatted = fmt_course_dates(start, end)
-            if formatted:
-                available_courses[track_level] = formatted
+            
+        if isinstance(batches, dict):
+            batches = [batches] if batches.get("start") else []
+            
+        valid_batches = []
+        for idx, b in enumerate(batches):
+            start = b.get("start")
+            end = b.get("end")
+            wa = b.get("wa", "")
+            if start and end:
+                formatted = fmt_course_dates(start, end)
+                if formatted:
+                    valid_batches.append({"index": idx, "formatted": formatted, "wa": wa})
+                    
+        if valid_batches:
+            available_courses[track_level] = valid_batches
 
     return render_template("index.html", available_courses=available_courses)
 
@@ -658,7 +691,7 @@ def success(token):
     row = db.find_one({"token": token})
     if not row:
         abort(404)
-    return render_template("success.html", token=token, name=row["name"])
+    return render_template("success.html", token=token, name=row.get("name", "Applicant"), whatsapp_link=row.get("whatsapp_link"))
 
 
 @app.route("/download/pdf/<token>")
@@ -718,9 +751,14 @@ def admin_dates():
     if request.method == "POST":
         updates = {}
         for key in courses.keys():
-            s = request.form.get(f"{key}_start")
-            e = request.form.get(f"{key}_end")
-            updates[key] = {"start": s, "end": e}
+            starts = request.form.getlist(f"{key}_start[]")
+            ends = request.form.getlist(f"{key}_end[]")
+            was = request.form.getlist(f"{key}_wa[]")
+            batches = []
+            for s, e, w in zip(starts, ends, was):
+                if s and e:
+                    batches.append({"start": s, "end": e, "wa": w})
+            updates[key] = batches
         
         config_col.update_one({"_id": "course_dates"}, {"$set": updates}, upsert=True)
         flash("Course dates updated successfully.", "success")
