@@ -331,12 +331,42 @@ def generate_pdf(form_data: dict) -> BytesIO:
         norm_st = ParagraphStyle('norm', fontName='Helvetica', fontSize=9)
         bold_st = ParagraphStyle('bold', fontName='Helvetica-Bold', fontSize=9)
         
-        # Header
-        elements.append(Paragraph("National Institute of Electronics and Information Technology Chandigarh", title_st))
-        elements.append(Paragraph("An autonomous scientific society under administrative control of<br/>Ministry of Electronics and Information Technology (MeitY), Government of India", ParagraphStyle('sub', fontName='Helvetica-Bold', fontSize=10, alignment=1, spaceAfter=8)))
-        elements.append(Paragraph("FutureSkills PRIME (Programme for Re-skilling/Up-skilling of IT Manpower for Employability)", ParagraphStyle('sub2', fontName='Helvetica-Bold', fontSize=10, alignment=1, spaceAfter=14)))
-        
         usable_w = A4[0] - 2.4*cm
+        
+        # Header with Logos
+        try:
+            nielit_img = RLImage("static/assets/img/NIELIT-Logo.png", width=1.3*inch, height=1.3*inch)
+        except Exception:
+            nielit_img = ""
+            
+        try:
+            fs_img = RLImage("static/assets/img/FUTURESKILLS_LOGO.png", width=1.5*inch, height=0.7*inch)
+        except Exception:
+            fs_img = ""
+            
+        header_text = """
+        <font color="#000080" size="14"><b>National Institute of Electronics and<br/>Information Technology Chandigarh</b></font><br/>
+        <font color="#000080" size="7">An autonomous scientific society under administrative control of<br/>
+        Ministry of Electronics and Information Technology (MeitY), Government of India</font>
+        """
+        header_p = Paragraph(header_text, ParagraphStyle('h', alignment=1, leading=10))
+        
+        header_t = Table([[nielit_img, header_p, fs_img]], colWidths=[1.5*inch, usable_w-3.0*inch, 1.5*inch])
+        header_t.setStyle(TableStyle([
+            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+            ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+        ]))
+        elements.append(header_t)
+        
+        fsp_text = "<b>FutureSkills PRIME (Programme for Re-skilling/Up-skilling of ITManpower for Employability)</b>"
+        elements.append(Paragraph(fsp_text, ParagraphStyle('fsp', fontName='Helvetica-Bold', fontSize=10, alignment=1)))
+        elements.append(Spacer(1, 15))
+        
+        elements.append(Paragraph("<b>Application Form for Bootcamp</b>", ParagraphStyle('afb', fontName='Helvetica-Bold', fontSize=14, alignment=1)))
+        elements.append(Spacer(1, 15))
+        
+        elements.append(Paragraph("<b>Date:</b>", ParagraphStyle('rdate', fontName='Helvetica-Bold', fontSize=10, alignment=2)))
+        elements.append(Spacer(1, 5))
         
         data = [
             [Paragraph("Resource Centre Name", bold_st), ":", Paragraph(form_data.get("Resource_Centre_Name", ""), norm_st)],
@@ -360,7 +390,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
         ]
         
         t_style = TableStyle([
-            ('GRID', (0,0), (-1,-1), 0.5, colors.black),
+            ('GRID', (0,2), (-1,-1), 0.5, colors.black),
             ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
             ('PADDING', (0,0), (-1,-1), 4),
             ('SPAN', (0, 0), (1, 0)), 
