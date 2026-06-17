@@ -369,38 +369,44 @@ def generate_pdf(form_data: dict) -> BytesIO:
         elements.append(Spacer(1, 5))
         
         data = [
-            [Paragraph("Resource Centre Name", bold_st), ":", Paragraph(form_data.get("Resource_Centre_Name", ""), norm_st)],
-            [Paragraph("Technology", bold_st), ":", Paragraph(f"{form_data.get('Technology', '')}      Role: {form_data.get('xxx', 'Co-Lead')}", norm_st)],
-            ["1", Paragraph("Course Name", norm_st), ":", Paragraph(form_data.get("Course_Name", ""), norm_st)],
-            ["2", Paragraph("Course Start Date", norm_st), ":", Paragraph(form_data.get("Course_Start_Date", ""), norm_st)],
-            ["3", Paragraph("Applicant Name (as per Gov ID)", norm_st), ":", Paragraph(form_data.get("Applicant_Name", ""), norm_st)],
-            ["4", Paragraph("Date of Birth", norm_st), ":", Paragraph(form_data.get("DOB", ""), norm_st)],
-            ["5", Paragraph("Gender", norm_st), ":", Paragraph(form_data.get("Gender", ""), norm_st)],
-            ["6", Paragraph("Mobile Number", norm_st), ":", Paragraph(form_data.get("Contact_Number", ""), norm_st)],
-            ["7", Paragraph("Email ID (official ID preferred)", norm_st), ":", Paragraph(form_data.get("Email", ""), norm_st)],
-            ["8", Paragraph("Native State", norm_st), ":", Paragraph(form_data.get("Native_State", ""), norm_st)],
-            ["9", Paragraph("District", norm_st), ":", Paragraph(form_data.get("District", ""), norm_st)],
-            ["10", Paragraph("Government-issued ID Number<sup>1</sup><br/><i>(Aadhar copy enclosed)</i>", norm_st), ":", Paragraph(form_data.get("Gov_ID_Number", ""), norm_st)],
-            ["11", Paragraph("Organization/Academic Institute (if applicable)", norm_st), ":", Paragraph(form_data.get("Organization_Academic_Institute", ""), norm_st)],
-            ["12", Paragraph("Highest Qualification (with Degree & Branch)", norm_st), ":", Paragraph(form_data.get("Highest_Qualification", ""), norm_st)],
-            ["13", Paragraph("Status (Pursuing/ Passed out)", norm_st), ":", Paragraph(form_data.get("Status", ""), norm_st)],
-            ["14", Paragraph("Beneficiary Category (Tick as applicable)", norm_st), ":", Paragraph(form_data.get("Beneficiary_Category", ""), norm_st)],
-            ["15", Paragraph("Involved in previous FSP Program<sup>2</sup>", norm_st), ":", Paragraph(form_data.get("Previous_FSP_Program", ""), norm_st)],
-            ["16", Paragraph("If previous answer is, yes provide details<br/>(Program Name / Conducting Institute / Date)", norm_st), ":", Paragraph(f"1. {form_data.get('Previous_FSP_Details_1', '')}<br/>2. {form_data.get('Previous_FSP_Details_2', '')}", norm_st)],
+            [Paragraph("<b>Resource Centre Name</b>", norm_st), "", ":", Paragraph(form_data.get("Resource_Centre_Name", ""), norm_st), ""],
+            [Paragraph("<b>Technology</b>", norm_st), "", ":", Paragraph(form_data.get("Technology", ""), norm_st), Paragraph("<b>Role:</b> Co-Lead", norm_st)],
+            ["1", Paragraph("Course Name", norm_st), ":", Paragraph(form_data.get("Course_Name", ""), norm_st), ""],
+            ["2", Paragraph("Course Start Date", norm_st), ":", Paragraph(form_data.get("Course_Start_Date", ""), norm_st), ""],
+            ["3", Paragraph("Applicant Name (as per Gov ID)", norm_st), ":", Paragraph(form_data.get("Applicant_Name", ""), norm_st), ""],
+            ["4", Paragraph("Date of Birth", norm_st), ":", Paragraph(form_data.get("DOB", ""), norm_st), ""],
+            ["5", Paragraph("Gender", norm_st), ":", Paragraph(form_data.get("Gender", ""), norm_st), ""],
+            ["6", Paragraph("Mobile Number", norm_st), ":", Paragraph(form_data.get("Contact_Number", ""), norm_st), ""],
+            ["7", Paragraph("Email ID (official ID preferred)", norm_st), ":", Paragraph(form_data.get("Email", ""), norm_st), ""],
+            ["8", Paragraph("Native State", norm_st), ":", Paragraph(form_data.get("Native_State", ""), norm_st), ""],
+            ["9", Paragraph("District", norm_st), ":", Paragraph(form_data.get("District", ""), norm_st), ""],
+            ["10", Paragraph("Government-issued ID Number<sup>1</sup><br/><i>(Aadhar copy enclosed)</i>", norm_st), ":", Paragraph(form_data.get("Gov_ID_Number", ""), norm_st), ""],
+            ["11", Paragraph("Organization/Academic Institute (if applicable)", norm_st), ":", Paragraph(form_data.get("Organization_Academic_Institute", ""), norm_st), ""],
+            ["12", Paragraph("Highest Qualification (with Degree & Branch)", norm_st), ":", Paragraph(form_data.get("Highest_Qualification", ""), norm_st), ""],
+            ["13", Paragraph("Status (Pursuing/ Passed out)", norm_st), ":", Paragraph(form_data.get("Status", ""), norm_st), ""],
+            ["14", Paragraph("Beneficiary Category (Tick as applicable)", norm_st), ":", Paragraph(form_data.get("Beneficiary_Category", ""), norm_st), ""],
+            ["15", Paragraph("Involved in previous FSP Program<sup>2</sup>", norm_st), ":", Paragraph(form_data.get("Previous_FSP_Program", ""), norm_st), ""],
+            ["16", Paragraph("If previous answer is, yes provide details<br/>(Program Name / Conducting Institute / Date)", norm_st), ":", Paragraph(f"1. {form_data.get('Previous_FSP_Details_1', '')}<br/>2. {form_data.get('Previous_FSP_Details_2', '')}", norm_st), ""],
         ]
         
-        t_style = TableStyle([
+        t_style_cmds = [
             ('GRID', (0,2), (-1,-1), 0.5, colors.black),
+            ('LINEABOVE', (0,0), (-1,0), 0.5, colors.black),
+            ('LINEBELOW', (0,0), (-1,0), 0.5, colors.black),
+            ('LINEBELOW', (0,1), (-1,1), 0.5, colors.black),
             ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
             ('PADDING', (0,0), (-1,-1), 4),
             ('SPAN', (0, 0), (1, 0)), 
+            ('SPAN', (3, 0), (4, 0)), 
             ('SPAN', (0, 1), (1, 1)), 
-        ])
+        ]
         
-        data[0].insert(1, "")
-        data[1].insert(1, "")
+        for r in range(2, len(data)):
+            t_style_cmds.append(('SPAN', (3, r), (4, r)))
+            
+        t_style = TableStyle(t_style_cmds)
         
-        t = Table(data, colWidths=[usable_w*0.05, usable_w*0.35, usable_w*0.05, usable_w*0.55])
+        t = Table(data, colWidths=[usable_w*0.05, usable_w*0.35, usable_w*0.05, usable_w*0.35, usable_w*0.20])
         t.setStyle(t_style)
         elements.append(t)
         elements.append(Spacer(1, 20))
