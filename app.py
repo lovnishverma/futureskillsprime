@@ -285,9 +285,9 @@ def generate_docx(form_data: dict) -> BytesIO:
                     # run.add_picture(img_buf, width=Inches(1.2), height=Inches(1.5))
                     run.add_picture(img_buf, width=Inches(0.96), height=Inches(1.2))
                 except Exception:
-                    para.text = "[Paste Passport Size Photo Here]"
+                    para.text = "Photo"
             else:
-                para.text = "[Paste Passport Size Photo Here]"
+                para.text = "Photo"
             continue
         elif "{Signature}" in cell_text or "<<Signature>>" in cell_text or cell_text == "Signature":
             para.text = "[Please Sign Here]"
@@ -311,7 +311,9 @@ def generate_docx(form_data: dict) -> BytesIO:
                             # run.add_picture(img_buf, width=Inches(1.2), height=Inches(1.5))
                             run.add_picture(img_buf, width=Inches(0.96), height=Inches(1.2))
                         except Exception:
-                            cell.paragraphs[0].text = "[Photo]"
+                            cell.paragraphs[0].text = "Photo"
+                    else:
+                        cell.paragraphs[0].text = "Photo"
                     continue
                 elif "{Signature}" in cell_text or "<<Signature>>" in cell_text or cell_text == "Signature":
                     cell.paragraphs[0].text = "[Please Sign Here]"
