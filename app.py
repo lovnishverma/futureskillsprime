@@ -409,31 +409,30 @@ def generate_pdf(form_data: dict) -> BytesIO:
         t = Table(data, colWidths=[usable_w*0.05, usable_w*0.35, usable_w*0.05, usable_w*0.35, usable_w*0.20])
         t.setStyle(t_style)
         elements.append(t)
-        elements.append(Spacer(1, 20))
+        elements.append(Spacer(1, 10))
         
         elements.append(Paragraph("I hereby declare that all the information provided above is true.", norm_st))
-        elements.append(Spacer(1, 10))
         
-        elements.append(Spacer(1, 0.5*inch))
+        elements.append(Spacer(1, 20))
         elements.append(Paragraph("<b>Applicant Signature</b>", ParagraphStyle('r', fontName='Helvetica', fontSize=9, alignment=2)))
         
-        elements.append(Spacer(1, 10))
+        elements.append(Spacer(1, 5))
         long_line = Table([[""]], colWidths=[usable_w], rowHeights=[1])
         long_line.setStyle(TableStyle([('LINEABOVE', (0,0), (-1,-1), 0.5, colors.black)]))
         elements.append(long_line)
         
-        elements.append(Spacer(1, 10))
+        elements.append(Spacer(1, 5))
         elements.append(Paragraph("<b>(For office purpose)</b><br/><br/>The above submitted information has been verified and recommended.", norm_st))
         
-        elements.append(Spacer(1, 30))
+        elements.append(Spacer(1, 20))
         elements.append(Paragraph("(Signature)<br/><b>Course Co-ordinator</b>", ParagraphStyle('r2', fontName='Helvetica', fontSize=9, alignment=2)))
         
-        elements.append(Spacer(1, 10))
+        elements.append(Spacer(1, 5))
         short_line = Table([[""]], colWidths=[150], rowHeights=[1], hAlign='LEFT')
         short_line.setStyle(TableStyle([('LINEABOVE', (0,0), (-1,-1), 0.5, colors.black)]))
         elements.append(short_line)
         
-        elements.append(Spacer(1, 5))
+        elements.append(Spacer(1, 2))
         bullet_text = "&bull; &nbsp; <sup>1</sup> <i>Any of the government issued ID: Aadhaar card</i><br/>" \
                       "&bull; &nbsp; <sup>2</sup> <i>Participants are not allowed to enroll in the same program for more than once</i>"
         elements.append(Paragraph(bullet_text, ParagraphStyle('small', fontName='Helvetica', fontSize=8)))
