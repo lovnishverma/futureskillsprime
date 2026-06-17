@@ -282,6 +282,21 @@ def generate_docx(form_data: dict) -> BytesIO:
             para.text = "[Please Sign Here]"
             continue
         
+        if "Any of the government issued ID" in para.text:
+            para.text = ""
+            r1 = para.add_run("1")
+            r1.font.superscript = True
+            r2 = para.add_run(" Any of the government issued ID: Aadhaar card")
+            r2.font.italic = True
+            continue
+        elif "Participants are not allowed to enroll" in para.text:
+            para.text = ""
+            r1 = para.add_run("2")
+            r1.font.superscript = True
+            r2 = para.add_run(" Participants are not allowed to enroll in the same program for more than once")
+            r2.font.italic = True
+            continue
+        
         _replace_in_para(para, replacements)
 
     for table in doc.tables:
@@ -296,6 +311,21 @@ def generate_docx(form_data: dict) -> BytesIO:
                     cell.paragraphs[0].text = "[Please Sign Here]"
                     continue
                 for para in cell.paragraphs:
+                    if "Any of the government issued ID" in para.text:
+                        para.text = ""
+                        r1 = para.add_run("1")
+                        r1.font.superscript = True
+                        r2 = para.add_run(" Any of the government issued ID: Aadhaar card")
+                        r2.font.italic = True
+                        continue
+                    elif "Participants are not allowed to enroll" in para.text:
+                        para.text = ""
+                        r1 = para.add_run("2")
+                        r1.font.superscript = True
+                        r2 = para.add_run(" Participants are not allowed to enroll in the same program for more than once")
+                        r2.font.italic = True
+                        continue
+                        
                     _replace_in_para(para, replacements)
 
     for section in doc.sections:
@@ -335,7 +365,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
         
         # Header with Logos
         try:
-            nielit_img = RLImage("static/assets/img/NIELIT-Logo.png", width=1.3*inch, height=1.3*inch)
+            nielit_img = RLImage("static/assets/img/NIELIT-Logo.png", width=1.9*inch, height=1.0*inch)
         except Exception:
             nielit_img = ""
             
