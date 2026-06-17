@@ -570,13 +570,13 @@ def generate_pdf(form_data: dict) -> BytesIO:
     sign_elem = Paragraph(sign_text, center_st)
             
     t4_data = [
-        [photo_elem, sign_elem]
+        [photo_elem, "", sign_elem]
     ]
     
-    t4 = Table(t4_data, colWidths=[usable_w*0.3, usable_w*0.7])
+    t4 = Table(t4_data, colWidths=[usable_w*0.3, usable_w*0.25, usable_w*0.45])
     t4.setStyle(TableStyle([
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ('ALIGN', (1,0), (1,-1), 'CENTER'),
+        ('ALIGN', (2,0), (2,-1), 'CENTER'),
         ('ALIGN', (0,0), (0,-1), 'LEFT')
     ]))
     story.append(t4)
