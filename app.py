@@ -378,20 +378,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
         elements.append(Paragraph("I hereby declare that all the information provided above is true.", norm_st))
         elements.append(Spacer(1, 10))
         
-        sign_img = None
-        if form_data.get("sign_url"):
-            try:
-                sign_buf = fetch_image_as_jpeg(form_data["sign_url"], target_size=(300, 100))
-                sign_img = RLImage(sign_buf, width=1.5*inch, height=0.5*inch)
-                sign_img.hAlign = 'RIGHT'
-            except Exception:
-                pass
-
-        if sign_img:
-            elements.append(sign_img)
-        else:
-            elements.append(Spacer(1, 0.5*inch))
-            
+        elements.append(Spacer(1, 0.5*inch))
         elements.append(Paragraph("Applicant Signature", ParagraphStyle('r', fontName='Helvetica-Bold', fontSize=9, alignment=2)))
         
         elements.append(Spacer(1, 20))
