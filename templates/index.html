@@ -2789,19 +2789,7 @@
                             </div>
                         </div>
                     </fieldset>
-                    <fieldset class="form-fieldset">
-                        <legend class="form-legend">7. Documents</legend>
-                        <div class="form-row">
-                            <div class="form-col" id="photoCol">
-                                <label class="form-label">Passport Size Photo *</label>
-                                <input type="file" name="photo" accept="image/*" class="form-input" required>
-                            </div>
-                            <div class="form-col">
-                                <label class="form-label">Signature *</label>
-                                <input type="file" name="signature" accept="image/*" class="form-input" required>
-                            </div>
-                        </div>
-                    </fieldset>
+
                     <button type="submit" class="form-submit-btn" id="submitBtn">Submit Nomination</button>
                     <div class="status-message" id="statusMessage"></div>
                 </form>
@@ -3255,17 +3243,7 @@
                 `;
             }
             
-            const photoCol = document.getElementById('photoCol');
-            const photoInput = document.querySelector('input[name="photo"]');
-            if(photoCol && photoInput) {
-                if (isBootcamp) {
-                    photoCol.style.display = 'none';
-                    photoInput.required = false;
-                } else {
-                    photoCol.style.display = 'block';
-                    photoInput.required = true;
-                }
-            }
+            // (Photo toggle logic removed as photo upload is no longer required)
         });
 
 

@@ -285,19 +285,12 @@ def generate_docx(form_data: dict) -> BytesIO:
                     # run.add_picture(img_buf, width=Inches(1.2), height=Inches(1.5))
                     run.add_picture(img_buf, width=Inches(0.96), height=Inches(1.2))
                 except Exception:
-                    para.text = "[Photo]"
+                    para.text = "[Paste Passport Size Photo Here]"
+            else:
+                para.text = "[Paste Passport Size Photo Here]"
             continue
         elif "{Signature}" in cell_text or "<<Signature>>" in cell_text or cell_text == "Signature":
-            sign_url = form_data.get("sign_url")
-            if sign_url:
-                try:
-                    img_buf = fetch_image_as_jpeg(sign_url, target_size=(300, 100))
-                    para.clear()
-                    run = para.add_run()
-                    # run.add_picture(img_buf, width=Inches(1.5), height=Inches(0.5))
-                    run.add_picture(img_buf, width=Inches(1.2), height=Inches(0.4))
-                except Exception:
-                    para.text = "[Signature]"
+            para.text = "[Please Sign Here]"
             continue
         
         _replace_in_para(para, replacements)
@@ -321,18 +314,7 @@ def generate_docx(form_data: dict) -> BytesIO:
                             cell.paragraphs[0].text = "[Photo]"
                     continue
                 elif "{Signature}" in cell_text or "<<Signature>>" in cell_text or cell_text == "Signature":
-                    sign_url = form_data.get("sign_url")
-                    if sign_url:
-                        try:
-                            img_buf = fetch_image_as_jpeg(sign_url, target_size=(300, 100))
-                            cell.text = ""
-                            run = cell.paragraphs[0].add_run()
-                            # run.add_picture(img_buf, width=Inches(1.5), height=Inches(0.5))
-                            run.add_picture(img_buf, width=Inches(1.2), height=Inches(0.4))
-                            from docx.enum.text import WD_ALIGN_PARAGRAPH
-                            cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
-                        except Exception:
-                            cell.paragraphs[0].text = "[Signature]"
+                    cell.paragraphs[0].text = "[Please Sign Here]"
                     continue
                 for para in cell.paragraphs:
                     _replace_in_para(para, replacements)
@@ -465,6 +447,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
     norm_st = ParagraphStyle('norm', fontName='Helvetica', fontSize=9)
     bold_st = ParagraphStyle('bold', fontName='Helvetica-Bold', fontSize=9)
     right_st = ParagraphStyle('right', fontName='Helvetica', fontSize=9, alignment=2)
+    center_st = ParagraphStyle('center_st', fontName='Helvetica', fontSize=10, alignment=1)
     
     story = []
     
@@ -571,29 +554,28 @@ def generate_pdf(form_data: dict) -> BytesIO:
             img_buf = fetch_image_as_jpeg(photo_url, target_size=(300, 375))
             photo_elem = RLImage(img_buf, width=1.2*inch, height=1.5*inch)
         except Exception:
-            photo_elem = "[Photo]"
+            photo_elem = Table([["Photo"]], colWidths=[1.2*inch], rowHeights=[1.2*inch], style=[('BOX', (0,0), (-1,-1), 1, colors.black), ('ALIGN', (0,0), (-1,-1), 'CENTER'), ('VALIGN', (0,0), (-1,-1), 'MIDDLE')])
+    else:
+        photo_elem = Table([["Photo"]], colWidths=[1.2*inch], rowHeights=[1.2*inch], style=[('BOX', (0,0), (-1,-1), 1, colors.black), ('ALIGN', (0,0), (-1,-1), 'CENTER'), ('VALIGN', (0,0), (-1,-1), 'MIDDLE')])
             
-    sign_elem = ""
-    sign_url = form_data.get("sign_url")
-    if sign_url:
-        try:
-            img_buf = fetch_image_as_jpeg(sign_url, target_size=(300, 100))
-            sign_elem = RLImage(img_buf, width=1.5*inch, height=0.5*inch)
-        except Exception:
-            sign_elem = "[Signature]"
+    sign_text = (
+        "<i>Signature of the Official</i><br/><br/>"
+        "<b><i>Recommended/Not Recommended</i></b><br/>"
+        "<i>(By the Head of the Institute)</i><br/><br/><br/><br/>"
+        "<i>(Signature of head of institution)</i><br/>"
+        "<i>Name & Designation with Seal</i>"
+    )
+    sign_elem = Paragraph(sign_text, center_st)
             
     t4_data = [
-        [photo_elem, sign_elem],
-        ["", Paragraph("Signature of the Official<br/>Recommended/Not Recommended<br/>(By the Head of the Institute)", right_st)],
-        ["", Paragraph("<br/><br/><br/>(Signature of head of institution)<br/>Name & Designation with Seal", right_st)]
+        [photo_elem, sign_elem]
     ]
     
     t4 = Table(t4_data, colWidths=[usable_w*0.3, usable_w*0.7])
     t4.setStyle(TableStyle([
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ('ALIGN', (1,0), (1,-1), 'RIGHT'),
-        ('ALIGN', (0,0), (0,-1), 'LEFT'),
-        ('SPAN', (0,0), (0,-1))
+        ('ALIGN', (1,0), (1,-1), 'CENTER'),
+        ('ALIGN', (0,0), (0,-1), 'LEFT')
     ]))
     story.append(t4)
     
@@ -608,8 +590,8 @@ def generate_pdf(form_data: dict) -> BytesIO:
 def index():
     if request.method == "POST":
         f = request.form
-        photo_url = upload_to_cloudinary(request.files.get("photo"), "photos")
-        sign_url = upload_to_cloudinary(request.files.get("signature"), "signatures")
+        photo_url = None
+        sign_url = None
         token = uuid.uuid4().hex
 
         track = f.get("Track")
