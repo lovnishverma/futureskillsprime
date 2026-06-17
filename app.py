@@ -786,9 +786,9 @@ def admin_dates():
             was = request.form.getlist(f"{key}_wa[]")
             gfs = request.form.getlist(f"{key}_gf[]")
             batches = []
-            for s, e, w, g in zip(starts, ends, was, gfs):
+            for s, e, w, gf_val in zip(starts, ends, was, gfs):
                 if s and e:
-                    batches.append({"start": s, "end": e, "wa": w, "gf": g})
+                    batches.append({"start": s, "end": e, "wa": w, "gf": gf_val})
             updates[key] = batches
         
         config_col.update_one({"_id": "course_dates"}, {"$set": updates}, upsert=True)
