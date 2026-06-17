@@ -373,7 +373,9 @@ def generate_pdf(form_data: dict) -> BytesIO:
         
         # Header with Logos
         try:
-            nielit_img = RLImage("static/assets/img/NIELIT-Logo.png", width=1.9*inch, height=1.0*inch)
+            with open("static/assets/img/NIELIT-Logo.png", "rb") as f:
+                n_data = BytesIO(f.read())
+            nielit_img = RLImage(n_data, width=1.9*inch, height=1.0*inch)
         except Exception:
             nielit_img = ""
             
@@ -513,7 +515,9 @@ def generate_pdf(form_data: dict) -> BytesIO:
     story = []
     
     try:
-        n_img = RLImage("static/assets/img/NIELIT-Logo.png", width=1.8*inch, height=1.0*inch)
+        with open("static/assets/img/NIELIT-Logo.png", "rb") as f:
+            n_data = BytesIO(f.read())
+        n_img = RLImage(n_data, width=1.8*inch, height=1.0*inch)
         img_t = Table([[n_img]], colWidths=[usable_w])
         img_t.setStyle(TableStyle([('ALIGN', (0,0), (-1,-1), 'CENTER')]))
         story.append(img_t)
