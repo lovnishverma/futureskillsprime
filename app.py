@@ -474,6 +474,15 @@ def generate_pdf(form_data: dict) -> BytesIO:
     
     story = []
     
+    try:
+        n_img = RLImage("static/assets/img/NIELIT-Logo.png", width=1.8*inch, height=1.0*inch)
+        img_t = Table([[n_img]], colWidths=[usable_w])
+        img_t.setStyle(TableStyle([('ALIGN', (0,0), (-1,-1), 'CENTER')]))
+        story.append(img_t)
+        story.append(Spacer(1, 10))
+    except Exception:
+        pass
+        
     story.append(Paragraph("Nomination Form", title_st))
     
     level_val = (form_data.get("Level") or "").capitalize()
