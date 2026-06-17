@@ -561,7 +561,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
         photo_elem = Table([["Photo"]], colWidths=[1.2*inch], rowHeights=[1.2*inch], style=[('BOX', (0,0), (-1,-1), 1, colors.black), ('ALIGN', (0,0), (-1,-1), 'CENTER'), ('VALIGN', (0,0), (-1,-1), 'MIDDLE')])
             
     sign_text = (
-        "<br/><br/><br/><i>Signature of the Official</i><br/><br/>"
+        "<i>Signature of the Official</i><br/><br/>"
         "<b><i>Recommended/Not Recommended</i></b><br/>"
         "<i>(By the Head of the Institute)</i><br/><br/><br/><br/><br/><br/>"
         "<i>(Signature of head of institution)</i><br/>"
@@ -575,7 +575,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
     
     t4 = Table(t4_data, colWidths=[usable_w*0.3, usable_w*0.25, usable_w*0.45])
     t4.setStyle(TableStyle([
-        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('VALIGN', (0,0), (-1,-1), 'TOP'),
         ('ALIGN', (2,0), (2,-1), 'CENTER'),
         ('ALIGN', (0,0), (0,-1), 'LEFT')
     ]))
