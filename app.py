@@ -283,14 +283,18 @@ def generate_docx(form_data: dict) -> BytesIO:
             continue
         
         if "Any of the government issued ID" in para.text:
+            para.style = 'Normal'
             para.text = ""
+            r0 = para.add_run("• ")
             r1 = para.add_run("1")
             r1.font.superscript = True
             r2 = para.add_run(" Any of the government issued ID: Aadhaar card")
             r2.font.italic = True
             continue
         elif "Participants are not allowed to enroll" in para.text:
+            para.style = 'Normal'
             para.text = ""
+            r0 = para.add_run("• ")
             r1 = para.add_run("2")
             r1.font.superscript = True
             r2 = para.add_run(" Participants are not allowed to enroll in the same program for more than once")
@@ -312,14 +316,18 @@ def generate_docx(form_data: dict) -> BytesIO:
                     continue
                 for para in cell.paragraphs:
                     if "Any of the government issued ID" in para.text:
+                        para.style = 'Normal'
                         para.text = ""
+                        r0 = para.add_run("• ")
                         r1 = para.add_run("1")
                         r1.font.superscript = True
                         r2 = para.add_run(" Any of the government issued ID: Aadhaar card")
                         r2.font.italic = True
                         continue
                     elif "Participants are not allowed to enroll" in para.text:
+                        para.style = 'Normal'
                         para.text = ""
+                        r0 = para.add_run("• ")
                         r1 = para.add_run("2")
                         r1.font.superscript = True
                         r2 = para.add_run(" Participants are not allowed to enroll in the same program for more than once")
