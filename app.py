@@ -359,6 +359,8 @@ def generate_pdf(form_data: dict) -> BytesIO:
             buf, pagesize=A4,
             topMargin=0.8*cm, bottomMargin=0.8*cm,
             leftMargin=1.2*cm, rightMargin=1.2*cm,
+            title="Nomination Form",
+            author="FutureSkills PRIME"
         )
         elements = []
         
@@ -450,6 +452,8 @@ def generate_pdf(form_data: dict) -> BytesIO:
         buf, pagesize=A4,
         topMargin=0.8*cm, bottomMargin=0.8*cm,
         leftMargin=1.2*cm, rightMargin=1.2*cm,
+        title="Nomination Form",
+        author="FutureSkills PRIME"
     )
     W, H = A4
     usable_w = W - 3.6*cm
