@@ -365,7 +365,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
         elements.append(Paragraph("<b>Application Form for Bootcamp</b>", ParagraphStyle('afb', fontName='Helvetica-Bold', fontSize=14, alignment=1)))
         elements.append(Spacer(1, 15))
         
-        elements.append(Paragraph("<b>Date:</b>", ParagraphStyle('rdate', fontName='Helvetica-Bold', fontSize=10, alignment=2)))
+        elements.append(Paragraph("<b>Date:</b>", ParagraphStyle('rdate', fontName='Helvetica-Bold', fontSize=10, alignment=2, rightIndent=100)))
         elements.append(Spacer(1, 5))
         
         data = [
