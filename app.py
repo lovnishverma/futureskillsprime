@@ -380,12 +380,12 @@ def generate_pdf(form_data: dict) -> BytesIO:
             ["7", Paragraph("Email ID (official ID preferred)", norm_st), ":", Paragraph(form_data.get("Email", ""), norm_st)],
             ["8", Paragraph("Native State", norm_st), ":", Paragraph(form_data.get("Native_State", ""), norm_st)],
             ["9", Paragraph("District", norm_st), ":", Paragraph(form_data.get("District", ""), norm_st)],
-            ["10", Paragraph("Government-issued ID Number<br/>(Aadhar copy enclosed)", norm_st), ":", Paragraph(form_data.get("Gov_ID_Number", ""), norm_st)],
+            ["10", Paragraph("Government-issued ID Number<sup>1</sup><br/><i>(Aadhar copy enclosed)</i>", norm_st), ":", Paragraph(form_data.get("Gov_ID_Number", ""), norm_st)],
             ["11", Paragraph("Organization/Academic Institute (if applicable)", norm_st), ":", Paragraph(form_data.get("Organization_Academic_Institute", ""), norm_st)],
             ["12", Paragraph("Highest Qualification (with Degree & Branch)", norm_st), ":", Paragraph(form_data.get("Highest_Qualification", ""), norm_st)],
             ["13", Paragraph("Status (Pursuing/ Passed out)", norm_st), ":", Paragraph(form_data.get("Status", ""), norm_st)],
             ["14", Paragraph("Beneficiary Category (Tick as applicable)", norm_st), ":", Paragraph(form_data.get("Beneficiary_Category", ""), norm_st)],
-            ["15", Paragraph("Involved in previous FSP Program", norm_st), ":", Paragraph(form_data.get("Previous_FSP_Program", ""), norm_st)],
+            ["15", Paragraph("Involved in previous FSP Program<sup>2</sup>", norm_st), ":", Paragraph(form_data.get("Previous_FSP_Program", ""), norm_st)],
             ["16", Paragraph("If previous answer is, yes provide details<br/>(Program Name / Conducting Institute / Date)", norm_st), ":", Paragraph(f"1. {form_data.get('Previous_FSP_Details_1', '')}<br/>2. {form_data.get('Previous_FSP_Details_2', '')}", norm_st)],
         ]
         
@@ -409,17 +409,39 @@ def generate_pdf(form_data: dict) -> BytesIO:
         elements.append(Spacer(1, 10))
         
         elements.append(Spacer(1, 0.5*inch))
-        elements.append(Paragraph("Applicant Signature", ParagraphStyle('r', fontName='Helvetica-Bold', fontSize=9, alignment=2)))
-        
-        elements.append(Spacer(1, 20))
-        elements.append(Paragraph("(For office purpose)<br/>The above submitted information has been verified and recommended.", norm_st))
-        elements.append(Spacer(1, 30))
-        elements.append(Paragraph("(Signature)<br/>Course Co-ordinator", ParagraphStyle('r2', fontName='Helvetica-Bold', fontSize=9, alignment=2)))
+        elements.append(Paragraph("<b>Applicant Signature</b>", ParagraphStyle('r', fontName='Helvetica', fontSize=9, alignment=2)))
         
         elements.append(Spacer(1, 10))
-        elements.append(Paragraph("1 Any of the government issued ID: Aadhaar card<br/>2 Participants are not allowed to enroll in the same program for more than once", ParagraphStyle('small', fontName='Helvetica-Oblique', fontSize=8)))
+        long_line = Table([[""]], colWidths=[usable_w], rowHeights=[1])
+        long_line.setStyle(TableStyle([('LINEABOVE', (0,0), (-1,-1), 0.5, colors.black)]))
+        elements.append(long_line)
         
-        doc.build(elements)
+        elements.append(Spacer(1, 10))
+        elements.append(Paragraph("<b>(For office purpose)</b><br/><br/>The above submitted information has been verified and recommended.", norm_st))
+        
+        elements.append(Spacer(1, 30))
+        elements.append(Paragraph("(Signature)<br/><b>Course Co-ordinator</b>", ParagraphStyle('r2', fontName='Helvetica', fontSize=9, alignment=2)))
+        
+        elements.append(Spacer(1, 10))
+        short_line = Table([[""]], colWidths=[150], rowHeights=[1], hAlign='LEFT')
+        short_line.setStyle(TableStyle([('LINEABOVE', (0,0), (-1,-1), 0.5, colors.black)]))
+        elements.append(short_line)
+        
+        elements.append(Spacer(1, 5))
+        bullet_text = "&bull; &nbsp; <sup>1</sup> <i>Any of the government issued ID: Aadhaar card</i><br/>" \
+                      "&bull; &nbsp; <sup>2</sup> <i>Participants are not allowed to enroll in the same program for more than once</i>"
+        elements.append(Paragraph(bullet_text, ParagraphStyle('small', fontName='Helvetica', fontSize=8)))
+        
+        def draw_page_border(canvas, document):
+            canvas.saveState()
+            canvas.setStrokeColor(colors.black)
+            canvas.setLineWidth(3)
+            canvas.rect(0.6*cm, 0.6*cm, A4[0]-1.2*cm, A4[1]-1.2*cm)
+            canvas.setLineWidth(0.5)
+            canvas.rect(0.65*cm, 0.65*cm, A4[0]-1.3*cm, A4[1]-1.3*cm)
+            canvas.restoreState()
+            
+        doc.build(elements, onFirstPage=draw_page_border, onLaterPages=draw_page_border)
         buf.seek(0)
         return buf
         
