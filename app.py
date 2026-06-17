@@ -276,18 +276,7 @@ def generate_docx(form_data: dict) -> BytesIO:
 
         cell_text = para.text.strip()
         if "{Photo}" in cell_text or "<<Photo>>" in cell_text or cell_text == "Photo":
-            photo_url = form_data.get("photo_url")
-            if photo_url:
-                try:
-                    img_buf = fetch_image_as_jpeg(photo_url, target_size=(300, 375))
-                    para.clear()
-                    run = para.add_run()
-                    # run.add_picture(img_buf, width=Inches(1.2), height=Inches(1.5))
-                    run.add_picture(img_buf, width=Inches(0.96), height=Inches(1.2))
-                except Exception:
-                    para.text = "Photo"
-            else:
-                para.text = "Photo"
+            para.text = "Photo"
             continue
         elif "{Signature}" in cell_text or "<<Signature>>" in cell_text or cell_text == "Signature":
             para.text = "[Please Sign Here]"
@@ -301,19 +290,7 @@ def generate_docx(form_data: dict) -> BytesIO:
                 # Check if this cell is the "Photo" placeholder cell
                 cell_text = cell.text.strip()
                 if "{Photo}" in cell_text or "<<Photo>>" in cell_text or cell_text == "Photo":
-                    photo_url = form_data.get("photo_url")
-                    if photo_url:
-                        try:
-                            img_buf = fetch_image_as_jpeg(photo_url, target_size=(300, 375))
-                            for para in cell.paragraphs:
-                                para.clear()
-                            run = cell.paragraphs[0].add_run()
-                            # run.add_picture(img_buf, width=Inches(1.2), height=Inches(1.5))
-                            run.add_picture(img_buf, width=Inches(0.96), height=Inches(1.2))
-                        except Exception:
-                            cell.paragraphs[0].text = "Photo"
-                    else:
-                        cell.paragraphs[0].text = "Photo"
+                    cell.paragraphs[0].text = "Photo"
                     continue
                 elif "{Signature}" in cell_text or "<<Signature>>" in cell_text or cell_text == "Signature":
                     cell.paragraphs[0].text = "[Please Sign Here]"
@@ -546,19 +523,10 @@ def generate_pdf(form_data: dict) -> BytesIO:
         ('PADDING', (0,0), (-1,-1), 2)
     ]))
     story.append(t3)
-    story.append(Spacer(1, 4))
+    story.append(Spacer(1, 40))
     
     # Table 4: Signature / Photo block
-    photo_elem = ""
-    photo_url = form_data.get("photo_url")
-    if photo_url:
-        try:
-            img_buf = fetch_image_as_jpeg(photo_url, target_size=(300, 375))
-            photo_elem = RLImage(img_buf, width=1.2*inch, height=1.5*inch)
-        except Exception:
-            photo_elem = Table([["Photo"]], colWidths=[1.2*inch], rowHeights=[1.2*inch], style=[('BOX', (0,0), (-1,-1), 1, colors.black), ('ALIGN', (0,0), (-1,-1), 'CENTER'), ('VALIGN', (0,0), (-1,-1), 'MIDDLE')])
-    else:
-        photo_elem = Table([["Photo"]], colWidths=[1.2*inch], rowHeights=[1.2*inch], style=[('BOX', (0,0), (-1,-1), 1, colors.black), ('ALIGN', (0,0), (-1,-1), 'CENTER'), ('VALIGN', (0,0), (-1,-1), 'MIDDLE')])
+    photo_elem = Table([["Photo"]], colWidths=[1.2*inch], rowHeights=[1.2*inch], style=[('BOX', (0,0), (-1,-1), 1, colors.black), ('ALIGN', (0,0), (-1,-1), 'CENTER'), ('VALIGN', (0,0), (-1,-1), 'MIDDLE')])
             
     sign_text = (
         "<i>Signature of the Official</i><br/><br/>"
