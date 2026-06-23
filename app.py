@@ -366,9 +366,9 @@ def generate_pdf(form_data: dict) -> BytesIO:
         
         # Styles
         styles = getSampleStyleSheet()
-        title_st = ParagraphStyle('title', fontName='Helvetica-Bold', fontSize=12, alignment=1, spaceAfter=4)
-        norm_st = ParagraphStyle('norm', fontName='Helvetica', fontSize=9)
-        bold_st = ParagraphStyle('bold', fontName='Helvetica-Bold', fontSize=9)
+        title_st = ParagraphStyle('title', fontName='Helvetica-Bold', fontSize=11, alignment=1, spaceAfter=2)
+        norm_st = ParagraphStyle('norm', fontName='Helvetica', fontSize=8)
+        bold_st = ParagraphStyle('bold', fontName='Helvetica-Bold', fontSize=8)
         
         usable_w = A4[0] - 2.4*cm
         
@@ -400,13 +400,13 @@ def generate_pdf(form_data: dict) -> BytesIO:
         elements.append(header_t)
         
         fsp_text = "<b>FutureSkills PRIME (Programme for Re-skilling/Up-skilling of ITManpower for Employability)</b>"
-        elements.append(Paragraph(fsp_text, ParagraphStyle('fsp', fontName='Helvetica-Bold', fontSize=10, alignment=1)))
-        elements.append(Spacer(1, 15))
+        elements.append(Paragraph(fsp_text, ParagraphStyle('fsp', fontName='Helvetica-Bold', fontSize=9, alignment=1)))
+        elements.append(Spacer(1, 10))
         
-        elements.append(Paragraph("<b>Application Form for Bootcamp</b>", ParagraphStyle('afb', fontName='Helvetica-Bold', fontSize=14, alignment=1)))
-        elements.append(Spacer(1, 15))
+        elements.append(Paragraph("<b>Application Form for Bootcamp</b>", ParagraphStyle('afb', fontName='Helvetica-Bold', fontSize=12, alignment=1)))
+        elements.append(Spacer(1, 10))
         
-        elements.append(Paragraph("<b>Date:</b>", ParagraphStyle('rdate', fontName='Helvetica-Bold', fontSize=10, alignment=2, rightIndent=100)))
+        elements.append(Paragraph("<b>Date:</b>", ParagraphStyle('rdate', fontName='Helvetica-Bold', fontSize=9, alignment=2, rightIndent=100)))
         elements.append(Spacer(1, 5))
         
         data = [
@@ -436,7 +436,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
             ('LINEBELOW', (0,0), (-1,0), 0.5, colors.black),
             ('LINEBELOW', (0,1), (-1,1), 0.5, colors.black),
             ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-            ('PADDING', (0,0), (-1,-1), 4),
+            ('PADDING', (0,0), (-1,-1), 2),
             ('SPAN', (0, 0), (1, 0)), 
             ('SPAN', (3, 0), (4, 0)), 
             ('SPAN', (0, 1), (1, 1)), 
@@ -450,12 +450,12 @@ def generate_pdf(form_data: dict) -> BytesIO:
         t = Table(data, colWidths=[usable_w*0.05, usable_w*0.35, usable_w*0.05, usable_w*0.35, usable_w*0.20])
         t.setStyle(t_style)
         elements.append(t)
-        elements.append(Spacer(1, 10))
+        elements.append(Spacer(1, 5))
         
         elements.append(Paragraph("I hereby declare that all the information provided above is true.", norm_st))
         
-        elements.append(Spacer(1, 20))
-        elements.append(Paragraph("<b>Applicant Signature</b>", ParagraphStyle('r', fontName='Helvetica', fontSize=9, alignment=2)))
+        elements.append(Spacer(1, 10))
+        elements.append(Paragraph("<b>Applicant Signature</b>", ParagraphStyle('r', fontName='Helvetica', fontSize=8, alignment=2)))
         
         elements.append(Spacer(1, 5))
         long_line = Table([[""]], colWidths=[usable_w], rowHeights=[1])
@@ -465,8 +465,8 @@ def generate_pdf(form_data: dict) -> BytesIO:
         elements.append(Spacer(1, 5))
         elements.append(Paragraph("<b>(For office purpose)</b><br/><br/>The above submitted information has been verified and recommended.", norm_st))
         
-        elements.append(Spacer(1, 20))
-        elements.append(Paragraph("(Signature)<br/><b>Course Co-ordinator</b>", ParagraphStyle('r2', fontName='Helvetica', fontSize=9, alignment=2)))
+        elements.append(Spacer(1, 10))
+        elements.append(Paragraph("(Signature)<br/><b>Course Co-ordinator</b>", ParagraphStyle('r2', fontName='Helvetica', fontSize=8, alignment=2)))
         
         elements.append(Spacer(1, 5))
         short_line = Table([[""]], colWidths=[150], rowHeights=[1], hAlign='LEFT')
@@ -476,7 +476,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
         elements.append(Spacer(1, 2))
         bullet_text = "&bull; &nbsp; <sup>1</sup> <i>Any of the government issued ID: Aadhaar card</i><br/>" \
                       "&bull; &nbsp; <sup>2</sup> <i>Participants are not allowed to enroll in the same program for more than once</i>"
-        elements.append(Paragraph(bullet_text, ParagraphStyle('small', fontName='Helvetica', fontSize=8)))
+        elements.append(Paragraph(bullet_text, ParagraphStyle('small', fontName='Helvetica', fontSize=7)))
         
         def draw_page_border(canvas, document):
             canvas.saveState()
@@ -506,12 +506,12 @@ def generate_pdf(form_data: dict) -> BytesIO:
 
     styles = getSampleStyleSheet()
     
-    title_st = ParagraphStyle('title', fontName='Helvetica-Bold', fontSize=12, alignment=1, spaceAfter=4)
-    sub_st = ParagraphStyle('sub', fontName='Helvetica-Bold', fontSize=10, alignment=1, spaceAfter=8)
-    norm_st = ParagraphStyle('norm', fontName='Helvetica', fontSize=9)
-    bold_st = ParagraphStyle('bold', fontName='Helvetica-Bold', fontSize=9)
-    right_st = ParagraphStyle('right', fontName='Helvetica', fontSize=9, alignment=2)
-    center_st = ParagraphStyle('center_st', fontName='Helvetica', fontSize=10, alignment=1)
+    title_st = ParagraphStyle('title', fontName='Helvetica-Bold', fontSize=11, alignment=1, spaceAfter=2)
+    sub_st = ParagraphStyle('sub', fontName='Helvetica-Bold', fontSize=9, alignment=1, spaceAfter=4)
+    norm_st = ParagraphStyle('norm', fontName='Helvetica', fontSize=8)
+    bold_st = ParagraphStyle('bold', fontName='Helvetica-Bold', fontSize=8)
+    right_st = ParagraphStyle('right', fontName='Helvetica', fontSize=8, alignment=2)
+    center_st = ParagraphStyle('center_st', fontName='Helvetica', fontSize=9, alignment=1)
     
     story = []
     
@@ -549,10 +549,10 @@ def generate_pdf(form_data: dict) -> BytesIO:
         ('BOX', (0,0), (-1,-1), 0.5, colors.black),
         ('INNERGRID', (0,0), (-1,-1), 0.5, colors.black),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ('PADDING', (0,0), (-1,-1), 2)
+        ('PADDING', (0,0), (-1,-1), 1)
     ]))
     story.append(t0)
-    story.append(Spacer(1, 4))
+    story.append(Spacer(1, 2))
     
     # Table 1: Personal Information
     story.append(Paragraph("Personal Information", bold_st))
@@ -575,10 +575,10 @@ def generate_pdf(form_data: dict) -> BytesIO:
         ('SPAN', (1,5), (3,5)),
         ('SPAN', (1,6), (3,6)),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ('PADDING', (0,0), (-1,-1), 2)
+        ('PADDING', (0,0), (-1,-1), 1)
     ]))
     story.append(t1)
-    story.append(Spacer(1, 4))
+    story.append(Spacer(1, 2))
     
     # Table 2: Educational Qualifications
     story.append(Paragraph("Educational / Professional Qualifications", bold_st))
@@ -596,10 +596,10 @@ def generate_pdf(form_data: dict) -> BytesIO:
         ('SPAN', (0,0), (3,0)),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
         ('ALIGN', (0,0), (3,1), 'CENTER'),
-        ('PADDING', (0,0), (-1,-1), 2)
+        ('PADDING', (0,0), (-1,-1), 1)
     ]))
     story.append(t2)
-    story.append(Spacer(1, 4))
+    story.append(Spacer(1, 2))
     
     # Table 3: Experience
     t3_data = [
@@ -616,10 +616,10 @@ def generate_pdf(form_data: dict) -> BytesIO:
         ('SPAN', (0,0), (3,0)),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
         ('ALIGN', (0,0), (3,1), 'CENTER'),
-        ('PADDING', (0,0), (-1,-1), 2)
+        ('PADDING', (0,0), (-1,-1), 1)
     ]))
     story.append(t3)
-    story.append(Spacer(1, 5))
+    story.append(Spacer(1, 2))
     
     # Table 4: Signature / Photo block
     photo_elem = Table([["Photo"]], colWidths=[1.1*inch], rowHeights=[1.1*inch], style=[('BOX', (0,0), (-1,-1), 1, colors.black), ('ALIGN', (0,0), (-1,-1), 'CENTER'), ('VALIGN', (0,0), (-1,-1), 'MIDDLE')])
