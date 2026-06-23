@@ -376,7 +376,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
         try:
             with open("static/assets/img/NIELIT-Logo-hd.png", "rb") as f:
                 n_data = BytesIO(f.read())
-            nielit_img = RLImage(n_data, width=1.6*inch, height=0.85*inch)
+            nielit_img = RLImage(n_data, width=1.3*inch, height=0.7*inch)
         except Exception:
             nielit_img = ""
             
@@ -518,7 +518,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
     try:
         with open("static/assets/img/NIELIT-Logo-hd.png", "rb") as f:
             n_data = BytesIO(f.read())
-        n_img = RLImage(n_data, width=1.5*inch, height=0.8*inch)
+        n_img = RLImage(n_data, width=1.3*inch, height=0.7*inch)
         img_t = Table([[n_img]], colWidths=[usable_w])
         img_t.setStyle(TableStyle([('ALIGN', (0,0), (-1,-1), 'CENTER')]))
         story.append(img_t)
@@ -628,7 +628,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
         "<br/><br/><br/>"
         "<i>Signature of the Official</i><br/><br/>"
         "<b><i>Recommended/Not Recommended</i></b><br/>"
-        "<i>(By the Head of the Institute)</i><br/><br/><br/>"
+        "<i>(By the Head of the Institute)</i><br/><br/><br/><br/>"
         "<i>(Signature of head of institution)</i><br/>"
         "<i>Name & Designation with Seal</i>"
     )
