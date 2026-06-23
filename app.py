@@ -805,6 +805,24 @@ def download_docx(token):
     )
 
 
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    row = None
+    if request.method == "POST":
+        query = request.form.get("query", "").strip()
+        if query:
+            db = get_db()
+            row = db.find_one({"$or": [
+                {"aadhar": query}, 
+                {"contact": query}, 
+                {"email": query},
+                {"token": query}
+            ]})
+            if not row:
+                flash("No nomination found with that detail. Please try again.", "error")
+    return render_template("search.html", row=row)
+
+
 # ── Admin routes ──────────────────────────────────────────────────────────────
 
 @app.route("/admin/dates", methods=["GET", "POST"])
