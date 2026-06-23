@@ -618,15 +618,15 @@ def generate_pdf(form_data: dict) -> BytesIO:
         ('PADDING', (0,0), (-1,-1), 2)
     ]))
     story.append(t3)
-    story.append(Spacer(1, 40))
+    story.append(Spacer(1, 15))
     
     # Table 4: Signature / Photo block
-    photo_elem = Table([["Photo"]], colWidths=[1.2*inch], rowHeights=[1.2*inch], style=[('BOX', (0,0), (-1,-1), 1, colors.black), ('ALIGN', (0,0), (-1,-1), 'CENTER'), ('VALIGN', (0,0), (-1,-1), 'MIDDLE')])
+    photo_elem = Table([["Photo"]], colWidths=[1.1*inch], rowHeights=[1.1*inch], style=[('BOX', (0,0), (-1,-1), 1, colors.black), ('ALIGN', (0,0), (-1,-1), 'CENTER'), ('VALIGN', (0,0), (-1,-1), 'MIDDLE')])
             
     sign_text = (
         "<i>Signature of the Official</i><br/><br/>"
         "<b><i>Recommended/Not Recommended</i></b><br/>"
-        "<i>(By the Head of the Institute)</i><br/><br/><br/><br/><br/><br/>"
+        "<i>(By the Head of the Institute)</i><br/><br/><br/>"
         "<i>(Signature of head of institution)</i><br/>"
         "<i>Name & Designation with Seal</i>"
     )
