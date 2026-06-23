@@ -19,6 +19,7 @@ from flask import (Flask, abort, flash, g, redirect, render_template,
                    request, send_file, session, url_for)
 from docx.shared import Inches, Pt
 from docx import Document
+from docxcompose.composer import Composer
 from pathlib import Path
 from io import BytesIO
 from datetime import datetime
@@ -375,7 +376,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
         try:
             with open("static/assets/img/NIELIT-Logo-hd.png", "rb") as f:
                 n_data = BytesIO(f.read())
-            nielit_img = RLImage(n_data, width=1.9*inch, height=1.0*inch)
+            nielit_img = RLImage(n_data, width=1.6*inch, height=0.85*inch)
         except Exception:
             nielit_img = ""
             
@@ -517,7 +518,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
     try:
         with open("static/assets/img/NIELIT-Logo-hd.png", "rb") as f:
             n_data = BytesIO(f.read())
-        n_img = RLImage(n_data, width=1.8*inch, height=1.0*inch)
+        n_img = RLImage(n_data, width=1.5*inch, height=0.8*inch)
         img_t = Table([[n_img]], colWidths=[usable_w])
         img_t.setStyle(TableStyle([('ALIGN', (0,0), (-1,-1), 'CENTER')]))
         story.append(img_t)
@@ -624,7 +625,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
     photo_elem = Table([["Photo"]], colWidths=[1.1*inch], rowHeights=[1.1*inch], style=[('BOX', (0,0), (-1,-1), 1, colors.black), ('ALIGN', (0,0), (-1,-1), 'CENTER'), ('VALIGN', (0,0), (-1,-1), 'MIDDLE')])
             
     sign_text = (
-        "<i>Signature of the Official</i><br/><br/>"
+        "<i>Signature of the Official</i><br/><br/><br/><br/>"
         "<b><i>Recommended/Not Recommended</i></b><br/>"
         "<i>(By the Head of the Institute)</i><br/><br/><br/>"
         "<i>(Signature of head of institution)</i><br/>"
@@ -938,10 +939,45 @@ def admin_pdf_all():
 
 
 
+@app.route("/admin/docx/all")
+def admin_docx_all():
+    if not session.get("admin"):
+        abort(403)
+    db = get_db()
+    rows = list(db.find().sort("submitted_at", 1))
+    if not rows:
+        flash("No submissions yet.", "warning")
+        return redirect(url_for("admin"))
+
+    master = None
+    for row in rows:
+        form_data = row_to_form_data(row)
+        docx_buf = generate_docx(form_data)
+        doc = Document(docx_buf)
+        if master is None:
+            master = Composer(doc)
+        else:
+            master.append(doc)
+
+    out_buf = BytesIO()
+    master.save(out_buf)
+    out_buf.seek(0)
+    ts = datetime.now().strftime("%Y-%m-%d_%H-%M")
+    return send_file(out_buf, mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document", as_attachment=True,
+                     download_name=f"All_Nominations_{ts}.docx")
+
+
 @app.route("/admin/delete_all", methods=["POST"])
 def admin_delete_all():
     if not session.get("admin"):
         abort(403)
+        
+    pwd = request.form.get("delete_password", "")
+    expected_pwd = os.environ.get("DELETE_ALL_PASSWORD", "rccrcc")
+    if pwd != expected_pwd:
+        flash("Incorrect password to delete all.", "error")
+        return redirect(url_for("admin"))
+
     db = get_db()
     db.delete_many({})
     flash("All nominations deleted successfully.", "success")

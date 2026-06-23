@@ -41,8 +41,10 @@
         <a href="{{ url_for('admin_zip_pdfs') }}" class="btn">Download All PDFs (ZIP)</a>
         <a href="{{ url_for('admin_zip_docxs') }}" class="btn">Download All DOCXs (ZIP)</a>
         <a href="{{ url_for('admin_pdf_all') }}" class="btn" style="background:#4b5563;">Merged PDF</a>
+        <a href="{{ url_for('admin_docx_all') }}" class="btn" style="background:#4b5563;">Merged DOCX</a>
         
-        <form action="{{ url_for('admin_delete_all') }}" method="POST" onsubmit="return confirm('WARNING: Are you absolutely sure you want to permanently delete ALL nominations? This cannot be undone!');" style="margin-left: auto;">
+        <form action="{{ url_for('admin_delete_all') }}" method="POST" onsubmit="return confirm('WARNING: Are you absolutely sure you want to permanently delete ALL nominations? This cannot be undone!');" style="margin-left: auto; display: flex; gap: 5px;">
+            <input type="password" name="delete_password" placeholder="Password" required style="padding: 5px; border: 1px solid #ccc; border-radius: 4px; width: 100px;">
             <button type="submit" class="btn-danger">Delete All Nominations</button>
         </form>
     </div>
