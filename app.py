@@ -496,7 +496,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
 
     doc = SimpleDocTemplate(
         buf, pagesize=A4,
-        topMargin=0.8*cm, bottomMargin=0.8*cm,
+        topMargin=0.5*cm, bottomMargin=0.5*cm,
         leftMargin=1.2*cm, rightMargin=1.2*cm,
         title="Nomination Form",
         author="FutureSkills PRIME"
@@ -619,7 +619,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
         ('PADDING', (0,0), (-1,-1), 2)
     ]))
     story.append(t3)
-    story.append(Spacer(1, 15))
+    story.append(Spacer(1, 5))
     
     # Table 4: Signature / Photo block
     photo_elem = Table([["Photo"]], colWidths=[1.1*inch], rowHeights=[1.1*inch], style=[('BOX', (0,0), (-1,-1), 1, colors.black), ('ALIGN', (0,0), (-1,-1), 'CENTER'), ('VALIGN', (0,0), (-1,-1), 'MIDDLE')])
