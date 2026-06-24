@@ -106,12 +106,11 @@ def fetch_image_as_jpeg(url, target_size=None):
         # Auto-crop signatures (target aspect ratio > 1)
         if target_size[0] > target_size[1]:
             try:
-                from PIL import ImageStat
+                from PIL import ImageFilter, ImageChops
                 gray = img.convert('L')
-                stat = ImageStat.Stat(gray)
-                mean_val = stat.mean[0]
-                threshold = int(mean_val * 0.8)
-                bw = gray.point(lambda x: 255 if x < threshold else 0, '1')
+                blur = gray.filter(ImageFilter.GaussianBlur(radius=20))
+                diff = ImageChops.difference(gray, blur)
+                bw = diff.point(lambda x: 255 if x > 15 else 0, '1')
                 bbox = bw.getbbox()
                 if bbox:
                     l, t, r, b = bbox
