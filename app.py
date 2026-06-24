@@ -315,8 +315,9 @@ def generate_docx(form_data: dict) -> BytesIO:
         nonlocal photo_added, sign_added
         
         # Replace image placeholders
-        if "{Photo}" in para.text:
-            para.text = para.text.replace("{Photo}", "")
+        ptxt = para.text.strip()
+        if "{Photo}" in ptxt or "<<Photo>>" in ptxt or ptxt == "Photo":
+            para.text = ""
             if form_data.get("photo_url"):
                 try:
                     img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(400, 400))
@@ -326,8 +327,8 @@ def generate_docx(form_data: dict) -> BytesIO:
                     logging.error(f"Photo error: {e}")
             photo_added = True
             
-        if "{Signature}" in para.text:
-            para.text = para.text.replace("{Signature}", "")
+        elif "{Signature}" in ptxt or "<<Signature>>" in ptxt or ptxt == "Signature":
+            para.text = ""
             if form_data.get("sign_url"):
                 try:
                     img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(600, 200))
@@ -369,16 +370,19 @@ def generate_docx(form_data: dict) -> BytesIO:
             _replace_in_para(para, replacements)
 
     # Fallback: Add Photo and Signature at the end if they were NOT added above but exist
-    if not photo_added and not sign_added and (form_data.get("photo_url") or form_data.get("sign_url")):
+    needs_photo_fallback = not photo_added and form_data.get("photo_url")
+    needs_sign_fallback = not sign_added and form_data.get("sign_url")
+    
+    if needs_photo_fallback or needs_sign_fallback:
         doc.add_paragraph()
         table = doc.add_table(rows=1, cols=3)
-        if form_data.get("photo_url") and not photo_added:
+        if needs_photo_fallback:
             try:
                 img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(400, 400))
                 table.cell(0, 0).paragraphs[0].add_run().add_picture(img_path, width=Inches(1.1))
                 os.remove(img_path)
             except: pass
-        if form_data.get("sign_url") and not sign_added:
+        if needs_sign_fallback:
             try:
                 img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(600, 200))
                 p = table.cell(0, 2).paragraphs[0]
