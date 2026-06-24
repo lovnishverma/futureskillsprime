@@ -388,6 +388,28 @@ def generate_docx(form_data: dict) -> BytesIO:
         for para in section.footer.paragraphs:
             _replace_in_para(para, replacements)
 
+    # Add Photo and Signature at the end of document if available
+    if form_data.get("photo_url") or form_data.get("sign_url"):
+        doc.add_paragraph()
+        table = doc.add_table(rows=1, cols=3)
+        if form_data.get("photo_url"):
+            try:
+                img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(400, 400))
+                table.cell(0, 0).paragraphs[0].add_run().add_picture(img_path, width=Inches(1.1))
+                os.remove(img_path)
+            except:
+                pass
+        if form_data.get("sign_url"):
+            try:
+                img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(600, 200))
+                p = table.cell(0, 2).paragraphs[0]
+                p.alignment = 1 # Center alignment
+                p.add_run().add_picture(img_path, width=Inches(1.5))
+                p.add_run("\nApplicant Signature").bold = True
+                os.remove(img_path)
+            except:
+                pass
+
     buf = BytesIO()
     doc.save(buf)
     buf.seek(0)
@@ -865,6 +887,23 @@ def download_pdf(token):
         pdf_buf,
         mimetype="application/pdf",
         as_attachment=True,
+        download_name=f"Nomination_{safe_name}.pdf",
+    )
+
+@app.route("/preview/pdf/<token>")
+def preview_pdf(token):
+    db = get_db()
+    row = db.find_one({"token": token})
+    if not row:
+        abort(404)
+        
+    form_data = row_to_form_data(row)
+    safe_name = "".join(c for c in form_data.get("Name", "Applicant") if c.isalnum() or c in " _-").strip()
+    pdf_buf = generate_pdf(form_data)
+    return send_file(
+        pdf_buf,
+        mimetype="application/pdf",
+        as_attachment=False,
         download_name=f"Nomination_{safe_name}.pdf",
     )
 

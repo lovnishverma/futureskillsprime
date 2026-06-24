@@ -130,7 +130,7 @@
             
             {% if row.photo_url and row.sign_url %}
             <div style="margin-top: 25px;">
-                <iframe src="{{ url_for('download_pdf', token=row.token) }}#toolbar=0" style="width: 100%; height: 500px; border: 1px solid #d1d5db; border-radius: 8px;"></iframe>
+                <iframe src="{{ url_for('preview_pdf', token=row.token) }}#toolbar=0" style="width: 100%; height: 500px; border: 1px solid #d1d5db; border-radius: 8px;"></iframe>
             </div>
             {% endif %}
         </div>
