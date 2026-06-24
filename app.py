@@ -838,6 +838,18 @@ def index():
             except Exception as e:
                 logging.error(f"Signature upload error: {e}")
 
+        existing = db.find_one({
+            "aadhar": f.get("Aadhar"),
+            "track": track,
+            "level": level,
+            "batch_index": batch_index_str
+        })
+
+        if existing:
+            token = existing.get("token", token)
+            photo_url = photo_url or existing.get("photo_url")
+            sign_url = sign_url or existing.get("sign_url")
+
         doc = {
             "token": token, "submitted_at": datetime.now().isoformat(),
             "track": track, "level": level, "batch_index": batch_index_str,
@@ -867,14 +879,19 @@ def index():
             upload_result = cloudinary.uploader.upload(
                 pdf_buf.getvalue(),
                 resource_type="raw",
-                public_id=f"nominations/nomination_{token}.pdf"
+                public_id=f"nominations/nomination_{token}.pdf",
+                invalidate=True
             )
             doc["pdf_url"] = upload_result.get("secure_url", "")
         except Exception as e:
             logging.error(f"Cloudinary upload failed: {e}")
-            doc["pdf_url"] = ""
+            doc["pdf_url"] = existing.get("pdf_url", "") if existing else ""
 
-        db.insert_one(doc)
+        if existing:
+            db.replace_one({"_id": existing["_id"]}, doc)
+        else:
+            db.insert_one(doc)
+            
         flash("success", "ok")
         return redirect(url_for("success", token=token))
 
