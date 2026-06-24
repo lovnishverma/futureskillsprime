@@ -310,13 +310,33 @@ def generate_docx(form_data: dict) -> BytesIO:
         
     photo_added = False
     sign_added = False
+    import re
+
+    # Wiping cells that contain 'Photo' ensures we delete any margin-heavy Text Boxes and insert the image natively
+    for table in doc.tables:
+        for row in table.rows:
+            for cell in row.cells:
+                if not photo_added and re.search(r'>\s*\{?Photo\}?\s*<', cell._element.xml, re.IGNORECASE):
+                    cell.text = "" 
+                    if form_data.get("photo_url"):
+                        try:
+                            img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(400, 400))
+                            if not cell.paragraphs:
+                                cell.add_paragraph()
+                            p = cell.paragraphs[0]
+                            p.alignment = 1
+                            p.add_run().add_picture(img_path, width=Inches(1.1))
+                            os.remove(img_path)
+                        except Exception as e:
+                            logging.error(f"Photo error: {e}")
+                    photo_added = True
 
     def process_paragraph(para):
         nonlocal photo_added, sign_added
         
         # Replace image placeholders
         ptxt = para.text.strip()
-        if "{Photo}" in ptxt or "<<Photo>>" in ptxt or ptxt == "Photo":
+        if not photo_added and ("{Photo}" in ptxt or "<<Photo>>" in ptxt or ptxt == "Photo"):
             para.text = ""
             if form_data.get("photo_url"):
                 try:
@@ -327,12 +347,24 @@ def generate_docx(form_data: dict) -> BytesIO:
                     logging.error(f"Photo error: {e}")
             photo_added = True
             
-        elif "{Signature}" in ptxt or "<<Signature>>" in ptxt or ptxt == "Signature":
+        elif not sign_added and ("{Signature}" in ptxt or "<<Signature>>" in ptxt or ptxt == "Signature"):
             para.text = ""
             if form_data.get("sign_url"):
                 try:
                     img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(600, 200))
                     para.add_run().add_picture(img_path, width=Inches(1.5))
+                    os.remove(img_path)
+                except Exception as e:
+                    logging.error(f"Sign error: {e}")
+            sign_added = True
+
+        elif not sign_added and "Signature of the Official" in ptxt:
+            if form_data.get("sign_url"):
+                try:
+                    img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(600, 200))
+                    new_para = para.insert_paragraph_before("")
+                    new_para.alignment = 1
+                    new_para.add_run().add_picture(img_path, width=Inches(1.5))
                     os.remove(img_path)
                 except Exception as e:
                     logging.error(f"Sign error: {e}")
@@ -388,7 +420,6 @@ def generate_docx(form_data: dict) -> BytesIO:
                 p = table.cell(0, 2).paragraphs[0]
                 p.alignment = 1
                 p.add_run().add_picture(img_path, width=Inches(1.5))
-                p.add_run("\nApplicant Signature").bold = True
                 os.remove(img_path)
             except: pass
 
