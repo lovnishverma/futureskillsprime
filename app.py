@@ -1034,7 +1034,7 @@ def upload_media(token):
         logging.error(f"Cloudinary PDF upload failed during media update: {e}")
 
     flash("Media uploaded successfully! Your form has been updated.", "success")
-    return render_template("search.html", row=row)
+    return render_template("search.html", rows=[row])
 
 
 
