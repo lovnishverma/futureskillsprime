@@ -102,6 +102,26 @@ def fetch_image_as_jpeg(url, target_size=None):
         
     if target_size:
         img = ImageOps.exif_transpose(img)
+        
+        # Auto-crop signatures (target aspect ratio > 1)
+        if target_size[0] > target_size[1]:
+            try:
+                from PIL import ImageStat
+                gray = img.convert('L')
+                stat = ImageStat.Stat(gray)
+                mean_val = stat.mean[0]
+                threshold = int(mean_val * 0.8)
+                bw = gray.point(lambda x: 255 if x < threshold else 0, '1')
+                bbox = bw.getbbox()
+                if bbox:
+                    l, t, r, b = bbox
+                    w, h = img.size
+                    pad_x = int((r-l)*0.05)
+                    pad_y = int((b-t)*0.05)
+                    img = img.crop((max(0, l-pad_x), max(0, t-pad_y), min(w, r+pad_x), min(h, b+pad_y)))
+            except Exception as e:
+                logging.error(f"Auto-crop failed: {e}")
+                
         img = ImageOps.contain(img, target_size, Image.Resampling.LANCZOS if hasattr(Image, 'Resampling') else Image.ANTIALIAS)
         
     fd, path = tempfile.mkstemp(suffix=".jpg")
