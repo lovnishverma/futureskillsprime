@@ -108,9 +108,11 @@ def fetch_image_as_jpeg(url, target_size=None):
             try:
                 from PIL import ImageFilter, ImageChops
                 gray = img.convert('L')
-                blur = gray.filter(ImageFilter.GaussianBlur(radius=20))
+                blur = gray.filter(ImageFilter.GaussianBlur(radius=10))
                 diff = ImageChops.difference(gray, blur)
-                bw = diff.point(lambda x: 255 if x > 15 else 0, '1')
+                max_diff = diff.getextrema()[1]
+                threshold = max(5, int(max_diff * 0.2))
+                bw = diff.point(lambda x: 255 if x > threshold else 0, '1')
                 bbox = bw.getbbox()
                 if bbox:
                     l, t, r, b = bbox
