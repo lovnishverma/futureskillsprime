@@ -821,6 +821,23 @@ def index():
                 flash("error", "Educational Qualifications are mandatory for GOT forms.")
                 return redirect(url_for("index") + "#nomination")
 
+        # Handle signature upload directly for Bootcamp
+        if level == "Bootcamp":
+            sign_file = request.files.get("signature_file")
+            sign_data = request.form.get("signature_data")
+            try:
+                import base64
+                if sign_file and sign_file.filename != '':
+                    res = cloudinary.uploader.upload(sign_file, folder="nominations_signs", resource_type="image")
+                    sign_url = res.get("secure_url")
+                elif sign_data:
+                    header, encoded = sign_data.split(",", 1)
+                    data = base64.b64decode(encoded)
+                    res = cloudinary.uploader.upload(data, folder="nominations_signs", resource_type="image")
+                    sign_url = res.get("secure_url")
+            except Exception as e:
+                logging.error(f"Signature upload error: {e}")
+
         doc = {
             "token": token, "submitted_at": datetime.now().isoformat(),
             "track": track, "level": level, "batch_index": batch_index_str,

@@ -2795,6 +2795,27 @@
                         </div>
                     </fieldset>
 
+                    <fieldset class="form-fieldset" id="bootcampSignatureSection" style="display: none;">
+                        <legend class="form-legend">7. Signature (Required for Bootcamp)</legend>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                                    <label><input type="radio" name="sign_method" value="upload" checked onclick="toggleSignMethod()"> Upload Image</label>
+                                    <label><input type="radio" name="sign_method" value="draw" onclick="toggleSignMethod()"> Draw Signature</label>
+                                </div>
+                                <div id="sign-upload-box">
+                                    <input type="file" id="sign-file" name="signature_file" accept="image/*" class="form-input" style="width: 100%;">
+                                </div>
+                                <div id="sign-draw-box" style="display: none;">
+                                    <canvas id="sign-canvas" width="300" height="150" style="border: 2px dashed #d1d5db; border-radius: 6px; background: #f9fafb; cursor: crosshair; touch-action: none;"></canvas>
+                                    <br>
+                                    <button type="button" class="form-submit-btn" style="padding: 6px 12px; font-size: 0.9em; width: auto; margin-top: 10px; background: #6b7280;" onclick="clearCanvas()">Clear Signature</button>
+                                    <input type="hidden" name="signature_data" id="signature_data">
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
                     <button type="submit" class="form-submit-btn" id="submitBtn">Submit Nomination</button>
                     <div class="status-message" id="statusMessage"></div>
                 </form>
@@ -3211,6 +3232,67 @@
             });
         });
 
+        const form = document.getElementById('nominationForm');
+        form.addEventListener('submit', function (e) {
+            const isBootcamp = (document.getElementById('levelSelect').value === 'Bootcamp');
+            if (isBootcamp) {
+                const method = document.querySelector('input[name="sign_method"]:checked').value;
+                if (method === 'draw') {
+                    if (!signaturePad || signaturePad.isEmpty()) {
+                        e.preventDefault();
+                        alert("Please draw your signature for the Bootcamp nomination.");
+                        return;
+                    }
+                    document.getElementById('signature_data').value = signaturePad.toDataURL('image/png');
+                }
+            }
+            
+            // Allow native form submission to proceed
+            const btn = document.getElementById('submitBtn');
+            if(btn) {
+                btn.disabled = true;
+                btn.textContent = "Submitting...";
+            }
+        });
+        
+        // ==================== SIGNATURE PAD ====================
+        let signaturePad;
+        const canvas = document.getElementById('sign-canvas');
+        if (canvas) {
+            // Load signature pad script dynamically
+            const script = document.createElement('script');
+            script.src = "https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js";
+            script.onload = () => {
+                signaturePad = new SignaturePad(canvas, {
+                    backgroundColor: 'rgba(255, 255, 255, 0)',
+                    penColor: 'rgb(0, 0, 0)'
+                });
+            };
+            document.head.appendChild(script);
+        }
+
+        function toggleSignMethod() {
+            const methodEl = document.querySelector('input[name="sign_method"]:checked');
+            if (!methodEl) return;
+            const method = methodEl.value;
+            const isBootcamp = (document.getElementById('levelSelect').value === 'Bootcamp');
+            
+            if (method === 'upload') {
+                document.getElementById('sign-upload-box').style.display = 'block';
+                document.getElementById('sign-draw-box').style.display = 'none';
+                document.getElementById('sign-file').required = isBootcamp;
+            } else {
+                document.getElementById('sign-upload-box').style.display = 'none';
+                document.getElementById('sign-draw-box').style.display = 'block';
+                document.getElementById('sign-file').required = false;
+                document.getElementById('sign-file').value = "";
+            }
+        }
+        
+        function clearCanvas() {
+            if (signaturePad) signaturePad.clear();
+        }
+
         // ==================== NOMINATION FORM ====================
         const levelSelect = document.getElementById('levelSelect');
         const beneficiarySelect = document.getElementById('beneficiarySelect');
@@ -3248,7 +3330,15 @@
                 `;
             }
             
-            // (Photo toggle logic removed as photo upload is no longer required)
+            // Bootcamp Signature visibility
+            const bcSignSection = document.getElementById('bootcampSignatureSection');
+            if (isBootcamp) {
+                bcSignSection.style.display = 'block';
+                toggleSignMethod(); // re-eval required attr
+            } else {
+                bcSignSection.style.display = 'none';
+                document.getElementById('sign-file').required = false;
+            }
         });
 
 
