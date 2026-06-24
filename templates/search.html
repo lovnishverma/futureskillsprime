@@ -43,14 +43,18 @@
             <p style="margin-bottom: 8px;"><strong>Token:</strong> <span style="font-family: monospace;">{{ row.token }}</span></p>
             <p style="margin-bottom: 8px;"><strong>Submitted On:</strong> {{ row.submitted_at[:10] }}</p>
             
-            {% if not row.photo_url or not row.sign_url %}
+            {% set is_bootcamp = (row.level|lower == 'bootcamp') %}
+            {% if (is_bootcamp and not row.sign_url) or (not is_bootcamp and (not row.photo_url or not row.sign_url)) %}
             <div style="margin-top: 25px; background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #d1d5db;">
-                <h4 style="margin-top: 0; color: #1f2937;">Complete Your Form (Add Photo & Signature)</h4>
+                <h4 style="margin-top: 0; color: #1f2937;">Complete Your Form (Add Signature{% if not is_bootcamp %} & Photo{% endif %})</h4>
                 <form id="media-form" action="{{ url_for('upload_media', token=row.token) }}" method="POST" enctype="multipart/form-data">
+                    
+                    {% if not is_bootcamp %}
                     <div style="margin-bottom: 15px;">
                         <label style="display: block; font-weight: 600; margin-bottom: 5px;">Upload Photo <span style="color: red;">*</span></label>
                         <input type="file" name="photo" accept="image/*" class="input-field" style="width: 100%; box-sizing: border-box;" required>
                     </div>
+                    {% endif %}
 
                     <div style="margin-bottom: 15px;">
                         <label style="display: block; font-weight: 600; margin-bottom: 5px;">Signature <span style="color: red;">*</span></label>
@@ -119,7 +123,7 @@
             </script>
             {% else %}
             <div style="margin-top: 25px; padding: 15px; background: #dcfce7; color: #166534; border-radius: 8px; border: 1px solid #bbf7d0;">
-                <p style="margin: 0; font-weight: 600;">✅ Photo and Signature have been successfully attached!</p>
+                <p style="margin: 0; font-weight: 600;">✅ {% if is_bootcamp %}Signature has{% else %}Photo and Signature have{% endif %} been successfully attached!</p>
             </div>
             {% endif %}
 
@@ -128,7 +132,7 @@
                 <a href="{{ url_for('download_docx', token=row.token) }}" class="btn btn-outline">Download DOCX</a>
             </div>
             
-            {% if row.photo_url and row.sign_url %}
+            {% if (is_bootcamp and row.sign_url) or (not is_bootcamp and row.photo_url and row.sign_url) %}
             <div style="margin-top: 25px;">
                 <iframe src="{{ url_for('preview_pdf', token=row.token) }}#toolbar=0" style="width: 100%; height: 500px; border: 1px solid #d1d5db; border-radius: 8px;"></iframe>
             </div>
