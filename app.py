@@ -110,8 +110,6 @@ def fetch_image_as_jpeg(url, target_size=None):
                 gray = img.convert('L')
                 stat = ImageStat.Stat(gray)
                 median_val = stat.median[0]
-                # Ink is significantly darker than the paper. 
-                # Use a reliable offset (e.g., 30 levels darker) to isolate ink.
                 threshold = max(0, median_val - 30)
                 bw = gray.point(lambda x: 255 if x < threshold else 0, '1')
                 bbox = bw.getbbox()
@@ -121,6 +119,15 @@ def fetch_image_as_jpeg(url, target_size=None):
                     pad_x = int((r-l)*0.05)
                     pad_y = int((b-t)*0.05)
                     img = img.crop((max(0, l-pad_x), max(0, t-pad_y), min(w, r+pad_x), min(h, b+pad_y)))
+                
+                # Fallback: if shadows prevented a tight crop and it's still too tall, center-crop it
+                w, h = img.size
+                target_aspect = target_size[0] / target_size[1]
+                if w / h < target_aspect - 0.5:
+                    new_h = int(w / target_aspect)
+                    top = (h - new_h) // 2
+                    bottom = top + new_h
+                    img = img.crop((0, top, w, bottom))
             except Exception as e:
                 logging.error(f"Auto-crop failed: {e}")
                 
