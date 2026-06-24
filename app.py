@@ -910,7 +910,7 @@ def success(token):
     row = db.find_one({"token": token})
     if not row:
         abort(404)
-    return render_template("success.html", token=token, name=row.get("name", "Applicant"), whatsapp_link=row.get("whatsapp_link"), google_form_link=row.get("google_form_link"))
+    return render_template("success.html", token=token, name=row.get("name", "Applicant"), whatsapp_link=row.get("whatsapp_link"), google_form_link=row.get("google_form_link"), is_bootcamp=(row.get("level") == "Bootcamp"))
 
 
 @app.route("/download/pdf/<token>")
