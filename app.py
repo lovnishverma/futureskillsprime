@@ -1031,6 +1031,18 @@ def upload_media(token):
 
 # ── Admin routes ──────────────────────────────────────────────────────────────
 
+@app.route("/admin/fix-levels")
+def admin_fix_levels():
+    if not session.get("admin"):
+        abort(403)
+    db = get_db()
+    res1 = db.update_many({"level": None}, {"$set": {"level": "Advanced"}})
+    res2 = db.update_many({"level": ""}, {"$set": {"level": "Advanced"}})
+    res3 = db.update_many({"level": {"$exists": False}}, {"$set": {"level": "Advanced"}})
+    total = res1.modified_count + res2.modified_count + res3.modified_count
+    flash(f"Successfully updated {total} records to 'Advanced' level.", "success")
+    return redirect(url_for("admin"))
+
 @app.route("/admin/dates", methods=["GET", "POST"])
 def admin_dates():
     if not session.get("admin"):
