@@ -357,14 +357,10 @@ def generate_docx(form_data: dict) -> BytesIO:
         else:
             _replace_in_para(para, replacements)
 
-    for para in doc.paragraphs:
+    from docx.text.paragraph import Paragraph
+    all_paras = [Paragraph(p, doc) for p in doc._element.xpath('.//w:p')]
+    for para in all_paras:
         process_paragraph(para)
-
-    for table in doc.tables:
-        for row in table.rows:
-            for cell in row.cells:
-                for para in cell.paragraphs:
-                    process_paragraph(para)
 
     for section in doc.sections:
         for para in section.header.paragraphs:
