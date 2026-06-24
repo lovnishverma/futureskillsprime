@@ -17,6 +17,12 @@
         .alert-success { background: #d1fae5; color: #065f46; }
         .alert-error { background: #fee2e2; color: #991b1b; }
         .alert-warning { background: #fef3c7; color: #92400e; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; }
+        .tab-btn { padding: 10px 20px; background: transparent; border: none; cursor: pointer; font-weight: 600; color: #4b5563; border-radius: 4px; }
+        .tab-btn:hover { background: #e5e7eb; }
+        .tab-btn.active { background: #2563eb; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -59,7 +65,13 @@
       {% endif %}
     {% endwith %}
 
-    <table id="nom_table" class="display">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('all-tab')">All Submissions ({{ rows|length }})</button>
+        <button class="tab-btn" onclick="showTab('completed-tab')">Completed Forms ({{ completed_rows|length }})</button>
+    </div>
+
+    <div id="all-tab" class="tab-content active">
+        <table id="nom_table" class="display">
         <thead>
             <tr>
                 <th>Date</th>
@@ -92,10 +104,53 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
+
+    <div id="completed-tab" class="tab-content">
+        <table id="completed_table" class="display">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Track</th>
+                    <th>Level</th>
+                    <th>Token</th>
+                    <th>Media</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in completed_rows %}
+                <tr>
+                    <td>{{ row.submitted_at[:10] if row.submitted_at else '' }}</td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.track }}</td>
+                    <td>{{ row.level }}</td>
+                    <td style="font-family: monospace; font-size: 0.9em; color: #6b7280;">{{ row.token[:8] }}...</td>
+                    <td>
+                        <a href="{{ row.photo_url }}" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 600;">Photo</a> | 
+                        <a href="{{ row.sign_url }}" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 600;">Sign</a>
+                    </td>
+                    <td class="actions">
+                        <a href="{{ url_for('download_pdf', token=row.token) }}" class="btn">PDF</a>
+                        <a href="{{ url_for('download_docx', token=row.token) }}" class="btn" style="background:#4b5563;">DOCX</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     <script>
+        function showTab(tabId) {
+            $('.tab-content').removeClass('active');
+            $('.tab-btn').removeClass('active');
+            $('#' + tabId).addClass('active');
+            $('button[onclick="showTab(\'' + tabId + '\')"]').addClass('active');
+        }
+
         $(document).ready(function() {
-            $('#nom_table').DataTable({
+            $('#nom_table, #completed_table').DataTable({
                 "pageLength": 50,
                 "order": [[ 0, "desc" ]],
                 "language": {

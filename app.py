@@ -277,10 +277,30 @@ def generate_docx(form_data: dict) -> BytesIO:
 
         cell_text = para.text.strip()
         if "{Photo}" in cell_text or "<<Photo>>" in cell_text or cell_text == "Photo":
-            para.text = "Photo"
+            para.text = ""
+            if form_data.get("photo_url"):
+                try:
+                    img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(100, 100))
+                    para.add_run().add_picture(img_path, width=Inches(1.1))
+                    os.remove(img_path)
+                except Exception as e:
+                    logging.error(f"Failed to add photo to docx para: {e}")
+                    para.text = "Photo"
+            else:
+                para.text = "Photo"
             continue
         elif "{Signature}" in cell_text or "<<Signature>>" in cell_text or cell_text == "Signature":
-            para.text = "[Please Sign Here]"
+            para.text = ""
+            if form_data.get("sign_url"):
+                try:
+                    img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(150, 50))
+                    para.add_run().add_picture(img_path, width=Inches(1.5))
+                    os.remove(img_path)
+                except Exception as e:
+                    logging.error(f"Failed to add sign to docx para: {e}")
+                    para.text = "[Please Sign Here]"
+            else:
+                para.text = "[Please Sign Here]"
             continue
         
         if "Any of the government issued ID" in para.text:
@@ -310,10 +330,30 @@ def generate_docx(form_data: dict) -> BytesIO:
                 # Check if this cell is the "Photo" placeholder cell
                 cell_text = cell.text.strip()
                 if "{Photo}" in cell_text or "<<Photo>>" in cell_text or cell_text == "Photo":
-                    cell.paragraphs[0].text = "Photo"
+                    cell.paragraphs[0].text = ""
+                    if form_data.get("photo_url"):
+                        try:
+                            img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(100, 100))
+                            cell.paragraphs[0].add_run().add_picture(img_path, width=Inches(1.1))
+                            os.remove(img_path)
+                        except Exception as e:
+                            logging.error(f"Failed to add photo to docx: {e}")
+                            cell.paragraphs[0].text = "Photo"
+                    else:
+                        cell.paragraphs[0].text = "Photo"
                     continue
                 elif "{Signature}" in cell_text or "<<Signature>>" in cell_text or cell_text == "Signature":
-                    cell.paragraphs[0].text = "[Please Sign Here]"
+                    cell.paragraphs[0].text = ""
+                    if form_data.get("sign_url"):
+                        try:
+                            img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(150, 50))
+                            cell.paragraphs[0].add_run().add_picture(img_path, width=Inches(1.5))
+                            os.remove(img_path)
+                        except Exception as e:
+                            logging.error(f"Failed to add sign to docx: {e}")
+                            cell.paragraphs[0].text = "[Please Sign Here]"
+                    else:
+                        cell.paragraphs[0].text = "[Please Sign Here]"
                     continue
                 for para in cell.paragraphs:
                     if "Any of the government issued ID" in para.text:
@@ -455,7 +495,30 @@ def generate_pdf(form_data: dict) -> BytesIO:
         elements.append(Paragraph("I hereby declare that all the information provided above is true.", norm_st))
         
         elements.append(Spacer(1, 10))
-        elements.append(Paragraph("<b>Applicant Signature</b>", ParagraphStyle('r', fontName='Helvetica', fontSize=8, alignment=2)))
+        
+        photo_elem = ""
+        if form_data.get('photo_url'):
+            try:
+                img_path = fetch_image_as_jpeg(form_data['photo_url'], target_size=(100, 100))
+                photo_elem = RLImage(img_path, width=1.1*inch, height=1.1*inch)
+            except:
+                pass
+                
+        sign_elem = [Paragraph("<b>Applicant Signature</b>", ParagraphStyle('r', fontName='Helvetica', fontSize=8, alignment=2))]
+        if form_data.get('sign_url'):
+            try:
+                img_path = fetch_image_as_jpeg(form_data['sign_url'], target_size=(150, 50))
+                sign_elem.insert(0, RLImage(img_path, width=1.5*inch, height=0.5*inch, hAlign='RIGHT'))
+            except:
+                pass
+                
+        bot_table = Table([[photo_elem, sign_elem]], colWidths=[usable_w*0.5, usable_w*0.5])
+        bot_table.setStyle(TableStyle([
+            ('ALIGN', (0,0), (0,0), 'LEFT'),
+            ('ALIGN', (1,0), (1,0), 'RIGHT'),
+            ('VALIGN', (0,0), (-1,-1), 'BOTTOM'),
+        ]))
+        elements.append(bot_table)
         
         elements.append(Spacer(1, 5))
         long_line = Table([[""]], colWidths=[usable_w], rowHeights=[1])
@@ -622,17 +685,32 @@ def generate_pdf(form_data: dict) -> BytesIO:
     story.append(Spacer(1, 2))
     
     # Table 4: Signature / Photo block
-    photo_elem = Table([["Photo"]], colWidths=[1.1*inch], rowHeights=[1.1*inch], style=[('BOX', (0,0), (-1,-1), 1, colors.black), ('ALIGN', (0,0), (-1,-1), 'CENTER'), ('VALIGN', (0,0), (-1,-1), 'MIDDLE')])
+    if form_data.get('photo_url'):
+        try:
+            img_path = fetch_image_as_jpeg(form_data['photo_url'], target_size=(100, 100))
+            photo_elem = RLImage(img_path, width=1.1*inch, height=1.1*inch)
+        except:
+            photo_elem = Table([["Photo"]], colWidths=[1.1*inch], rowHeights=[1.1*inch], style=[('BOX', (0,0), (-1,-1), 1, colors.black), ('ALIGN', (0,0), (-1,-1), 'CENTER'), ('VALIGN', (0,0), (-1,-1), 'MIDDLE')])
+    else:
+        photo_elem = Table([["Photo"]], colWidths=[1.1*inch], rowHeights=[1.1*inch], style=[('BOX', (0,0), (-1,-1), 1, colors.black), ('ALIGN', (0,0), (-1,-1), 'CENTER'), ('VALIGN', (0,0), (-1,-1), 'MIDDLE')])
             
-    sign_text = (
-        "<br/><br/><br/>"
+    sign_text_str = (
         "<i>Signature of the Official</i><br/><br/>"
         "<b><i>Recommended/Not Recommended</i></b><br/>"
         "<i>(By the Head of the Institute)</i><br/><br/><br/><br/>"
         "<i>(Signature of head of institution)</i><br/>"
         "<i>Name & Designation with Seal</i>"
     )
-    sign_elem = Paragraph(sign_text, center_st)
+    
+    if form_data.get('sign_url'):
+        try:
+            img_path = fetch_image_as_jpeg(form_data['sign_url'], target_size=(150, 50))
+            sign_img = RLImage(img_path, width=1.5*inch, height=0.5*inch, hAlign='CENTER')
+            sign_elem = [sign_img, Paragraph(sign_text_str, center_st)]
+        except:
+            sign_elem = Paragraph("<br/><br/><br/>" + sign_text_str, center_st)
+    else:
+        sign_elem = Paragraph("<br/><br/><br/>" + sign_text_str, center_st)
             
     t4_data = [
         [photo_elem, "", sign_elem]
@@ -822,6 +900,58 @@ def search():
                 flash("No nomination found with that detail. Please try again.", "error")
     return render_template("search.html", row=row)
 
+import base64
+
+@app.route("/upload_media/<token>", methods=["POST"])
+def upload_media(token):
+    db = get_db()
+    row = db.find_one({"token": token})
+    if not row:
+        abort(404)
+
+    photo_file = request.files.get("photo")
+    sign_file = request.files.get("signature_file")
+    sign_data = request.form.get("signature_data")
+
+    photo_url = row.get("photo_url")
+    sign_url = row.get("sign_url")
+
+    if photo_file and photo_file.filename != '':
+        res = cloudinary.uploader.upload(photo_file, folder="nominations_photos", resource_type="image")
+        photo_url = res.get("secure_url")
+
+    if sign_file and sign_file.filename != '':
+        res = cloudinary.uploader.upload(sign_file, folder="nominations_signs", resource_type="image")
+        sign_url = res.get("secure_url")
+    elif sign_data:
+        # Base64 data: data:image/png;base64,iVBORw0KGgo...
+        header, encoded = sign_data.split(",", 1)
+        data = base64.b64decode(encoded)
+        res = cloudinary.uploader.upload(data, folder="nominations_signs", resource_type="image")
+        sign_url = res.get("secure_url")
+
+    # Update DB
+    db.update_one({"token": token}, {"$set": {"photo_url": photo_url, "sign_url": sign_url}})
+    row = db.find_one({"token": token})  # Get updated row
+
+    # Regenerate PDF with photo and sign, then upload to Cloudinary
+    form_data = row_to_form_data(row)
+    try:
+        pdf_buf = generate_pdf(form_data)
+        upload_result = cloudinary.uploader.upload(
+            pdf_buf.getvalue(),
+            resource_type="raw",
+            public_id=f"nominations/nomination_{token}.pdf"
+        )
+        db.update_one({"token": token}, {"$set": {"pdf_url": upload_result.get("secure_url", "")}})
+        row["pdf_url"] = upload_result.get("secure_url", "")
+    except Exception as e:
+        logging.error(f"Cloudinary PDF upload failed during media update: {e}")
+
+    flash("Media uploaded successfully! Your form has been updated.", "success")
+    return render_template("search.html", row=row)
+
+
 
 # ── Admin routes ──────────────────────────────────────────────────────────────
 
@@ -873,9 +1003,12 @@ def admin():
 
     db = get_db()
     rows = list(db.find().sort("submitted_at", -1))
+    completed_rows = []
     for r in rows:
         r["id"] = str(r["_id"])
-    return render_template("admin.html", rows=rows)
+        if r.get("photo_url") and r.get("sign_url"):
+            completed_rows.append(r)
+    return render_template("admin.html", rows=rows, completed_rows=completed_rows)
 
 
 @app.route("/admin/logout")

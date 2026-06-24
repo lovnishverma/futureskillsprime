@@ -43,10 +43,96 @@
             <p style="margin-bottom: 8px;"><strong>Token:</strong> <span style="font-family: monospace;">{{ row.token }}</span></p>
             <p style="margin-bottom: 8px;"><strong>Submitted On:</strong> {{ row.submitted_at[:10] }}</p>
             
+            {% if not row.photo_url or not row.sign_url %}
+            <div style="margin-top: 25px; background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #d1d5db;">
+                <h4 style="margin-top: 0; color: #1f2937;">Complete Your Form (Add Photo & Signature)</h4>
+                <form id="media-form" action="{{ url_for('upload_media', token=row.token) }}" method="POST" enctype="multipart/form-data">
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Upload Photo <span style="color: red;">*</span></label>
+                        <input type="file" name="photo" accept="image/*" class="input-field" style="width: 100%; box-sizing: border-box;" required>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Signature <span style="color: red;">*</span></label>
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <label><input type="radio" name="sign_method" value="upload" checked onclick="toggleSignMethod()"> Upload Image</label>
+                            <label><input type="radio" name="sign_method" value="draw" onclick="toggleSignMethod()"> Draw Signature</label>
+                        </div>
+                        
+                        <div id="sign-upload-box">
+                            <input type="file" id="sign-file" name="signature_file" accept="image/*" class="input-field" style="width: 100%; box-sizing: border-box;">
+                        </div>
+
+                        <div id="sign-draw-box" style="display: none;">
+                            <canvas id="sign-canvas" width="300" height="150" style="border: 2px dashed #d1d5db; border-radius: 6px; background: #f9fafb; cursor: crosshair; touch-action: none;"></canvas>
+                            <br>
+                            <button type="button" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.9em;" onclick="clearCanvas()">Clear Signature</button>
+                            <input type="hidden" name="signature_data" id="signature_data">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn" style="width: 100%; margin: 10px 0 0 0;" onclick="return prepareForm()">Upload & Update Form</button>
+                </form>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+            <script>
+                var canvas = document.getElementById('sign-canvas');
+                var signaturePad = new SignaturePad(canvas, {
+                    backgroundColor: 'rgba(255, 255, 255, 0)',
+                    penColor: 'rgb(0, 0, 0)'
+                });
+
+                function toggleSignMethod() {
+                    var method = document.querySelector('input[name="sign_method"]:checked').value;
+                    if (method === 'upload') {
+                        document.getElementById('sign-upload-box').style.display = 'block';
+                        document.getElementById('sign-draw-box').style.display = 'none';
+                        document.getElementById('sign-file').required = true;
+                    } else {
+                        document.getElementById('sign-upload-box').style.display = 'none';
+                        document.getElementById('sign-draw-box').style.display = 'block';
+                        document.getElementById('sign-file').required = false;
+                        document.getElementById('sign-file').value = "";
+                    }
+                }
+                
+                function clearCanvas() {
+                    signaturePad.clear();
+                }
+
+                function prepareForm() {
+                    var method = document.querySelector('input[name="sign_method"]:checked').value;
+                    if (method === 'draw') {
+                        if (signaturePad.isEmpty()) {
+                            alert("Please draw your signature.");
+                            return false;
+                        }
+                        var dataUrl = signaturePad.toDataURL('image/png');
+                        document.getElementById('signature_data').value = dataUrl;
+                    }
+                    return true;
+                }
+                
+                // Init
+                toggleSignMethod();
+            </script>
+            {% else %}
+            <div style="margin-top: 25px; padding: 15px; background: #dcfce7; color: #166534; border-radius: 8px; border: 1px solid #bbf7d0;">
+                <p style="margin: 0; font-weight: 600;">✅ Photo and Signature have been successfully attached!</p>
+            </div>
+            {% endif %}
+
             <div style="margin-top: 25px; text-align: center;">
                 <a href="{{ url_for('download_pdf', token=row.token) }}" class="btn">Download PDF</a>
                 <a href="{{ url_for('download_docx', token=row.token) }}" class="btn btn-outline">Download DOCX</a>
             </div>
+            
+            {% if row.photo_url and row.sign_url %}
+            <div style="margin-top: 25px;">
+                <iframe src="{{ url_for('download_pdf', token=row.token) }}#toolbar=0" style="width: 100%; height: 500px; border: 1px solid #d1d5db; border-radius: 8px;"></iframe>
+            </div>
+            {% endif %}
         </div>
         {% endif %}
 
