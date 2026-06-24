@@ -376,7 +376,7 @@ def generate_docx(form_data: dict) -> BytesIO:
                     logging.error(f"Sign error: {e}")
             sign_added = True
 
-        elif not sign_added and "Signature of the Official" in ptxt:
+        elif not sign_added and ("Signature of the Official" in ptxt or "Applicant Signature" in ptxt):
             if form_data.get("sign_url"):
                 try:
                     from docx.shared import Pt
