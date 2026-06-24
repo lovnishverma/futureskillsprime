@@ -806,10 +806,19 @@ def index():
 
         db = get_db()
         
+        # Enforce strict server-side validation to block submissions from old cached tabs
+        if not track or not level:
+            flash("error", "Invalid or outdated form submission detected. Please refresh the page completely and try again.")
+            return redirect(url_for("index") + "#nomination")
+            
+        if not f.get("Highest_Qualification"):
+            flash("error", "Highest Qualification is a mandatory field. Please refresh and fill it out.")
+            return redirect(url_for("index") + "#nomination")
+        
         # Enforce server-side validation for GOT forms (Educational Qualifications)
         if level in ["Basic", "Advanced"]:
             if not f.get("Edu1_Year") or not f.get("Edu1_Degree") or not f.get("Edu1_University"):
-                flash("error", "Educational Qualifications are mandatory for GOT forms.")
+                flash("error", "Detailed Educational Qualifications are mandatory for GOT forms.")
                 return redirect(url_for("index") + "#nomination")
 
         # Handle signature upload directly for Bootcamp
