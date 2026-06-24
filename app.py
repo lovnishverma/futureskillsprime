@@ -126,15 +126,23 @@ def fetch_image_as_jpeg(url, target_size=None):
                 if w / h < target_aspect - 0.5:
                     new_h = int(w / target_aspect)
                     
-                    # Find the Y center of the ink by locating the darkest pixels in the inner 80%
-                    inner_gray = gray.crop((int(w*0.1), int(h*0.1), int(w*0.9), int(h*0.9)))
-                    min_val = inner_gray.getextrema()[0]
-                    threshold = min_val + 10
-                    bw = inner_gray.point(lambda x: 255 if x <= threshold else 0, '1')
-                    ink_bbox = bw.getbbox()
-                    if ink_bbox:
-                        ink_cy = (ink_bbox[1] + ink_bbox[3]) // 2 + int(h*0.1)
-                    else:
+                    # Find the Y center of the ink using edge detection (ignores smooth shadows entirely)
+                    try:
+                        from PIL import ImageFilter
+                        edges = gray.filter(ImageFilter.FIND_EDGES)
+                        # Ignore the outer 5% to avoid border artifacts
+                        edges_cropped = edges.crop((int(w*0.05), int(h*0.05), int(w*0.95), int(h*0.95)))
+                        # Compress horizontally and vertically to find the row with the highest density of edges (ink)
+                        row_sums = edges_cropped.resize((1, 100), Image.Resampling.BILINEAR)
+                        max_val = -1
+                        best_y = 50
+                        for y in range(100):
+                            val = row_sums.getpixel((0, y))
+                            if val > max_val:
+                                max_val = val
+                                best_y = y
+                        ink_cy = int((best_y / 100) * edges_cropped.height) + int(h*0.05)
+                    except Exception:
                         ink_cy = h // 2
                         
                     top = ink_cy - new_h // 2
