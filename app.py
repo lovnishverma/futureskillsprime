@@ -120,13 +120,34 @@ def fetch_image_as_jpeg(url, target_size=None):
                     pad_y = int((b-t)*0.05)
                     img = img.crop((max(0, l-pad_x), max(0, t-pad_y), min(w, r+pad_x), min(h, b+pad_y)))
                 
-                # Fallback: if shadows prevented a tight crop and it's still too tall, center-crop it
+                # Fallback: if shadows prevented a tight crop and it's still too tall, intelligently crop around the ink
                 w, h = img.size
                 target_aspect = target_size[0] / target_size[1]
                 if w / h < target_aspect - 0.5:
                     new_h = int(w / target_aspect)
-                    top = (h - new_h) // 2
+                    
+                    # Find the Y center of the ink by locating the darkest pixels in the inner 80%
+                    inner_gray = gray.crop((int(w*0.1), int(h*0.1), int(w*0.9), int(h*0.9)))
+                    min_val = inner_gray.getextrema()[0]
+                    threshold = min_val + 10
+                    bw = inner_gray.point(lambda x: 255 if x <= threshold else 0, '1')
+                    ink_bbox = bw.getbbox()
+                    if ink_bbox:
+                        ink_cy = (ink_bbox[1] + ink_bbox[3]) // 2 + int(h*0.1)
+                    else:
+                        ink_cy = h // 2
+                        
+                    top = ink_cy - new_h // 2
                     bottom = top + new_h
+                    
+                    # Clamp boundaries
+                    if top < 0:
+                        top = 0
+                        bottom = new_h
+                    elif bottom > h:
+                        bottom = h
+                        top = h - new_h
+                        
                     img = img.crop((0, top, w, bottom))
             except Exception as e:
                 logging.error(f"Auto-crop failed: {e}")
