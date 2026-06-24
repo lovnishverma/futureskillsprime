@@ -267,6 +267,14 @@ def generate_docx(form_data: dict) -> BytesIO:
     template_path = Path("docxtemplates/Bootcamp_Nomination_Form.docx") if form_data.get("Level") == "Bootcamp" else DOCX_TEMPLATE
     doc = Document(str(template_path))
     
+    # Squeeze margins slightly to guarantee everything fits after inserting logo
+    from docx.shared import Inches
+    for section in doc.sections:
+        if section.bottom_margin > Inches(0.25):
+            section.bottom_margin = Inches(0.25)
+        if section.top_margin > Inches(0.25):
+            section.top_margin = Inches(0.25)
+
     # Strip empty spacing paragraphs to prevent layout spilling to a second page
     for table in doc.tables:
         for row in table.rows:
@@ -330,12 +338,12 @@ def generate_docx(form_data: dict) -> BytesIO:
                     cell.text = "" 
                     if form_data.get("photo_url"):
                         try:
-                            img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(300, 300))
+                            img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(250, 250))
                             if not cell.paragraphs:
                                 cell.add_paragraph()
                             p = cell.paragraphs[0]
                             p.alignment = 1
-                            p.add_run().add_picture(img_path, width=Inches(1.0))
+                            p.add_run().add_picture(img_path, width=Inches(0.85))
                             os.remove(img_path)
                         except Exception as e:
                             logging.error(f"Photo error: {e}")
@@ -350,8 +358,8 @@ def generate_docx(form_data: dict) -> BytesIO:
             para.text = ""
             if form_data.get("photo_url"):
                 try:
-                    img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(300, 300))
-                    para.add_run().add_picture(img_path, width=Inches(1.0))
+                    img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(250, 250))
+                    para.add_run().add_picture(img_path, width=Inches(0.85))
                     os.remove(img_path)
                 except Exception as e:
                     logging.error(f"Photo error: {e}")
@@ -361,8 +369,8 @@ def generate_docx(form_data: dict) -> BytesIO:
             para.text = ""
             if form_data.get("sign_url"):
                 try:
-                    img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(400, 150))
-                    para.add_run().add_picture(img_path, width=Inches(1.2))
+                    img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(300, 100))
+                    para.add_run().add_picture(img_path, width=Inches(0.9))
                     os.remove(img_path)
                 except Exception as e:
                     logging.error(f"Sign error: {e}")
@@ -372,11 +380,12 @@ def generate_docx(form_data: dict) -> BytesIO:
             if form_data.get("sign_url"):
                 try:
                     from docx.shared import Pt
-                    img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(400, 150))
+                    img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(300, 100))
                     new_para = para.insert_paragraph_before("")
                     new_para.alignment = 2 # Right align
                     new_para.paragraph_format.space_after = Pt(0)
-                    new_para.add_run().add_picture(img_path, width=Inches(1.2))
+                    new_para.paragraph_format.space_before = Pt(0)
+                    new_para.add_run().add_picture(img_path, width=Inches(0.9))
                     os.remove(img_path)
                 except Exception as e:
                     logging.error(f"Sign error: {e}")
