@@ -46,6 +46,8 @@
         <a href="{{ url_for('admin_csv') }}" class="btn">Export CSV</a>
         <a href="{{ url_for('admin_zip_pdfs') }}" class="btn">Download All PDFs (ZIP)</a>
         <a href="{{ url_for('admin_zip_docxs') }}" class="btn">Download All DOCXs (ZIP)</a>
+        <a href="{{ url_for('admin_zip_pdfs', completed=1) }}" class="btn" style="background:#10b981;">Download Completed PDFs (ZIP)</a>
+        <a href="{{ url_for('admin_zip_docxs', completed=1) }}" class="btn" style="background:#10b981;">Download Completed DOCXs (ZIP)</a>
         <a href="{{ url_for('admin_pdf_all') }}" class="btn" style="background:#4b5563;">Merged PDF</a>
         <a href="{{ url_for('admin_docx_all') }}" class="btn" style="background:#4b5563;">Merged DOCX</a>
         
@@ -156,6 +158,22 @@
                 "language": {
                     "search": "Search any field:",
                     "emptyTable": "No nominations found."
+                },
+                initComplete: function () {
+                    this.api().columns([2, 3]).every(function () {
+                        var column = this;
+                        var select = $('<select style="margin-left: 8px; font-weight: normal; padding: 2px;"><option value="">All</option></select>')
+                            .appendTo($(column.header()))
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                column.search(val ? '^' + val + '$' : '', true, false).draw();
+                            });
+                        // Stop click event from bubbling to column sort
+                        select.on('click', function(e) { e.stopPropagation(); });
+                        column.data().unique().sort().each(function (d, j) {
+                            if(d) select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    });
                 }
             });
         });

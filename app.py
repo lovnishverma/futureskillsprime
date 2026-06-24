@@ -1145,7 +1145,11 @@ def admin_pdf_all():
     if not session.get("admin"):
         abort(403)
     db = get_db()
-    rows = list(db.find().sort("submitted_at", 1))
+    
+    if request.args.get("completed"):
+        rows = list(db.find({"photo_url": {"$nin": [None, ""]}, "sign_url": {"$nin": [None, ""]}}).sort("submitted_at", 1))
+    else:
+        rows = list(db.find().sort("submitted_at", 1))
     if not rows:
         flash("No submissions yet.", "warning")
         return redirect(url_for("admin"))
@@ -1172,7 +1176,11 @@ def admin_docx_all():
     if not session.get("admin"):
         abort(403)
     db = get_db()
-    rows = list(db.find().sort("submitted_at", 1))
+    
+    if request.args.get("completed"):
+        rows = list(db.find({"photo_url": {"$nin": [None, ""]}, "sign_url": {"$nin": [None, ""]}}).sort("submitted_at", 1))
+    else:
+        rows = list(db.find().sort("submitted_at", 1))
     if not rows:
         flash("No submissions yet.", "warning")
         return redirect(url_for("admin"))
@@ -1216,7 +1224,12 @@ def admin_zip_pdfs():
     if not session.get("admin"):
         abort(403)
     db = get_db()
-    rows = list(db.find())
+    
+    if request.args.get("completed"):
+        rows = list(db.find({"photo_url": {"$nin": [None, ""]}, "sign_url": {"$nin": [None, ""]}}))
+    else:
+        rows = list(db.find())
+        
     if not rows:
         flash("No submissions yet.", "warning")
         return redirect(url_for("admin"))
@@ -1238,7 +1251,12 @@ def admin_zip_docxs():
     if not session.get("admin"):
         abort(403)
     db = get_db()
-    rows = list(db.find())
+    
+    if request.args.get("completed"):
+        rows = list(db.find({"photo_url": {"$nin": [None, ""]}, "sign_url": {"$nin": [None, ""]}}))
+    else:
+        rows = list(db.find())
+        
     if not rows:
         flash("No submissions yet.", "warning")
         return redirect(url_for("admin"))
