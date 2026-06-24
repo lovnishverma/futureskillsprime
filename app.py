@@ -320,12 +320,12 @@ def generate_docx(form_data: dict) -> BytesIO:
                     cell.text = "" 
                     if form_data.get("photo_url"):
                         try:
-                            img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(400, 400))
+                            img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(300, 300))
                             if not cell.paragraphs:
                                 cell.add_paragraph()
                             p = cell.paragraphs[0]
                             p.alignment = 1
-                            p.add_run().add_picture(img_path, width=Inches(1.1))
+                            p.add_run().add_picture(img_path, width=Inches(1.0))
                             os.remove(img_path)
                         except Exception as e:
                             logging.error(f"Photo error: {e}")
@@ -340,8 +340,8 @@ def generate_docx(form_data: dict) -> BytesIO:
             para.text = ""
             if form_data.get("photo_url"):
                 try:
-                    img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(400, 400))
-                    para.add_run().add_picture(img_path, width=Inches(1.1))
+                    img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(300, 300))
+                    para.add_run().add_picture(img_path, width=Inches(1.0))
                     os.remove(img_path)
                 except Exception as e:
                     logging.error(f"Photo error: {e}")
@@ -351,8 +351,8 @@ def generate_docx(form_data: dict) -> BytesIO:
             para.text = ""
             if form_data.get("sign_url"):
                 try:
-                    img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(600, 200))
-                    para.add_run().add_picture(img_path, width=Inches(1.5))
+                    img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(400, 150))
+                    para.add_run().add_picture(img_path, width=Inches(1.2))
                     os.remove(img_path)
                 except Exception as e:
                     logging.error(f"Sign error: {e}")
@@ -361,10 +361,12 @@ def generate_docx(form_data: dict) -> BytesIO:
         elif not sign_added and "Signature of the Official" in ptxt:
             if form_data.get("sign_url"):
                 try:
-                    img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(600, 200))
+                    from docx.shared import Pt
+                    img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(400, 150))
                     new_para = para.insert_paragraph_before("")
-                    new_para.alignment = 1
-                    new_para.add_run().add_picture(img_path, width=Inches(1.5))
+                    new_para.alignment = 2 # Right align
+                    new_para.paragraph_format.space_after = Pt(0)
+                    new_para.add_run().add_picture(img_path, width=Inches(1.2))
                     os.remove(img_path)
                 except Exception as e:
                     logging.error(f"Sign error: {e}")
