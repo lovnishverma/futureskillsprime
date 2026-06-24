@@ -102,7 +102,7 @@ def fetch_image_as_jpeg(url, target_size=None):
         
     if target_size:
         img = ImageOps.exif_transpose(img)
-        img = ImageOps.pad(img, target_size, color=(255, 255, 255), method=Image.Resampling.LANCZOS if hasattr(Image, 'Resampling') else Image.ANTIALIAS)
+        img = ImageOps.contain(img, target_size, Image.Resampling.LANCZOS if hasattr(Image, 'Resampling') else Image.ANTIALIAS)
         
     fd, path = tempfile.mkstemp(suffix=".jpg")
     import os
@@ -275,6 +275,17 @@ def generate_docx(form_data: dict) -> BytesIO:
         if section.top_margin > Inches(0.25):
             section.top_margin = Inches(0.25)
 
+    def add_constrained_picture(run, img_path, max_width_inch, max_height_inch):
+        from PIL import Image
+        with Image.open(img_path) as im:
+            w, h = im.size
+        aspect = w / float(h) if h > 0 else 1
+        target_aspect = max_width_inch / float(max_height_inch)
+        if aspect > target_aspect:
+            run.add_picture(img_path, width=Inches(max_width_inch))
+        else:
+            run.add_picture(img_path, height=Inches(max_height_inch))
+
     replacements = {k: (str(v) if v else "") for k, v in form_data.items()
                     if k not in ("photo_url", "sign_url")}
 
@@ -295,7 +306,7 @@ def generate_docx(form_data: dict) -> BytesIO:
             if form_data.get("photo_url"):
                 try:
                     img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(400, 400))
-                    para.add_run().add_picture(img_path, width=Inches(1.1))
+                    add_constrained_picture(para.add_run(), img_path, 1.1, 1.3)
                     os.remove(img_path)
                 except Exception as e:
                     logging.error(f"Failed to add photo to docx para: {e}")
@@ -308,7 +319,7 @@ def generate_docx(form_data: dict) -> BytesIO:
             if form_data.get("sign_url"):
                 try:
                     img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(600, 200))
-                    para.add_run().add_picture(img_path, width=Inches(1.5))
+                    add_constrained_picture(para.add_run(), img_path, 1.5, 0.5)
                     os.remove(img_path)
                 except Exception as e:
                     logging.error(f"Failed to add sign to docx para: {e}")
@@ -334,7 +345,7 @@ def generate_docx(form_data: dict) -> BytesIO:
                                 cell.add_paragraph()
                             p = cell.paragraphs[0]
                             p.alignment = 1
-                            p.add_run().add_picture(img_path, width=Inches(0.85))
+                            add_constrained_picture(p.add_run(), img_path, 1.0, 1.2)
                             os.remove(img_path)
                         except Exception as e:
                             logging.error(f"Photo error: {e}")
@@ -350,7 +361,7 @@ def generate_docx(form_data: dict) -> BytesIO:
             if form_data.get("photo_url"):
                 try:
                     img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(250, 250))
-                    para.add_run().add_picture(img_path, width=Inches(0.85))
+                    add_constrained_picture(para.add_run(), img_path, 1.0, 1.2)
                     os.remove(img_path)
                 except Exception as e:
                     logging.error(f"Photo error: {e}")
@@ -361,7 +372,7 @@ def generate_docx(form_data: dict) -> BytesIO:
             if form_data.get("sign_url"):
                 try:
                     img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(300, 100))
-                    para.add_run().add_picture(img_path, width=Inches(0.9))
+                    add_constrained_picture(para.add_run(), img_path, 1.5, 0.5)
                     os.remove(img_path)
                 except Exception as e:
                     logging.error(f"Sign error: {e}")
@@ -376,7 +387,7 @@ def generate_docx(form_data: dict) -> BytesIO:
                     new_para.alignment = 2 # Right align
                     new_para.paragraph_format.space_after = Pt(0)
                     new_para.paragraph_format.space_before = Pt(0)
-                    new_para.add_run().add_picture(img_path, width=Inches(0.9))
+                    add_constrained_picture(new_para.add_run(), img_path, 1.5, 0.5)
                     os.remove(img_path)
                 except Exception as e:
                     logging.error(f"Sign error: {e}")
@@ -423,7 +434,7 @@ def generate_docx(form_data: dict) -> BytesIO:
         if needs_photo_fallback:
             try:
                 img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(400, 400))
-                table.cell(0, 0).paragraphs[0].add_run().add_picture(img_path, width=Inches(1.1))
+                add_constrained_picture(table.cell(0, 0).paragraphs[0].add_run(), img_path, 1.1, 1.3)
                 os.remove(img_path)
             except: pass
         if needs_sign_fallback:
@@ -431,7 +442,7 @@ def generate_docx(form_data: dict) -> BytesIO:
                 img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(600, 200))
                 p = table.cell(0, 2).paragraphs[0]
                 p.alignment = 1
-                p.add_run().add_picture(img_path, width=Inches(1.5))
+                add_constrained_picture(p.add_run(), img_path, 1.5, 0.5)
                 os.remove(img_path)
             except: pass
 
