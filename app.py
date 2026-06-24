@@ -308,6 +308,36 @@ def generate_docx(form_data: dict) -> BytesIO:
                 para.text = "[Please Sign Here]"
             continue
         
+    photo_added = False
+    sign_added = False
+
+    def process_paragraph(para):
+        nonlocal photo_added, sign_added
+        
+        # Replace image placeholders
+        if "{Photo}" in para.text:
+            para.text = para.text.replace("{Photo}", "")
+            if form_data.get("photo_url"):
+                try:
+                    img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(400, 400))
+                    para.add_run().add_picture(img_path, width=Inches(1.1))
+                    os.remove(img_path)
+                except Exception as e:
+                    logging.error(f"Photo error: {e}")
+            photo_added = True
+            
+        if "{Signature}" in para.text:
+            para.text = para.text.replace("{Signature}", "")
+            if form_data.get("sign_url"):
+                try:
+                    img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(600, 200))
+                    para.add_run().add_picture(img_path, width=Inches(1.5))
+                    os.remove(img_path)
+                except Exception as e:
+                    logging.error(f"Sign error: {e}")
+            sign_added = True
+
+        # Handle formatting hacks
         if "Any of the government issued ID" in para.text:
             para.style = 'Normal'
             para.text = ""
@@ -316,7 +346,6 @@ def generate_docx(form_data: dict) -> BytesIO:
             r1.font.superscript = True
             r2 = para.add_run(" Any of the government issued ID: Aadhaar card")
             r2.font.italic = True
-            continue
         elif "Participants are not allowed to enroll" in para.text:
             para.style = 'Normal'
             para.text = ""
@@ -325,62 +354,17 @@ def generate_docx(form_data: dict) -> BytesIO:
             r1.font.superscript = True
             r2 = para.add_run(" Participants are not allowed to enroll in the same program for more than once")
             r2.font.italic = True
-            continue
-        
-        _replace_in_para(para, replacements)
+        else:
+            _replace_in_para(para, replacements)
+
+    for para in doc.paragraphs:
+        process_paragraph(para)
 
     for table in doc.tables:
         for row in table.rows:
             for cell in row.cells:
-                # Check if this cell is the "Photo" placeholder cell
-                cell_text = cell.text.strip()
-                if "{Photo}" in cell_text or "<<Photo>>" in cell_text or cell_text == "Photo":
-                    cell.paragraphs[0].text = ""
-                    if form_data.get("photo_url"):
-                        try:
-                            img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(400, 400))
-                            cell.paragraphs[0].add_run().add_picture(img_path, width=Inches(1.1))
-                            os.remove(img_path)
-                        except Exception as e:
-                            logging.error(f"Failed to add photo to docx: {e}")
-                            cell.paragraphs[0].text = "Photo"
-                    else:
-                        cell.paragraphs[0].text = "Photo"
-                    continue
-                elif "{Signature}" in cell_text or "<<Signature>>" in cell_text or cell_text == "Signature":
-                    cell.paragraphs[0].text = ""
-                    if form_data.get("sign_url"):
-                        try:
-                            img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(600, 200))
-                            cell.paragraphs[0].add_run().add_picture(img_path, width=Inches(1.5))
-                            os.remove(img_path)
-                        except Exception as e:
-                            logging.error(f"Failed to add sign to docx: {e}")
-                            cell.paragraphs[0].text = "[Please Sign Here]"
-                    else:
-                        cell.paragraphs[0].text = "[Please Sign Here]"
-                    continue
                 for para in cell.paragraphs:
-                    if "Any of the government issued ID" in para.text:
-                        para.style = 'Normal'
-                        para.text = ""
-                        r0 = para.add_run("• ")
-                        r1 = para.add_run("1")
-                        r1.font.superscript = True
-                        r2 = para.add_run(" Any of the government issued ID: Aadhaar card")
-                        r2.font.italic = True
-                        continue
-                    elif "Participants are not allowed to enroll" in para.text:
-                        para.style = 'Normal'
-                        para.text = ""
-                        r0 = para.add_run("• ")
-                        r1 = para.add_run("2")
-                        r1.font.superscript = True
-                        r2 = para.add_run(" Participants are not allowed to enroll in the same program for more than once")
-                        r2.font.italic = True
-                        continue
-                        
-                    _replace_in_para(para, replacements)
+                    process_paragraph(para)
 
     for section in doc.sections:
         for para in section.header.paragraphs:
@@ -388,27 +372,25 @@ def generate_docx(form_data: dict) -> BytesIO:
         for para in section.footer.paragraphs:
             _replace_in_para(para, replacements)
 
-    # Add Photo and Signature at the end of document if available
-    if form_data.get("photo_url") or form_data.get("sign_url"):
+    # Fallback: Add Photo and Signature at the end if they were NOT added above but exist
+    if not photo_added and not sign_added and (form_data.get("photo_url") or form_data.get("sign_url")):
         doc.add_paragraph()
         table = doc.add_table(rows=1, cols=3)
-        if form_data.get("photo_url"):
+        if form_data.get("photo_url") and not photo_added:
             try:
                 img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(400, 400))
                 table.cell(0, 0).paragraphs[0].add_run().add_picture(img_path, width=Inches(1.1))
                 os.remove(img_path)
-            except:
-                pass
-        if form_data.get("sign_url"):
+            except: pass
+        if form_data.get("sign_url") and not sign_added:
             try:
                 img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(600, 200))
                 p = table.cell(0, 2).paragraphs[0]
-                p.alignment = 1 # Center alignment
+                p.alignment = 1
                 p.add_run().add_picture(img_path, width=Inches(1.5))
                 p.add_run("\nApplicant Signature").bold = True
                 os.remove(img_path)
-            except:
-                pass
+            except: pass
 
     buf = BytesIO()
     doc.save(buf)
