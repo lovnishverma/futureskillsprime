@@ -93,7 +93,12 @@ def fetch_image_as_jpeg(url, target_size=None):
     req = urllib.request.urlopen(url)
     img = Image.open(BytesIO(req.read()))
     if img.mode in ("RGBA", "P"):
-        img = img.convert("RGB")
+        if img.mode == "RGBA":
+            bg = Image.new("RGB", img.size, (255, 255, 255))
+            bg.paste(img, mask=img.split()[3])
+            img = bg
+        else:
+            img = img.convert("RGB")
         
     if target_size:
         # Replaced ImageOps.fit with ImageOps.contain
@@ -280,7 +285,7 @@ def generate_docx(form_data: dict) -> BytesIO:
             para.text = ""
             if form_data.get("photo_url"):
                 try:
-                    img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(100, 100))
+                    img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(400, 400))
                     para.add_run().add_picture(img_path, width=Inches(1.1))
                     os.remove(img_path)
                 except Exception as e:
@@ -293,7 +298,7 @@ def generate_docx(form_data: dict) -> BytesIO:
             para.text = ""
             if form_data.get("sign_url"):
                 try:
-                    img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(150, 50))
+                    img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(600, 200))
                     para.add_run().add_picture(img_path, width=Inches(1.5))
                     os.remove(img_path)
                 except Exception as e:
@@ -333,7 +338,7 @@ def generate_docx(form_data: dict) -> BytesIO:
                     cell.paragraphs[0].text = ""
                     if form_data.get("photo_url"):
                         try:
-                            img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(100, 100))
+                            img_path = fetch_image_as_jpeg(form_data["photo_url"], target_size=(400, 400))
                             cell.paragraphs[0].add_run().add_picture(img_path, width=Inches(1.1))
                             os.remove(img_path)
                         except Exception as e:
@@ -346,7 +351,7 @@ def generate_docx(form_data: dict) -> BytesIO:
                     cell.paragraphs[0].text = ""
                     if form_data.get("sign_url"):
                         try:
-                            img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(150, 50))
+                            img_path = fetch_image_as_jpeg(form_data["sign_url"], target_size=(600, 200))
                             cell.paragraphs[0].add_run().add_picture(img_path, width=Inches(1.5))
                             os.remove(img_path)
                         except Exception as e:
@@ -499,7 +504,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
         photo_elem = ""
         if form_data.get('photo_url'):
             try:
-                img_path = fetch_image_as_jpeg(form_data['photo_url'], target_size=(100, 100))
+                img_path = fetch_image_as_jpeg(form_data['photo_url'], target_size=(400, 400))
                 photo_elem = RLImage(img_path, width=1.1*inch, height=1.1*inch)
             except:
                 pass
@@ -507,7 +512,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
         sign_elem = [Paragraph("<b>Applicant Signature</b>", ParagraphStyle('r', fontName='Helvetica', fontSize=8, alignment=2))]
         if form_data.get('sign_url'):
             try:
-                img_path = fetch_image_as_jpeg(form_data['sign_url'], target_size=(150, 50))
+                img_path = fetch_image_as_jpeg(form_data['sign_url'], target_size=(600, 200))
                 sign_elem.insert(0, RLImage(img_path, width=1.5*inch, height=0.5*inch, hAlign='RIGHT'))
             except:
                 pass
@@ -687,7 +692,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
     # Table 4: Signature / Photo block
     if form_data.get('photo_url'):
         try:
-            img_path = fetch_image_as_jpeg(form_data['photo_url'], target_size=(100, 100))
+            img_path = fetch_image_as_jpeg(form_data['photo_url'], target_size=(400, 400))
             photo_elem = RLImage(img_path, width=1.1*inch, height=1.1*inch)
         except:
             photo_elem = Table([["Photo"]], colWidths=[1.1*inch], rowHeights=[1.1*inch], style=[('BOX', (0,0), (-1,-1), 1, colors.black), ('ALIGN', (0,0), (-1,-1), 'CENTER'), ('VALIGN', (0,0), (-1,-1), 'MIDDLE')])
@@ -704,7 +709,7 @@ def generate_pdf(form_data: dict) -> BytesIO:
     
     if form_data.get('sign_url'):
         try:
-            img_path = fetch_image_as_jpeg(form_data['sign_url'], target_size=(150, 50))
+            img_path = fetch_image_as_jpeg(form_data['sign_url'], target_size=(600, 200))
             sign_img = RLImage(img_path, width=1.5*inch, height=0.5*inch, hAlign='CENTER')
             sign_elem = [sign_img, Paragraph(sign_text_str, center_st)]
         except:
