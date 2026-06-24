@@ -2,19 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Your Nomination</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; text-align: center; margin-top: 50px; margin-bottom: 50px; background-color: #f9fafb; color: #1f2937; }
-        .search-box { border: 1px solid #d1d5db; padding: 40px; display: inline-block; border-radius: 12px; background-color: #ffffff; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); max-width: 550px; width: 90%; }
-        .input-field { padding: 12px 15px; width: 80%; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1em; margin-bottom: 20px; outline: none; transition: border-color 0.2s; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; text-align: center; margin: 0; padding: 20px; background-color: #f9fafb; color: #1f2937; }
+        .search-box { border: 1px solid #d1d5db; padding: 30px 20px; display: inline-block; border-radius: 12px; background-color: #ffffff; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); width: 100%; max-width: 550px; box-sizing: border-box; margin-top: 5vh; }
+        .input-field { padding: 12px 15px; width: 100%; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1em; margin-bottom: 20px; outline: none; transition: border-color 0.2s; box-sizing: border-box; }
         .input-field:focus { border-color: #2563eb; }
-        .btn { display: inline-block; padding: 12px 24px; margin: 10px 5px; background: #2563eb; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.2s; border: none; cursor: pointer; font-size: 1em; }
+        .btn { display: inline-block; padding: 12px 24px; margin: 8px 0; width: 100%; box-sizing: border-box; background: #2563eb; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.2s; border: none; cursor: pointer; font-size: 1em; text-align: center; }
         .btn:hover { background: #1d4ed8; transform: translateY(-1px); }
         .btn-outline { background: transparent; color: #2563eb; border: 2px solid #2563eb; }
         .btn-outline:hover { background: #eff6ff; color: #1d4ed8; }
-        .alert { background: #fee2e2; color: #991b1b; padding: 15px; border-radius: 6px; margin-bottom: 20px; font-weight: 600; }
-        .result-box { margin-top: 30px; padding: 25px; background-color: #eff6ff; border: 2px dashed #93c5fd; border-radius: 12px; text-align: left; }
+        .alert { background: #fee2e2; color: #991b1b; padding: 15px; border-radius: 6px; margin-bottom: 20px; font-weight: 600; word-break: break-word; }
+        .result-box { margin-top: 30px; padding: 20px; background-color: #eff6ff; border: 2px dashed #93c5fd; border-radius: 12px; text-align: left; overflow-wrap: break-word; }
+        
+        @media (min-width: 480px) {
+            .search-box { padding: 40px; }
+            .btn { width: auto; margin: 10px 5px; }
+        }
     </style>
 </head>
 <body>
@@ -70,9 +76,9 @@
                         </div>
 
                         <div id="sign-draw-box-{{ loop.index }}" style="display: none;">
-                            <canvas id="sign-canvas-{{ loop.index }}" width="300" height="150" style="border: 2px dashed #d1d5db; border-radius: 6px; background: #f9fafb; cursor: crosshair; touch-action: none;"></canvas>
+                            <canvas id="sign-canvas-{{ loop.index }}" width="300" height="150" style="border: 2px dashed #d1d5db; border-radius: 6px; background: #f9fafb; cursor: crosshair; touch-action: none; max-width: 100%;"></canvas>
                             <br>
-                            <button type="button" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.9em;" onclick="window['clearCanvas{{ loop.index }}']()">Clear Signature</button>
+                            <button type="button" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.9em; width: auto;" onclick="window['clearCanvas{{ loop.index }}']()">Clear Signature</button>
                             <input type="hidden" name="signature_data" id="signature_data_{{ loop.index }}">
                         </div>
                     </div>
