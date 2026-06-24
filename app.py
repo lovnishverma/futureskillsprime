@@ -106,57 +106,21 @@ def fetch_image_as_jpeg(url, target_size=None):
         # Auto-crop signatures (target aspect ratio > 1)
         if target_size[0] > target_size[1]:
             try:
-                from PIL import ImageStat
+                from PIL import ImageFilter
                 gray = img.convert('L')
-                stat = ImageStat.Stat(gray)
-                median_val = stat.median[0]
-                threshold = max(0, median_val - 30)
-                bw = gray.point(lambda x: 255 if x < threshold else 0, '1')
+                w, h = img.size
+                bx, by = int(w*0.02), int(h*0.02)
+                edges = gray.filter(ImageFilter.FIND_EDGES).crop((bx, by, w-bx, h-by))
+                max_edge = edges.getextrema()[1]
+                threshold = max(20, int(max_edge * 0.2))
+                bw = edges.point(lambda x: 255 if x > threshold else 0, '1')
                 bbox = bw.getbbox()
                 if bbox:
                     l, t, r, b = bbox
-                    w, h = img.size
+                    l += bx; t += by; r += bx; b += by
                     pad_x = int((r-l)*0.05)
                     pad_y = int((b-t)*0.05)
                     img = img.crop((max(0, l-pad_x), max(0, t-pad_y), min(w, r+pad_x), min(h, b+pad_y)))
-                
-                # Fallback: if shadows prevented a tight crop and it's still too tall, intelligently crop around the ink
-                w, h = img.size
-                target_aspect = target_size[0] / target_size[1]
-                if w / h < target_aspect - 0.5:
-                    new_h = int(w / target_aspect)
-                    
-                    # Find the Y center of the ink using edge detection (ignores smooth shadows entirely)
-                    try:
-                        from PIL import ImageFilter
-                        edges = gray.filter(ImageFilter.FIND_EDGES)
-                        # Ignore the outer 5% to avoid border artifacts
-                        edges_cropped = edges.crop((int(w*0.05), int(h*0.05), int(w*0.95), int(h*0.95)))
-                        # Compress horizontally and vertically to find the row with the highest density of edges (ink)
-                        row_sums = edges_cropped.resize((1, 100), Image.Resampling.BILINEAR)
-                        max_val = -1
-                        best_y = 50
-                        for y in range(100):
-                            val = row_sums.getpixel((0, y))
-                            if val > max_val:
-                                max_val = val
-                                best_y = y
-                        ink_cy = int((best_y / 100) * edges_cropped.height) + int(h*0.05)
-                    except Exception:
-                        ink_cy = h // 2
-                        
-                    top = ink_cy - new_h // 2
-                    bottom = top + new_h
-                    
-                    # Clamp boundaries
-                    if top < 0:
-                        top = 0
-                        bottom = new_h
-                    elif bottom > h:
-                        bottom = h
-                        top = h - new_h
-                        
-                    img = img.crop((0, top, w, bottom))
             except Exception as e:
                 logging.error(f"Auto-crop failed: {e}")
                 
