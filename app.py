@@ -969,20 +969,21 @@ def download_docx(token):
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
-    row = None
+    rows = []
     if request.method == "POST":
         query = request.form.get("query", "").strip()
         if query:
             db = get_db()
-            row = db.find_one({"$or": [
+            cursor = db.find({"$or": [
                 {"aadhar": query}, 
                 {"contact": query}, 
                 {"email": query},
                 {"token": query}
-            ]})
-            if not row:
+            ]}).sort("submitted_at", -1)
+            rows = list(cursor)
+            if not rows:
                 flash("No nomination found with that detail. Please try again.", "error")
-    return render_template("search.html", row=row)
+    return render_template("search.html", rows=rows)
 
 import base64
 

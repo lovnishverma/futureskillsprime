@@ -36,9 +36,11 @@
             <button type="submit" class="btn">Search</button>
         </form>
 
-        {% if row %}
-        <div class="result-box">
-            <h3 style="margin-top: 0; color: #1d4ed8;">Nomination Found!</h3>
+        {% if rows %}
+        <h2 style="color: #1d4ed8; margin-top: 40px; text-align: left;">Nominations Found ({{ rows|length }})</h2>
+        {% for row in rows %}
+        <div class="result-box" style="margin-bottom: 40px;">
+            <p style="margin-bottom: 8px;"><strong>Track:</strong> {{ row.track }} &bull; <strong>Level:</strong> {{ row.level }}</p>
             <p style="margin-bottom: 8px;"><strong>Name:</strong> {{ row.name }}</p>
             <p style="margin-bottom: 8px;"><strong>Token:</strong> <span style="font-family: monospace;">{{ row.token }}</span></p>
             <p style="margin-bottom: 8px;"><strong>Submitted On:</strong> {{ row.submitted_at[:10] }}</p>
@@ -47,7 +49,7 @@
             {% if (is_bootcamp and not row.sign_url) or (not is_bootcamp and (not row.photo_url or not row.sign_url)) %}
             <div style="margin-top: 25px; background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #d1d5db;">
                 <h4 style="margin-top: 0; color: #1f2937;">Complete Your Form (Add Signature{% if not is_bootcamp %} & Photo{% endif %})</h4>
-                <form id="media-form" action="{{ url_for('upload_media', token=row.token) }}" method="POST" enctype="multipart/form-data">
+                <form id="media-form-{{ loop.index }}" action="{{ url_for('upload_media', token=row.token) }}" method="POST" enctype="multipart/form-data">
                     
                     {% if not is_bootcamp %}
                     <div style="margin-bottom: 15px;">
@@ -59,67 +61,77 @@
                     <div style="margin-bottom: 15px;">
                         <label style="display: block; font-weight: 600; margin-bottom: 5px;">Signature <span style="color: red;">*</span></label>
                         <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                            <label><input type="radio" name="sign_method" value="upload" checked onclick="toggleSignMethod()"> Upload Image</label>
-                            <label><input type="radio" name="sign_method" value="draw" onclick="toggleSignMethod()"> Draw Signature</label>
+                            <label><input type="radio" name="sign_method_{{ loop.index }}" value="upload" checked onclick="window['toggleSignMethod{{ loop.index }}']()"> Upload Image</label>
+                            <label><input type="radio" name="sign_method_{{ loop.index }}" value="draw" onclick="window['toggleSignMethod{{ loop.index }}']()"> Draw Signature</label>
                         </div>
                         
-                        <div id="sign-upload-box">
-                            <input type="file" id="sign-file" name="signature_file" accept="image/*" class="input-field" style="width: 100%; box-sizing: border-box;">
+                        <div id="sign-upload-box-{{ loop.index }}">
+                            <input type="file" id="sign-file-{{ loop.index }}" name="signature_file" accept="image/*" class="input-field" style="width: 100%; box-sizing: border-box;">
                         </div>
 
-                        <div id="sign-draw-box" style="display: none;">
-                            <canvas id="sign-canvas" width="300" height="150" style="border: 2px dashed #d1d5db; border-radius: 6px; background: #f9fafb; cursor: crosshair; touch-action: none;"></canvas>
+                        <div id="sign-draw-box-{{ loop.index }}" style="display: none;">
+                            <canvas id="sign-canvas-{{ loop.index }}" width="300" height="150" style="border: 2px dashed #d1d5db; border-radius: 6px; background: #f9fafb; cursor: crosshair; touch-action: none;"></canvas>
                             <br>
-                            <button type="button" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.9em;" onclick="clearCanvas()">Clear Signature</button>
-                            <input type="hidden" name="signature_data" id="signature_data">
+                            <button type="button" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.9em;" onclick="window['clearCanvas{{ loop.index }}']()">Clear Signature</button>
+                            <input type="hidden" name="signature_data" id="signature_data_{{ loop.index }}">
                         </div>
                     </div>
                     
-                    <button type="submit" class="btn" style="width: 100%; margin: 10px 0 0 0;" onclick="return prepareForm()">Upload & Update Form</button>
+                    <button type="submit" class="btn" style="width: 100%; margin: 10px 0 0 0;" onclick="return window['prepareForm{{ loop.index }}']()">Upload & Update Form</button>
                 </form>
             </div>
 
             <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
             <script>
-                var canvas = document.getElementById('sign-canvas');
-                var signaturePad = new SignaturePad(canvas, {
-                    backgroundColor: 'rgba(255, 255, 255, 0)',
-                    penColor: 'rgb(0, 0, 0)'
-                });
-
-                function toggleSignMethod() {
-                    var method = document.querySelector('input[name="sign_method"]:checked').value;
-                    if (method === 'upload') {
-                        document.getElementById('sign-upload-box').style.display = 'block';
-                        document.getElementById('sign-draw-box').style.display = 'none';
-                        document.getElementById('sign-file').required = true;
-                    } else {
-                        document.getElementById('sign-upload-box').style.display = 'none';
-                        document.getElementById('sign-draw-box').style.display = 'block';
-                        document.getElementById('sign-file').required = false;
-                        document.getElementById('sign-file').value = "";
+                (function() {
+                    var idx = {{ loop.index }};
+                    var canvas = document.getElementById('sign-canvas-' + idx);
+                    var signaturePad;
+                    if (canvas) {
+                        signaturePad = new SignaturePad(canvas, {
+                            backgroundColor: 'rgba(255, 255, 255, 0)',
+                            penColor: 'rgb(0, 0, 0)'
+                        });
                     }
-                }
-                
-                function clearCanvas() {
-                    signaturePad.clear();
-                }
 
-                function prepareForm() {
-                    var method = document.querySelector('input[name="sign_method"]:checked').value;
-                    if (method === 'draw') {
-                        if (signaturePad.isEmpty()) {
-                            alert("Please draw your signature.");
-                            return false;
+                    window['toggleSignMethod' + idx] = function() {
+                        var methodEl = document.querySelector('input[name="sign_method_' + idx + '"]:checked');
+                        if (!methodEl) return;
+                        var method = methodEl.value;
+                        if (method === 'upload') {
+                            document.getElementById('sign-upload-box-' + idx).style.display = 'block';
+                            document.getElementById('sign-draw-box-' + idx).style.display = 'none';
+                            document.getElementById('sign-file-' + idx).required = true;
+                        } else {
+                            document.getElementById('sign-upload-box-' + idx).style.display = 'none';
+                            document.getElementById('sign-draw-box-' + idx).style.display = 'block';
+                            document.getElementById('sign-file-' + idx).required = false;
+                            document.getElementById('sign-file-' + idx).value = "";
                         }
-                        var dataUrl = signaturePad.toDataURL('image/png');
-                        document.getElementById('signature_data').value = dataUrl;
-                    }
-                    return true;
-                }
-                
-                // Init
-                toggleSignMethod();
+                    };
+                    
+                    window['clearCanvas' + idx] = function() {
+                        if (signaturePad) signaturePad.clear();
+                    };
+
+                    window['prepareForm' + idx] = function() {
+                        var method = document.querySelector('input[name="sign_method_' + idx + '"]:checked').value;
+                        if (method === 'draw') {
+                            if (signaturePad && signaturePad.isEmpty()) {
+                                alert("Please draw your signature.");
+                                return false;
+                            }
+                            if (signaturePad) {
+                                var dataUrl = signaturePad.toDataURL('image/png');
+                                document.getElementById('signature_data_' + idx).value = dataUrl;
+                            }
+                        }
+                        return true;
+                    };
+                    
+                    // Init
+                    window['toggleSignMethod' + idx]();
+                })();
             </script>
             {% else %}
                 {% if not is_bootcamp %}
@@ -140,6 +152,7 @@
             </div>
             {% endif %}
         </div>
+        {% endfor %}
         {% endif %}
 
         <div style="margin-top: 40px;">
