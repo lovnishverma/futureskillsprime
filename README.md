@@ -8,10 +8,10 @@ A complete web-based nomination and registration portal developed for the **Futu
 - **Dynamic Course Scheduling**: Administrators can dynamically configure multiple simultaneous batches for courses with custom start/end dates via the `/admin/dates` panel.
 - **Smart Form Guidance**: The public nomination form features an "Ongoing Courses" banner and intelligently prevents users from selecting course batches that are not currently active.
 - **Cohort WhatsApp Integration**: Participants are automatically provided with the exact WhatsApp group link corresponding to their uniquely selected course batch upon successful submission.
-- **Online Nomination Form**: Interactive, multi-step form to collect participant details, educational qualifications, professional experience, and Institute details. Participants are given a dynamically generated form with designated physical photo/signature placeholders.
-- **100% Cloud-Native Document Storage**: Secure handling of dynamically generated PDFs. All final generated nomination PDFs are uploaded directly to **Cloudinary**, making the application entirely stateless and resilient to ephemeral server restarts.
-- **Automated Document Generation**: Automatically injects form data into an official DOCX template and generates a polished, 1-page print-ready PDF using ReportLab that perfectly mimics the official grid layout, including exact instructions for physical photograph and signatures.
-- **Participant Dashboard**: Generates a unique tracking token for each submission and allows the user to immediately download their filled DOCX and PDF documents.
+- **Online Nomination Form**: Interactive, multi-step form to collect participant details, educational qualifications, professional experience, and Institute details. Features an integrated **Signature Pad** canvas for Bootcamp applicants, allowing them to draw their signature via mouse/touch or upload an image directly during submission.
+- **100% Cloud-Native Document Storage**: Secure handling of dynamically generated PDFs and images. All final generated nomination PDFs and captured signatures/photos are uploaded directly to **Cloudinary**, making the application entirely stateless and resilient to ephemeral server restarts.
+- **Automated Document Generation**: Automatically injects form data into an official DOCX template and generates a polished, 1-page print-ready PDF using ReportLab that perfectly mimics the official grid layout. Form formatting mathematically scales user-uploaded signatures to precisely fit document constraints without layout spillovers.
+- **Participant Dashboard & Search**: Generates a unique tracking token for each submission. Participants can search via Aadhar, Phone, Email, or Token. The system intelligently retrieves **multiple applications** if a user has applied for more than one track, presenting them in a consolidated dashboard where they can preview and download their DOCX and PDF documents.
 - **Advanced Admin Portal**: A secure dashboard (`/admin`) powered by DataTables that allows administrators to:
   - Instantly Search, Sort, and Paginate through all submitted nominations.
   - Manage **Course Dates** and WhatsApp Links.
@@ -27,8 +27,8 @@ A complete web-based nomination and registration portal developed for the **Futu
 - **Database**: MongoDB (via `pymongo`)
 - **Cloud Storage**: Cloudinary (for secure storage of photos and signatures)
 - **Document Processing**: `python-docx` (for Word documents), `reportlab` & `pypdf` (for PDF generation), `zipfile` (for bulk archives)
-- **Image Processing**: `Pillow` (PIL)
-- **Frontend**: HTML5, Vanilla JavaScript, CSS3 (Custom responsive design with modern styling), jQuery + DataTables (Admin Panel)
+- **Image Processing**: `Pillow` (PIL) for intelligent aspect-ratio constraint resizing
+- **Frontend**: HTML5, Vanilla JavaScript, CSS3 (Custom responsive design with modern styling), jQuery + DataTables (Admin Panel), `signature_pad` (Digital Signature Capture)
 
 ## Directory Structure
 
@@ -38,11 +38,13 @@ A complete web-based nomination and registration portal developed for the **Futu
 ├── app.py                      # Main Flask application and routes
 ├── requirements.txt            # Python dependencies for deployment
 ├── docxtemplates/              
-│   └── GOT_Nomination_Form.docx # Base Word template for generating documents
+│   ├── GOT_Nomination_Form.docx      # Base Word template for GOT documents
+│   └── Bootcamp_Nomination_Form.docx # Base Word template for Bootcamp documents
 ├── static/                     # Static assets (CSS, images)
 ├── templates/
 │   ├── index.html              # Main landing page and nomination form
 │   ├── success.html            # Success page with PDF/DOCX download links
+│   ├── search.html             # Multi-record search dashboard for applicants
 │   ├── admin_login.html        # Admin authentication page
 │   └── admin.html              # Admin dashboard with DataTables
 └── README.md                   # Project documentation
