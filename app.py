@@ -275,15 +275,6 @@ def generate_docx(form_data: dict) -> BytesIO:
         if section.top_margin > Inches(0.25):
             section.top_margin = Inches(0.25)
 
-    # Strip empty spacing paragraphs to prevent layout spilling to a second page
-    for table in doc.tables:
-        for row in table.rows:
-            for cell in row.cells:
-                if "Signature of the Official" in cell.text:
-                    for p in list(cell.paragraphs):
-                        if not p.text.strip():
-                            p._element.getparent().remove(p._element)
-                            
     replacements = {k: (str(v) if v else "") for k, v in form_data.items()
                     if k not in ("photo_url", "sign_url")}
 
