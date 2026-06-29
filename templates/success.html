@@ -113,6 +113,16 @@
             <span class="token">{{ token }}</span>
         </div>
 
+        {% if media_pending %}
+        <div style="margin: 30px 0; padding: 25px; border-radius: 12px; background: linear-gradient(145deg, #fff1f2, #ffe4e6); border: 2px dashed #f43f5e; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.15);">
+            <h2 style="color: #be123c; margin-top: 0; margin-bottom: 15px; font-size: 1.4em;">⚠️ Action Required</h2>
+            <p style="color: #9f1239; margin-bottom: 20px; font-size: 1.05em; font-weight: 600;">Your nomination is <strong>incomplete</strong> until you upload your Photo and Signature.</p>
+            <a href="{{ url_for('public.search', token=token) }}" style="display: inline-block; background: #e11d48; color: white; padding: 16px 32px; font-size: 1.15em; font-weight: 700; text-decoration: none; border-radius: 8px; box-shadow: 0 4px 12px rgba(225, 29, 72, 0.4); text-transform: uppercase; letter-spacing: 1px; transition: transform 0.2s, background 0.2s;" onmouseover="this.style.transform='scale(1.05)'; this.style.background='#be123c';" onmouseout="this.style.transform='scale(1)'; this.style.background='#e11d48';">
+                Upload Photo &amp; Signature Now
+            </a>
+        </div>
+        {% endif %}
+
         <p style="font-size: 1em; color: #374151; font-weight: 600; margin-bottom: 15px;">1. Download your submitted form:</p>
         <div>
             <a href="{{ url_for('public.download_pdf', token=token) }}" class="btn">Download PDF</a>

@@ -224,7 +224,17 @@ def success(token):
     row = db.find_one({"token": token})
     if not row:
         abort(404)
-    return render_template("success.html", token=token, name=row.get("name", "Applicant"), whatsapp_link=row.get("whatsapp_link"), google_form_link=row.get("google_form_link"), is_bootcamp=(row.get("level") == "Bootcamp"))
+        
+    is_bootcamp = (row.get("level") == "Bootcamp")
+    media_pending = not is_bootcamp and (not row.get("photo_url") or not row.get("signature_url"))
+    
+    return render_template("success.html", 
+                           token=token, 
+                           name=row.get("name", "Applicant"), 
+                           whatsapp_link=row.get("whatsapp_link"), 
+                           google_form_link=row.get("google_form_link"), 
+                           is_bootcamp=is_bootcamp,
+                           media_pending=media_pending)
 
 
 @public_bp.route("/download/pdf/<token>")
@@ -284,20 +294,20 @@ def download_docx(token):
 @public_bp.route("/search", methods=["GET", "POST"])
 def search():
     rows = []
-    if request.method == "POST":
-        query = request.form.get("query", "").strip()
-        if query:
-            db = get_db()
-            cursor = db.find({"$or": [
-                {"aadhar": query}, 
-                {"contact": query}, 
-                {"email": query},
-                {"token": query}
-            ]}).sort("submitted_at", -1)
-            rows = list(cursor)
-            if not rows:
-                flash("No nomination found with that detail. Please try again.", "error")
-    return render_template("search.html", rows=rows)
+    query = request.form.get("query", "").strip() or request.args.get("token", "").strip()
+    if query:
+        db = get_db()
+        cursor = db.find({"$or": [
+            {"aadhar": query}, 
+            {"contact": query}, 
+            {"email": query},
+            {"token": query}
+        ]}).sort("submitted_at", -1)
+        rows = list(cursor)
+        if not rows and request.method == "POST":
+            flash("No nomination found with that detail. Please try again.", "error")
+            
+    return render_template("search.html", rows=rows, prefill_query=query)
 
 import base64
 
