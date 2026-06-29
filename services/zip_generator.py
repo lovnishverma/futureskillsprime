@@ -3,8 +3,8 @@ import logging
 from io import BytesIO
 import zipfile
 import re
-import os
 from datetime import datetime
+import cloudinary.uploader
 from models.database import get_db, get_config_col
 from services.document import generate_pdf, generate_docx, row_to_form_data
 
@@ -57,20 +57,19 @@ def _generate_and_upload_zip(doc_type, completed_only):
                     
         zip_buf.seek(0)
         
-        # Ensure static/downloads directory exists
-        downloads_dir = os.path.join(os.getcwd(), 'static', 'downloads')
-        os.makedirs(downloads_dir, exist_ok=True)
+        # Upload to Cloudinary
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        public_id = f"exports/{doc_type}_export_{'completed' if completed_only else 'all'}_{ts}.zip"
         
-        # Save ZIP locally
-        filename = f"{doc_type}_export_{'completed' if completed_only else 'all'}.zip"
-        filepath = os.path.join(downloads_dir, filename)
+        logging.info("Uploading ZIP to Cloudinary...")
+        upload_result = cloudinary.uploader.upload(
+            zip_buf.getvalue(),
+            resource_type="raw",
+            public_id=public_id,
+            invalidate=True
+        )
         
-        logging.info(f"Saving ZIP locally to {filepath}...")
-        with open(filepath, 'wb') as f:
-            f.write(zip_buf.getvalue())
-            
-        # The URL to access the file
-        secure_url = f"/static/downloads/{filename}?v={datetime.now().timestamp()}"
+        secure_url = upload_result.get("secure_url", "")
         
         # Save link to MongoDB config
         config_col.update_one(
@@ -82,7 +81,7 @@ def _generate_and_upload_zip(doc_type, completed_only):
             upsert=True
         )
         
-        logging.info(f"Successfully generated and saved {status_key} to {secure_url}")
+        logging.info(f"Successfully generated and uploaded {status_key} to {secure_url}")
         
     except Exception as e:
         logging.error(f"Failed to generate background zip: {e}")
