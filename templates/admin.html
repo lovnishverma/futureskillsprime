@@ -177,7 +177,7 @@
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="px-6 py-4 text-gray-500">{{ row.submitted_at[:10] if row.submitted_at else '' }}</td>
                                 <td class="px-6 py-4">
-                                    <div class="font-medium text-gray-900">{{ row.name }}</div>
+                                    <a href="{{ url_for('public.preview_pdf', token=row.token) }}" target="_blank" class="font-medium text-blue-600 hover:text-blue-800 hover:underline" title="View PDF in browser">{{ row.name }}</a>
                                     <div class="text-xs text-gray-500 font-mono mt-1" title="Token">{{ row.token[:8] }}...</div>
                                 </td>
                                 <td class="px-6 py-4">
