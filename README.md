@@ -11,6 +11,7 @@ A complete web-based nomination and registration portal developed for the **Futu
 - **Online Nomination Form**: Interactive, multi-step form to collect participant details, educational qualifications, professional experience, and Institute details. Features an integrated **Signature Pad** canvas for Bootcamp applicants, allowing them to draw their signature via mouse/touch or upload an image directly during submission.
 - **100% Cloud-Native Document Storage**: Secure handling of dynamically generated PDFs and images. All final generated nomination PDFs and captured signatures/photos are uploaded directly to **Cloudinary**, making the application entirely stateless and resilient to ephemeral server restarts.
 - **Automated Document Generation**: Automatically injects form data into an official DOCX template and generates a polished, 1-page print-ready PDF using ReportLab that perfectly mimics the official grid layout. Form formatting mathematically scales user-uploaded signatures to precisely fit document constraints without layout spillovers.
+- **Automated Email Notifications**: Automatically dispatches confirmation emails, follow-ups, and generated PDF attachments directly to participants using a custom **Google Apps Script HTTP API** to securely bypass cloud server SMTP blocks.
 - **Participant Dashboard & Search**: Generates a unique tracking token for each submission. Participants can search via Aadhar, Phone, Email, or Token. The system intelligently retrieves **multiple applications** if a user has applied for more than one track, presenting them in a consolidated dashboard where they can preview and download their DOCX and PDF documents.
 - **Advanced Admin Portal**: A secure dashboard (`/admin`) powered by DataTables that allows administrators to:
   - Instantly Search, Sort, and Paginate through all submitted nominations.
@@ -23,7 +24,7 @@ A complete web-based nomination and registration portal developed for the **Futu
 
 ## Tech Stack
 
-- **Backend**: Python, Flask
+- **Backend**: Python, Flask, `requests` (for HTTP API interactions)
 - **Database**: MongoDB (via `pymongo`)
 - **Cloud Storage**: Cloudinary (for secure storage of photos and signatures)
 - **Document Processing**: `python-docx` (for Word documents), `reportlab` & `pypdf` (for PDF generation), `zipfile` (for bulk archives)
@@ -74,6 +75,7 @@ ADMIN_PASSWORD=nielit@admin
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 MONGO_URI=your_mongo_connection_string
+SENDER_EMAIL=your_email@gmail.com
 ```
 
 ### 4. Running the Application
@@ -111,6 +113,7 @@ In the Render dashboard under your Web Service settings, go to the **Environment
 - `CLOUDINARY_API_KEY`
 - `CLOUDINARY_API_SECRET`
 - `MONGO_URI`
+- `SENDER_EMAIL`
 
 ### 4. Deploy
 Click **Deploy**. Render will automatically build your environment, install the dependencies, and launch your Flask app using `gunicorn`. Once the deployment is live, your application will be accessible via a `*.onrender.com` URL.
