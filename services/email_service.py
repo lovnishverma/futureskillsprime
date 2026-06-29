@@ -64,7 +64,7 @@ Please find your official nomination form attached to this email.
             part['Content-Disposition'] = 'attachment; filename="Nomination_Form.pdf"'
             msg.attach(part)
 
-        server = smtplib.SMTP_SSL(smtp_server, smtp_port)
+        server = smtplib.SMTP_SSL(smtp_server, smtp_port, timeout=5)
 
         server.login(smtp_user, smtp_pass)
         server.send_message(msg)
@@ -111,7 +111,7 @@ Once the upload is completed, please download your nomination form.
         
         msg.attach(MIMEText(body, 'plain'))
 
-        server = smtplib.SMTP_SSL(smtp_server, smtp_port)
+        server = smtplib.SMTP_SSL(smtp_server, smtp_port, timeout=5)
 
         server.login(smtp_user, smtp_pass)
         server.send_message(msg)

@@ -32,7 +32,7 @@ def test_email():
         msg['From'] = sender_email
         msg['To'] = sender_email
         
-        server = smtplib.SMTP_SSL(smtp_server, smtp_port)
+        server = smtplib.SMTP_SSL(smtp_server, smtp_port, timeout=5)
         server.set_debuglevel(1)
         server.login(smtp_user, smtp_pass)
         server.send_message(msg)
