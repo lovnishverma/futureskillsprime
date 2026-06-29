@@ -15,33 +15,6 @@ from services.helpers import fmt_course_dates
 
 public_bp = Blueprint('public', __name__)
 
-@public_bp.route("/test-email")
-def test_email():
-    import requests
-    import os
-    try:
-        sender_email = os.environ.get("SENDER_EMAIL", "nielitchdropar@gmail.com")
-        apps_script_url = "https://script.google.com/macros/s/AKfycbzepkxz2ze5ru2TgagpVFqj3j-nPt7ats38R6K9ezvi0_aWPAKhTtG6UYVLRI_Uy_iSYg/exec"
-        
-        payload = {
-            "to": sender_email,
-            "subject": "Direct Render Test via Google Apps Script",
-            "body": "This is a direct synchronous test from Render production using the new HTTP API."
-        }
-        
-        response = requests.post(apps_script_url, json=payload, timeout=10)
-        
-        if response.status_code == 200:
-            result = response.json()
-            if result.get("status") == "success":
-                return f"SUCCESS! Sent to {sender_email} via Google Apps Script."
-            else:
-                return f"ERROR from Apps Script: {result.get('message')}"
-        else:
-            return f"ERROR: HTTP {response.status_code} - {response.text}"
-            
-    except Exception as e:
-        return f"ERROR: {str(e)}"
 
 @public_bp.route("/", methods=["GET", "POST"])
 def index():
