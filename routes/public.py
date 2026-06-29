@@ -10,7 +10,7 @@ from pathlib import Path
 
 from models.database import get_db, get_config_col
 from services.document import generate_pdf, generate_docx, row_to_form_data, DOCX_TEMPLATE
-from services.email_service import send_welcome_email_async
+from services.email_service import send_welcome_email_async, send_incomplete_reminder_email_async
 from services.helpers import fmt_course_dates
 
 public_bp = Blueprint('public', __name__)
@@ -135,17 +135,29 @@ def index():
         else:
             db.insert_one(doc)
             
-            # Send welcome email asynchronously for new registrations
+            # Send emails based on level
             try:
                 pdf_bytes = pdf_buf.getvalue() if 'pdf_buf' in locals() else None
                 course_name = f"{f.get('Track')} - {f.get('Level')}"
-                send_welcome_email_async(
-                    to_email=f.get("Email"),
-                    name=f.get("Name"),
-                    pdf_bytes=pdf_bytes,
-                    whatsapp_link=wa_link,
-                    course_name=course_name
-                )
+                
+                if str(f.get('Level')).lower() == 'bootcamp':
+                    # Bootcamp forms only require signature, so send the PDF immediately as they don't need a photo.
+                    send_welcome_email_async(
+                        to_email=f.get("Email"),
+                        name=f.get("Name"),
+                        pdf_bytes=pdf_bytes,
+                        whatsapp_link=wa_link,
+                        course_name=course_name
+                    )
+                else:
+                    # For GOT forms (Basic/Advanced), they need BOTH photo and signature to be valid.
+                    # Send a reminder to upload media first (no PDF).
+                    send_incomplete_reminder_email_async(
+                        to_email=f.get("Email"),
+                        whatsapp_link=wa_link,
+                        course_name=course_name
+                    )
+
             except Exception as e:
                 logging.error(f"Failed to start async email thread: {e}")
             
@@ -267,6 +279,8 @@ def upload_media(token):
     row = db.find_one({"token": token})
     if not row:
         abort(404)
+        
+    old_row = row.copy()
 
     photo_file = request.files.get("photo")
     sign_file = request.files.get("signature_file")
@@ -306,6 +320,28 @@ def upload_media(token):
         row["pdf_url"] = upload_result.get("secure_url", "")
     except Exception as e:
         logging.error(f"Cloudinary PDF upload failed during media update: {e}")
+
+    # Check if form is completed (has both photo and sign for GOT form)
+    level = str(row.get('level')).lower()
+    
+    # Was it already completed BEFORE this upload?
+    # For GOT, complete means having both photo and sign.
+    old_row_completed = bool(old_row.get('photo_url') and old_row.get('sign_url')) if level != 'bootcamp' else True
+    
+    if level != 'bootcamp':
+        if row.get('photo_url') and row.get('sign_url') and not old_row_completed:
+            # It just became completed! Send the PDF.
+            try:
+                course_name = f"{row.get('track')} - {row.get('level')}"
+                send_welcome_email_async(
+                    to_email=row.get("email"),
+                    name=row.get("name"),
+                    pdf_bytes=pdf_buf.getvalue(),
+                    whatsapp_link=row.get("whatsapp_link"),
+                    course_name=course_name
+                )
+            except Exception as e:
+                logging.error(f"Failed to send completed welcome email: {e}")
 
     flash("Media uploaded successfully! Your form has been updated.", "success")
     return render_template("search.html", rows=[row])
