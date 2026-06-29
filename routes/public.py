@@ -382,7 +382,7 @@ def upload_media(token):
             except Exception as e:
                 logging.error(f"Failed to send completed welcome email: {e}")
 
-    flash("Media uploaded successfully! Your form has been updated. Please check your email for the final form.", "success")
+    flash("Media uploaded successfully! Your form has been updated. Please check your email (and Spam folder) for the final form.", "success")
     return render_template("search.html", rows=[row])
 
 
