@@ -64,13 +64,73 @@ def admin():
         return render_template("admin_login.html")
 
     db = get_db()
-    rows = list(db.find().sort("submitted_at", -1))
-    completed_rows = []
+    
+    try:
+        page = int(request.args.get("page", 1))
+    except ValueError:
+        page = 1
+        
+    try:
+        limit = int(request.args.get("limit", 50))
+    except ValueError:
+        limit = 50
+
+    search_query = request.args.get("search", "").strip()
+    track_filter = request.args.get("track", "").strip()
+    level_filter = request.args.get("level", "").strip()
+    tab = request.args.get("tab", "all")
+
+    query = {}
+    if search_query:
+        query["$or"] = [
+            {"name": {"$regex": search_query, "$options": "i"}},
+            {"aadhar": {"$regex": search_query, "$options": "i"}},
+            {"contact": {"$regex": search_query, "$options": "i"}},
+            {"email": {"$regex": search_query, "$options": "i"}},
+            {"token": {"$regex": search_query, "$options": "i"}},
+            {"organisation": {"$regex": search_query, "$options": "i"}}
+        ]
+        
+    if track_filter:
+        query["track"] = track_filter
+    if level_filter:
+        query["level"] = level_filter
+        
+    if tab == "completed":
+        query["photo_url"] = {"$ne": None, "$exists": True, "$type": "string"}
+        query["sign_url"] = {"$ne": None, "$exists": True, "$type": "string"}
+
+    total_records = db.count_documents(query)
+    total_pages = (total_records + limit - 1) // limit
+    
+    if page < 1:
+        page = 1
+    elif page > total_pages and total_pages > 0:
+        page = total_pages
+
+    skip = (page - 1) * limit
+
+    rows = list(db.find(query).sort("submitted_at", -1).skip(skip).limit(limit))
     for r in rows:
         r["id"] = str(r["_id"])
-        if r.get("photo_url") and r.get("sign_url"):
-            completed_rows.append(r)
-    return render_template("admin.html", rows=rows, completed_rows=completed_rows)
+        
+    tracks = db.distinct("track")
+    levels = db.distinct("level")
+    
+    return render_template(
+        "admin.html", 
+        rows=rows, 
+        page=page, 
+        total_pages=total_pages, 
+        total_records=total_records,
+        search_query=search_query,
+        track_filter=track_filter,
+        level_filter=level_filter,
+        tab=tab,
+        tracks=[t for t in tracks if t],
+        levels=[l for l in levels if l],
+        limit=limit
+    )
 
 
 @admin_bp.route("/admin/logout")
