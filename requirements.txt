@@ -1,4 +1,4 @@
-﻿cloudinary==1.40.0
+cloudinary==1.40.0
 Flask==3.0.3
 Flask-Bcrypt==1.0.1
 Flask-Cors==4.0.1
@@ -18,4 +18,5 @@ python-docx==1.2.0
 python-dotenv==1.0.1
 reportlab==4.5.1
 python-docx
-docxcompose==2.2.0requests==2.32.3
+docxcompose==2.2.0
+requests==2.32.3
