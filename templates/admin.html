@@ -80,6 +80,8 @@
                 <th>Name</th>
                 <th>Track</th>
                 <th>Level</th>
+                <th>Batch Start</th>
+                <th>Batch End</th>
                 <th>Organisation</th>
                 <th>Contact</th>
                 <th>Token</th>
@@ -93,6 +95,8 @@
                 <td>{{ row.name }}</td>
                 <td>{{ row.track }}</td>
                 <td>{{ row.level }}</td>
+                <td>{{ row.course_start_date }}</td>
+                <td>{{ row.course_end_date }}</td>
                 <td>{{ row.organisation }}</td>
                 <td>{{ row.contact }}</td>
                 <td style="font-family: monospace; font-size: 0.9em; color: #6b7280;">{{ row.token[:8] }}...</td>
@@ -116,6 +120,8 @@
                     <th>Name</th>
                     <th>Track</th>
                     <th>Level</th>
+                    <th>Batch Start</th>
+                    <th>Batch End</th>
                     <th>Token</th>
                     <th>Media</th>
                     <th>Actions</th>
@@ -128,6 +134,8 @@
                     <td>{{ row.name }}</td>
                     <td>{{ row.track }}</td>
                     <td>{{ row.level }}</td>
+                    <td>{{ row.course_start_date }}</td>
+                    <td>{{ row.course_end_date }}</td>
                     <td style="font-family: monospace; font-size: 0.9em; color: #6b7280;">{{ row.token[:8] }}...</td>
                     <td>
                         <a href="{{ row.photo_url }}" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 600;">Photo</a> | 
