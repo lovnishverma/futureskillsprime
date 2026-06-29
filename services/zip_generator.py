@@ -5,10 +5,29 @@ import zipfile
 import re
 import os
 import tempfile
+import glob
 from datetime import datetime
 import cloudinary.uploader
+import concurrent.futures
+from flask import current_app
 from models.database import get_db, get_config_col
 from services.document import generate_pdf, generate_docx, row_to_form_data
+
+def process_row_for_zip(row, doc_type):
+    form_data = row_to_form_data(row)
+    safe_name = re.sub(r"[^a-zA-Z0-9_\-]", "_", row.get("name") or "Nomination")
+    token_short = row.get("token", "")[:6]
+    try:
+        if doc_type == "pdf":
+            buf = generate_pdf(form_data)
+            return f"Nomination_{safe_name}_{token_short}.pdf", buf.getvalue()
+        else:
+            buf = generate_docx(form_data)
+            return f"Nomination_{safe_name}_{token_short}.docx", buf.getvalue()
+    except Exception as doc_e:
+        logging.error(f"Failed to generate {doc_type} for token {token_short}: {doc_e}")
+        return None, None
+
 
 def trigger_background_zip(doc_type, completed_only):
     """
@@ -46,46 +65,38 @@ def _generate_and_upload_zip(doc_type, completed_only):
             logging.info("No rows found for ZIP generation.")
             return
             
-        # Use tempfile to write ZIP to disk instead of keeping it all in RAM
-        temp_zip = tempfile.NamedTemporaryFile(delete=False, suffix=".zip")
-        temp_path = temp_zip.name
-        temp_zip.close() # Close so zipfile can open it
+        # Ensure exports directory exists
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        exports_dir = os.path.join(base_dir, "static", "exports")
+        os.makedirs(exports_dir, exist_ok=True)
         
+        # Clean up old zips to save disk space
+        for old_zip in glob.glob(os.path.join(exports_dir, "*.zip")):
+            try:
+                os.remove(old_zip)
+            except Exception:
+                pass
+        
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"{doc_type}_export_{'completed' if completed_only else 'all'}_{ts}.zip"
+        filepath = os.path.join(exports_dir, filename)
+        
+        logging.info(f"Generating ZIP at {filepath} with threads...")
         try:
-            with zipfile.ZipFile(temp_path, "w", zipfile.ZIP_DEFLATED) as zf:
-                for row in rows:
-                    form_data = row_to_form_data(row)
-                    safe_name = re.sub(r"[^a-zA-Z0-9_\-]", "_", row.get("name") or "Nomination")
-                    token_short = row.get("token", "")[:6]
-                    
-                    try:
-                        if doc_type == "pdf":
-                            buf = generate_pdf(form_data)
-                            zf.writestr(f"Nomination_{safe_name}_{token_short}.pdf", buf.getvalue())
-                        else:
-                            buf = generate_docx(form_data)
-                            zf.writestr(f"Nomination_{safe_name}_{token_short}.docx", buf.getvalue())
-                    except Exception as doc_e:
-                        logging.error(f"Failed to generate {doc_type} for token {token_short}: {doc_e}")
-                        
-            # Upload to Cloudinary by passing the file path (Cloudinary will stream from disk)
-            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-            public_id = f"exports/{doc_type}_export_{'completed' if completed_only else 'all'}_{ts}.zip"
+            with zipfile.ZipFile(filepath, "w", zipfile.ZIP_DEFLATED) as zf:
+                with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+                    futures = [executor.submit(process_row_for_zip, row, doc_type) for row in rows]
+                    for future in concurrent.futures.as_completed(futures):
+                        fname, fdata = future.result()
+                        if fname and fdata:
+                            zf.writestr(fname, fdata)
+        except Exception as e:
+            logging.error(f"Failed to write ZIP: {e}")
+            if os.path.exists(filepath):
+                os.remove(filepath)
+            return
             
-            logging.info(f"Uploading ZIP from {temp_path} to Cloudinary using upload_large...")
-            upload_result = cloudinary.uploader.upload_large(
-                temp_path,
-                resource_type="raw",
-                public_id=public_id,
-                chunk_size=10000000, # 10MB chunks
-                invalidate=True
-            )
-        finally:
-            # Clean up the temporary file from the disk to save space
-            if os.path.exists(temp_path):
-                os.remove(temp_path)
-        
-        secure_url = upload_result.get("secure_url", "")
+        secure_url = f"/static/exports/{filename}"
         
         # Save link to MongoDB config
         config_col.update_one(
