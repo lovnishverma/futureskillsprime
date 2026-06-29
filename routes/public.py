@@ -183,7 +183,8 @@ def index():
                     send_incomplete_reminder_email_async(
                         to_email=f.get("Email"),
                         whatsapp_link=wa_link,
-                        course_name=course_name
+                        course_name=course_name,
+                        pdf_bytes=pdf_bytes
                     )
 
             except Exception as e:
