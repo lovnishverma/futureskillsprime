@@ -1,10 +1,8 @@
 import os
-import smtplib
 import threading
 import logging
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.application import MIMEApplication
+import base64
+import requests
 
 def send_welcome_email_async(to_email, name, pdf_bytes, whatsapp_link, course_name):
     """
@@ -30,21 +28,11 @@ def send_incomplete_reminder_email_async(to_email, whatsapp_link, course_name):
 
 def _send_email(to_email, name, pdf_bytes, whatsapp_link, course_name):
     try:
-        smtp_server = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
-        smtp_port = 465 # Hardcoded for Render
-        smtp_user = os.environ.get("SMTP_USERNAME")
-        smtp_pass = os.environ.get("SMTP_PASSWORD")
-        sender_email = os.environ.get("SENDER_EMAIL", smtp_user)
+        sender_email = os.environ.get("SENDER_EMAIL", "nielitchdropar@gmail.com")
+        apps_script_url = "https://script.google.com/macros/s/AKfycbzepkxz2ze5ru2TgagpVFqj3j-nPt7ats38R6K9ezvi0_aWPAKhTtG6UYVLRI_Uy_iSYg/exec"
+
+        subject = f"Welcome to {course_name} - FutureSkills Prime"
         
-        if not smtp_server or not smtp_user or not smtp_pass:
-            logging.warning("SMTP credentials not configured. Skipping welcome email.")
-            return
-
-        msg = MIMEMultipart()
-        msg['From'] = sender_email
-        msg['To'] = to_email
-        msg['Subject'] = f"Welcome to {course_name} - FutureSkills Prime"
-
         body = f"""Dear {name},
 
 Thank you for registering for the {course_name} program under FutureSkills Prime.
@@ -56,41 +44,38 @@ Please find your official nomination form attached to this email.
             body += f"Join the official WhatsApp group for your batch here: {whatsapp_link}\n\n"
             
         body += "Best regards,\nNIELIT Team"
-        
-        msg.attach(MIMEText(body, 'plain'))
+
+        payload = {
+            "to": to_email,
+            "subject": subject,
+            "body": body
+        }
 
         if pdf_bytes:
-            part = MIMEApplication(pdf_bytes, Name="Nomination_Form.pdf")
-            part['Content-Disposition'] = 'attachment; filename="Nomination_Form.pdf"'
-            msg.attach(part)
+            payload["attachmentBase64"] = base64.b64encode(pdf_bytes).decode('utf-8')
+            payload["attachmentName"] = "Nomination_Form.pdf"
 
-        server = smtplib.SMTP_SSL(smtp_server, smtp_port, timeout=5)
-
-        server.login(smtp_user, smtp_pass)
-        server.send_message(msg)
-        server.quit()
-        logging.info(f"Welcome email successfully sent to {to_email}")
+        res = requests.post(apps_script_url, json=payload, timeout=20)
+        
+        if res.status_code == 200:
+            result = res.json()
+            if result.get("status") == "success":
+                logging.info(f"Welcome email successfully sent to {to_email} via API")
+            else:
+                logging.error(f"API returned error when sending email to {to_email}: {result.get('message')}")
+        else:
+            logging.error(f"Failed to send email to {to_email}: HTTP {res.status_code} - {res.text}")
         
     except Exception as e:
-        logging.error(f"Failed to send email to {to_email}: {e}")
+        logging.error(f"Exception sending email to {to_email}: {e}")
 
 def _send_reminder_email(to_email, whatsapp_link, course_name):
     try:
-        smtp_server = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
-        smtp_port = 465 # Hardcoded for Render
-        smtp_user = os.environ.get("SMTP_USERNAME")
-        smtp_pass = os.environ.get("SMTP_PASSWORD")
-        sender_email = os.environ.get("SENDER_EMAIL", smtp_user)
+        sender_email = os.environ.get("SENDER_EMAIL", "nielitchdropar@gmail.com")
+        apps_script_url = "https://script.google.com/macros/s/AKfycbzepkxz2ze5ru2TgagpVFqj3j-nPt7ats38R6K9ezvi0_aWPAKhTtG6UYVLRI_Uy_iSYg/exec"
         
-        if not smtp_server or not smtp_user or not smtp_pass:
-            logging.warning("SMTP credentials not configured. Skipping reminder email.")
-            return
-
-        msg = MIMEMultipart()
-        msg['From'] = sender_email
-        msg['To'] = to_email
-        msg['Subject'] = f"Action Required: Upload Photo & Signature - {course_name}"
-
+        subject = f"Action Required: Upload Photo & Signature - {course_name}"
+        
         body = f"""Good afternoon, all!
 
 Thank you for joining this group and enrolling in our course.
@@ -109,14 +94,22 @@ Once the upload is completed, please download your nomination form.
             
         body += "Regards,\n\nNIELIT Chandigarh"
         
-        msg.attach(MIMEText(body, 'plain'))
+        payload = {
+            "to": to_email,
+            "subject": subject,
+            "body": body
+        }
 
-        server = smtplib.SMTP_SSL(smtp_server, smtp_port, timeout=5)
-
-        server.login(smtp_user, smtp_pass)
-        server.send_message(msg)
-        server.quit()
-        logging.info(f"Reminder email successfully sent to {to_email}")
+        res = requests.post(apps_script_url, json=payload, timeout=20)
+        
+        if res.status_code == 200:
+            result = res.json()
+            if result.get("status") == "success":
+                logging.info(f"Reminder email successfully sent to {to_email} via API")
+            else:
+                logging.error(f"API returned error when sending reminder to {to_email}: {result.get('message')}")
+        else:
+            logging.error(f"Failed to send reminder email to {to_email}: HTTP {res.status_code} - {res.text}")
         
     except Exception as e:
-        logging.error(f"Failed to send reminder email to {to_email}: {e}")
+        logging.error(f"Exception sending reminder email to {to_email}: {e}")

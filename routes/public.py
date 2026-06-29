@@ -17,27 +17,29 @@ public_bp = Blueprint('public', __name__)
 
 @public_bp.route("/test-email")
 def test_email():
-    import smtplib
+    import requests
     import os
-    from email.mime.text import MIMEText
     try:
-        smtp_server = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
-        smtp_port = 465 # Hardcoded to 465 for Render
-        smtp_user = os.environ.get("SMTP_USERNAME")
-        smtp_pass = os.environ.get("SMTP_PASSWORD")
-        sender_email = os.environ.get("SENDER_EMAIL", smtp_user)
+        sender_email = os.environ.get("SENDER_EMAIL", "nielitchdropar@gmail.com")
+        apps_script_url = "https://script.google.com/macros/s/AKfycbzepkxz2ze5ru2TgagpVFqj3j-nPt7ats38R6K9ezvi0_aWPAKhTtG6UYVLRI_Uy_iSYg/exec"
         
-        msg = MIMEText("This is a direct synchronous test from Render production.")
-        msg['Subject'] = "Direct Render Test"
-        msg['From'] = sender_email
-        msg['To'] = sender_email
+        payload = {
+            "to": sender_email,
+            "subject": "Direct Render Test via Google Apps Script",
+            "body": "This is a direct synchronous test from Render production using the new HTTP API."
+        }
         
-        server = smtplib.SMTP_SSL(smtp_server, smtp_port, timeout=5)
-        server.set_debuglevel(1)
-        server.login(smtp_user, smtp_pass)
-        server.send_message(msg)
-        server.quit()
-        return f"SUCCESS! Sent to {sender_email}. Server: {smtp_server}:{smtp_port}, User: {smtp_user}"
+        response = requests.post(apps_script_url, json=payload, timeout=10)
+        
+        if response.status_code == 200:
+            result = response.json()
+            if result.get("status") == "success":
+                return f"SUCCESS! Sent to {sender_email} via Google Apps Script."
+            else:
+                return f"ERROR from Apps Script: {result.get('message')}"
+        else:
+            return f"ERROR: HTTP {response.status_code} - {response.text}"
+            
     except Exception as e:
         return f"ERROR: {str(e)}"
 
