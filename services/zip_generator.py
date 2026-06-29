@@ -3,6 +3,8 @@ import logging
 from io import BytesIO
 import zipfile
 import re
+import os
+import tempfile
 from datetime import datetime
 import cloudinary.uploader
 from models.database import get_db, get_config_col
@@ -38,36 +40,43 @@ def _generate_and_upload_zip(doc_type, completed_only):
             logging.info("No rows found for ZIP generation.")
             return
             
-        zip_buf = BytesIO()
-        with zipfile.ZipFile(zip_buf, "w", zipfile.ZIP_DEFLATED) as zf:
-            for row in rows:
-                form_data = row_to_form_data(row)
-                safe_name = re.sub(r"[^a-zA-Z0-9_\-]", "_", row.get("name") or "Nomination")
-                token_short = row.get("token", "")[:6]
-                
-                try:
-                    if doc_type == "pdf":
-                        buf = generate_pdf(form_data)
-                        zf.writestr(f"Nomination_{safe_name}_{token_short}.pdf", buf.getvalue())
-                    else:
-                        buf = generate_docx(form_data)
-                        zf.writestr(f"Nomination_{safe_name}_{token_short}.docx", buf.getvalue())
-                except Exception as doc_e:
-                    logging.error(f"Failed to generate {doc_type} for token {token_short}: {doc_e}")
+        # Use tempfile to write ZIP to disk instead of keeping it all in RAM
+        temp_zip = tempfile.NamedTemporaryFile(delete=False, suffix=".zip")
+        temp_path = temp_zip.name
+        temp_zip.close() # Close so zipfile can open it
+        
+        try:
+            with zipfile.ZipFile(temp_path, "w", zipfile.ZIP_DEFLATED) as zf:
+                for row in rows:
+                    form_data = row_to_form_data(row)
+                    safe_name = re.sub(r"[^a-zA-Z0-9_\-]", "_", row.get("name") or "Nomination")
+                    token_short = row.get("token", "")[:6]
                     
-        zip_buf.seek(0)
-        
-        # Upload to Cloudinary
-        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-        public_id = f"exports/{doc_type}_export_{'completed' if completed_only else 'all'}_{ts}.zip"
-        
-        logging.info("Uploading ZIP to Cloudinary...")
-        upload_result = cloudinary.uploader.upload(
-            zip_buf.getvalue(),
-            resource_type="raw",
-            public_id=public_id,
-            invalidate=True
-        )
+                    try:
+                        if doc_type == "pdf":
+                            buf = generate_pdf(form_data)
+                            zf.writestr(f"Nomination_{safe_name}_{token_short}.pdf", buf.getvalue())
+                        else:
+                            buf = generate_docx(form_data)
+                            zf.writestr(f"Nomination_{safe_name}_{token_short}.docx", buf.getvalue())
+                    except Exception as doc_e:
+                        logging.error(f"Failed to generate {doc_type} for token {token_short}: {doc_e}")
+                        
+            # Upload to Cloudinary by passing the file path (Cloudinary will stream from disk)
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            public_id = f"exports/{doc_type}_export_{'completed' if completed_only else 'all'}_{ts}.zip"
+            
+            logging.info(f"Uploading ZIP from {temp_path} to Cloudinary...")
+            upload_result = cloudinary.uploader.upload(
+                temp_path,
+                resource_type="raw",
+                public_id=public_id,
+                invalidate=True
+            )
+        finally:
+            # Clean up the temporary file from the disk to save space
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
         
         secure_url = upload_result.get("secure_url", "")
         
