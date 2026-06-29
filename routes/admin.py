@@ -15,6 +15,7 @@ import cloudinary.uploader
 
 from models.database import get_db, get_config_col
 from services.document import generate_pdf, generate_docx, row_to_form_data, DOCX_TEMPLATE
+from services.zip_generator import trigger_background_zip
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -132,6 +133,9 @@ def admin():
     levels = db.distinct("level")
     batch_dates = db.distinct("course_start_date")
     
+    config_col = get_config_col()
+    export_links = config_col.find_one({"_id": "export_links"}) or {}
+    
     return render_template(
         "admin.html", 
         rows=rows, 
@@ -148,7 +152,8 @@ def admin():
         tracks=[t for t in tracks if t],
         levels=[l for l in levels if l],
         batch_dates=[b for b in batch_dates if b],
-        limit=limit
+        limit=limit,
+        export_links=export_links
     )
 
 
@@ -284,59 +289,29 @@ def admin_delete_all():
     flash("All nominations deleted successfully.", "success")
     return redirect(url_for('admin.admin'))
 
-@admin_bp.route("/admin/zip/pdfs")
+
+@admin_bp.route("/admin/zip_pdfs")
 def admin_zip_pdfs():
     if not session.get("admin"):
         abort(403)
-    db = get_db()
-    
-    if request.args.get("completed"):
-        rows = list(db.find({"photo_url": {"$nin": [None, ""]}, "sign_url": {"$nin": [None, ""]}}))
-    else:
-        rows = list(db.find())
         
-    if not rows:
-        flash("No submissions yet.", "warning")
-        return redirect(url_for('admin.admin'))
+    completed_only = bool(request.args.get("completed"))
+    trigger_background_zip("pdf", completed_only)
     
-    zip_buf = BytesIO()
-    with zipfile.ZipFile(zip_buf, "w", zipfile.ZIP_DEFLATED) as zf:
-        for row in rows:
-            form_data = row_to_form_data(row)
-            pdf_buf = generate_pdf(form_data)
-            safe_name = re.sub(r"[^a-zA-Z0-9_\-]", "_", row.get("name") or "Nomination")
-            zf.writestr(f"Nomination_{safe_name}_{row.get('token')[:6]}.pdf", pdf_buf.getvalue())
-            
-    zip_buf.seek(0)
-    ts = datetime.now().strftime("%Y-%m-%d_%H-%M")
-    return send_file(zip_buf, mimetype="application/zip", as_attachment=True, download_name=f"All_PDFs_{ts}.zip")
+    flash("PDF ZIP generation started in the background. Refresh this page in a few minutes to see the download link in the sidebar.", "success")
+    return redirect(url_for('admin.admin'))
 
-@admin_bp.route("/admin/zip/docxs")
+
+@admin_bp.route("/admin/zip_docxs")
 def admin_zip_docxs():
     if not session.get("admin"):
         abort(403)
-    db = get_db()
-    
-    if request.args.get("completed"):
-        rows = list(db.find({"photo_url": {"$nin": [None, ""]}, "sign_url": {"$nin": [None, ""]}}))
-    else:
-        rows = list(db.find())
         
-    if not rows:
-        flash("No submissions yet.", "warning")
-        return redirect(url_for('admin.admin'))
+    completed_only = bool(request.args.get("completed"))
+    trigger_background_zip("docx", completed_only)
     
-    zip_buf = BytesIO()
-    with zipfile.ZipFile(zip_buf, "w", zipfile.ZIP_DEFLATED) as zf:
-        for row in rows:
-            form_data = row_to_form_data(row)
-            docx_buf = generate_docx(form_data)
-            safe_name = re.sub(r"[^a-zA-Z0-9_\-]", "_", row.get("name") or "Nomination")
-            zf.writestr(f"Nomination_{safe_name}_{row.get('token')[:6]}.docx", docx_buf.getvalue())
-            
-    zip_buf.seek(0)
-    ts = datetime.now().strftime("%Y-%m-%d_%H-%M")
-    return send_file(zip_buf, mimetype="application/zip", as_attachment=True, download_name=f"All_DOCXs_{ts}.zip")
+    flash("DOCX ZIP generation started in the background. Refresh this page in a few minutes to see the download link in the sidebar.", "success")
+    return redirect(url_for('admin.admin'))
 
 
 @admin_bp.route("/admin/delete/<string:row_id>", methods=["POST"])
