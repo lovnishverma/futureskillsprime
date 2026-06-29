@@ -1,5 +1,12 @@
 # FutureSkills PRIME - NIELIT Chandigarh Nomination System
 
+[![Live Demo](https://img.shields.io/badge/Live_Website-futureskillsprime.onrender.com-blue?style=for-the-badge&logo=google-chrome)](https://futureskillsprime.onrender.com/)
+[![Python](https://img.shields.io/badge/Python-3.10+-yellow?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-Web_Framework-black?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Database-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Cloudinary](https://img.shields.io/badge/Cloudinary-Cloud_Storage-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white)](https://cloudinary.com/)
+[![Google Apps Script](https://img.shields.io/badge/Apps_Script-Automated_Emails-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://script.google.com/)
+
 A complete web-based nomination and registration portal developed for the **FutureSkills PRIME** initiative by **NIELIT Chandigarh**. The platform allows government officials and participants to register for emerging technology training programs (such as Big Data & Data Science and AR/VR), seamlessly generating standardized PDF and DOCX nomination forms from their submissions.
 
 ## Features
