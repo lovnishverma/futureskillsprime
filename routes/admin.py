@@ -104,8 +104,12 @@ def admin():
     all_count = db.count_documents(base_query)
     
     completed_query = base_query.copy()
-    completed_query["photo_url"] = {"$ne": None, "$exists": True, "$type": "string"}
-    completed_query["sign_url"] = {"$ne": None, "$exists": True, "$type": "string"}
+    completed_query["$or"] = [
+        # Bootcamp only needs signature
+        {"level": {"$regex": "^bootcamp$", "$options": "i"}, "sign_url": {"$nin": [None, ""]}},
+        # Others need both photo and signature
+        {"level": {"$not": {"$regex": "^bootcamp$", "$options": "i"}}, "photo_url": {"$nin": [None, ""]}, "sign_url": {"$nin": [None, ""]}}
+    ]
     
     completed_count = db.count_documents(completed_query)
 

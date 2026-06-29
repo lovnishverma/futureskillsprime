@@ -30,7 +30,13 @@ def _generate_and_upload_zip(doc_type, completed_only):
         config_col = get_config_col()
         
         if completed_only:
-            rows = list(db.find({"photo_url": {"$nin": [None, ""]}, "sign_url": {"$nin": [None, ""]}}))
+            query = {
+                "$or": [
+                    {"level": {"$regex": "^bootcamp$", "$options": "i"}, "sign_url": {"$nin": [None, ""]}},
+                    {"level": {"$not": {"$regex": "^bootcamp$", "$options": "i"}}, "photo_url": {"$nin": [None, ""]}, "sign_url": {"$nin": [None, ""]}}
+                ]
+            }
+            rows = list(db.find(query))
             status_key = f"latest_{doc_type}_completed_zip"
         else:
             rows = list(db.find())
