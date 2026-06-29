@@ -32,9 +32,13 @@ def test_email():
         msg['From'] = sender_email
         msg['To'] = sender_email
         
-        server = smtplib.SMTP(smtp_server, smtp_port)
+        if smtp_port == 465:
+            server = smtplib.SMTP_SSL(smtp_server, smtp_port)
+        else:
+            server = smtplib.SMTP(smtp_server, smtp_port)
+            server.starttls()
+        
         server.set_debuglevel(1)
-        server.starttls()
         server.login(smtp_user, smtp_pass)
         server.send_message(msg)
         server.quit()
