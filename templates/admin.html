@@ -130,7 +130,7 @@
                                 <th class="px-6 py-3">Applicant</th>
                                 <th class="px-6 py-3">Course</th>
                                 <th class="px-6 py-3">Contact</th>
-                                <th class="px-6 py-3">Batch Starts</th>
+                                <th class="px-6 py-3">Batch Dates</th>
                                 {% if tab == 'completed' %}
                                     <th class="px-6 py-3">Media</th>
                                 {% endif %}
@@ -157,8 +157,9 @@
                                         <a href="https://wa.me/{{ row.contact|replace(' ', '')|replace('+', '') }}" target="_blank" class="text-blue-600 hover:underline mt-1 block">{{ row.contact }}</a>
                                     {% endif %}
                                 </td>
-                                <td class="px-6 py-4 text-gray-500">
-                                    {{ row.course_start_date or 'N/A' }}
+                                <td class="px-6 py-4 text-gray-500 text-xs">
+                                    <div><span class="font-semibold text-gray-700">Start:</span> {{ row.course_start_date or 'N/A' }}</div>
+                                    <div class="mt-1"><span class="font-semibold text-gray-700">End:</span> {{ row.course_end_date or 'N/A' }}</div>
                                 </td>
                                 
                                 {% if tab == 'completed' %}
@@ -171,6 +172,7 @@
                                 <td class="px-6 py-4 text-right space-x-2">
                                     {% if tab == 'all' %}
                                         <a href="{{ url_for('admin.admin_pdf_single', row_id=row.id) }}" class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm transition">PDF</a>
+                                        <a href="{{ url_for('public.download_docx', token=row.token) }}" class="inline-flex items-center px-3 py-1.5 bg-gray-100 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200 shadow-sm transition">DOCX</a>
                                     {% else %}
                                         <a href="{{ url_for('public.download_pdf', token=row.token) }}" class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm transition">PDF</a>
                                         <a href="{{ url_for('public.download_docx', token=row.token) }}" class="inline-flex items-center px-3 py-1.5 bg-gray-100 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200 shadow-sm transition">DOCX</a>
