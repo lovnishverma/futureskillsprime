@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Batch - FSP Admin</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/img/NIELIT-Logo-hd.png') }}">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-gray-200 flex flex-col justify-between hidden md:flex">
+        <div>
+            <div class="h-16 flex items-center px-6 border-b border-gray-200">
+                <span class="text-xl font-bold text-blue-700">FSP Admin</span>
+            </div>
+            <nav class="p-4 space-y-1">
+                <a href="{{ url_for('admin.admin') }}" class="block px-4 py-2 rounded-md bg-blue-50 text-blue-700 font-medium">Dashboard</a>
+                <a href="{{ url_for('admin.admin_dates') }}" class="block px-4 py-2 rounded-md text-gray-600 hover:bg-gray-50 font-medium">Course Dates</a>
+            </nav>
+        </div>
+        <div class="p-4 border-t border-gray-200">
+            <a href="{{ url_for('admin.admin_logout') }}" class="block w-full text-center px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 font-medium transition">Logout</a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center px-6 shrink-0">
+            <h1 class="text-2xl font-semibold text-gray-800">Change Batch for {{ row.name }}</h1>
+        </header>
+
+        <div class="flex-1 overflow-auto p-6">
+            <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="mb-6 space-y-2">
+                        {% for category, message in messages %}
+                            {% if category == 'success' %}
+                                <div class="p-4 rounded-md bg-green-50 border border-green-200 text-green-700 font-medium">{{ message }}</div>
+                            {% else %}
+                                <div class="p-4 rounded-md bg-red-50 border border-red-200 text-red-700 font-medium">{{ message }}</div>
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
+                <div class="mb-6 pb-6 border-b border-gray-200">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Student Information</h2>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><span class="font-medium text-gray-500">Name:</span> <span class="text-gray-900">{{ row.name }}</span></div>
+                        <div><span class="font-medium text-gray-500">Course:</span> <span class="text-gray-900">{{ row.track }} - {{ row.level }}</span></div>
+                        <div><span class="font-medium text-gray-500">Contact:</span> <span class="text-gray-900">{{ row.contact }}</span></div>
+                        <div>
+                            <span class="font-medium text-gray-500">Current Batch:</span> 
+                            <span class="text-gray-900 font-medium">{{ row.course_start_date }} to {{ row.course_end_date }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <form method="POST" action="{{ url_for('admin.admin_edit_batch', row_id=row.id) }}">
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Select New Batch</label>
+                        <select name="new_batch_index" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                            <option value="">-- Choose a new batch --</option>
+                            {% for b in valid_batches %}
+                                <option value="{{ b.index }}">{{ b.start }} to {{ b.end }}</option>
+                            {% endfor %}
+                        </select>
+                        <p class="mt-2 text-xs text-gray-500">Note: Updating the batch will automatically regenerate their final PDF on the cloud.</p>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm transition">
+                            Save & Regenerate Document
+                        </button>
+                        <a href="{{ url_for('admin.admin') }}" class="px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

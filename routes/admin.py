@@ -10,7 +10,8 @@ from bson.objectid import ObjectId
 from pypdf import PdfWriter, PdfReader
 from docx import Document
 from docxcompose.composer import Composer
-
+import cloudinary
+import cloudinary.uploader
 
 from models.database import get_db, get_config_col
 from services.document import generate_pdf, generate_docx, row_to_form_data, DOCX_TEMPLATE
@@ -342,11 +343,86 @@ def admin_delete(row_id):
     return redirect(url_for('admin.admin'))
 
 
+@admin_bp.route("/admin/edit_batch/<row_id>", methods=["GET", "POST"])
+def admin_edit_batch(row_id):
+    if not session.get("admin"):
+        return redirect(url_for('admin.admin'))
+
+    db = get_db()
+    try:
+        obj_id = ObjectId(row_id)
+    except Exception:
+        abort(400)
+        
+    row = db.find_one({"_id": obj_id})
+    if not row:
+        flash("Record not found.", "error")
+        return redirect(url_for('admin.admin'))
+
+    config_col = get_config_col()
+    course_dates_doc = config_col.find_one({"_id": "course_dates"}) or {}
+    
+    track = row.get("track", "")
+    level = row.get("level", "")
+    key = f"{track}_{level}"
+    
+    batches = course_dates_doc.get(key, [])
+    if isinstance(batches, dict):
+        batches = [batches] if batches.get("start") else []
+        
+    valid_batches = []
+    for idx, b in enumerate(batches):
+        start = b.get("start")
+        end = b.get("end")
+        wa = b.get("wa", "")
+        if start and end:
+            valid_batches.append({"index": idx, "start": start, "end": end, "wa": wa})
+
+    if request.method == "POST":
+        new_batch_index_str = request.form.get("new_batch_index")
+        if not new_batch_index_str or not new_batch_index_str.isdigit():
+            flash("Invalid batch selection.", "error")
+            return redirect(request.url)
+            
+        b_idx = int(new_batch_index_str)
+        if b_idx >= len(valid_batches):
+            flash("Selected batch is out of range.", "error")
+            return redirect(request.url)
+            
+        b = valid_batches[b_idx]
+        
+        # Update MongoDB
+        row["course_start_date"] = b["start"]
+        row["course_end_date"] = b["end"]
+        row["whatsapp_link"] = b["wa"]
+        row["batch_index"] = str(b_idx)
+        
+        # Regenerate PDF
+        form_data = row_to_form_data(row)
+        try:
+            pdf_buf = generate_pdf(form_data)
+            token = row.get("token")
+            upload_result = cloudinary.uploader.upload(
+                pdf_buf.getvalue(),
+                resource_type="raw",
+                public_id=f"nominations/nomination_{token}.pdf",
+                invalidate=True
+            )
+            row["pdf_url"] = upload_result.get("secure_url", "")
+        except Exception as e:
+            flash(f"Batch updated in DB, but PDF regeneration failed: {e}", "warning")
+            
+        db.replace_one({"_id": obj_id}, row)
+        flash(f"Batch successfully updated to {b['start']}. Document regenerated.", "success")
+        return redirect(url_for('admin.admin'))
+
+    row["id"] = str(row["_id"])
+    return render_template("admin_edit_batch.html", row=row, valid_batches=valid_batches)
+
+
 # ── Init & run ────────────────────────────────────────────────────────────────
 
 @admin_bp.app_errorhandler(404)
 def page_not_found(e):
+
     return render_template('404.html'), 404
-
-
-
