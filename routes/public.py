@@ -15,6 +15,33 @@ from services.helpers import fmt_course_dates
 
 public_bp = Blueprint('public', __name__)
 
+@public_bp.route("/test-email")
+def test_email():
+    import smtplib
+    import os
+    from email.mime.text import MIMEText
+    try:
+        smtp_server = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = int(os.environ.get("SMTP_PORT", 587))
+        smtp_user = os.environ.get("SMTP_USERNAME")
+        smtp_pass = os.environ.get("SMTP_PASSWORD")
+        sender_email = os.environ.get("SENDER_EMAIL", smtp_user)
+        
+        msg = MIMEText("This is a direct synchronous test from Render production.")
+        msg['Subject'] = "Direct Render Test"
+        msg['From'] = sender_email
+        msg['To'] = sender_email
+        
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.set_debuglevel(1)
+        server.starttls()
+        server.login(smtp_user, smtp_pass)
+        server.send_message(msg)
+        server.quit()
+        return f"SUCCESS! Sent to {sender_email}. Server: {smtp_server}:{smtp_port}, User: {smtp_user}"
+    except Exception as e:
+        return f"ERROR: {str(e)}"
+
 @public_bp.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
