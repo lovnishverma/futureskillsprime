@@ -12,7 +12,6 @@ def send_welcome_email_async(to_email, name, pdf_bytes, whatsapp_link, course_na
         target=_send_email,
         args=(to_email, name, pdf_bytes, whatsapp_link, course_name)
     )
-    thread.daemon = True
     thread.start()
 
 def send_incomplete_reminder_email_async(to_email, whatsapp_link, course_name, pdf_bytes=None):
@@ -23,7 +22,6 @@ def send_incomplete_reminder_email_async(to_email, whatsapp_link, course_name, p
         target=_send_reminder_email,
         args=(to_email, whatsapp_link, course_name, pdf_bytes)
     )
-    thread.daemon = True
     thread.start()
 
 def _send_email(to_email, name, pdf_bytes, whatsapp_link, course_name):
