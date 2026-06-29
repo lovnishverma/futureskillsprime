@@ -38,20 +38,20 @@
 <body>
     <div class="header">
         <h2>Nominations Admin Panel</h2>
-        <a href="{{ url_for('admin_logout') }}" style="color: #4b5563; font-weight: 600; text-decoration: none;">Logout</a>
+        <a href="{{ url_for('admin.admin_logout') }}" style="color: #4b5563; font-weight: 600; text-decoration: none;">Logout</a>
     </div>
     
     <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
-        <a href="{{ url_for('admin_dates') }}" class="btn">Course Dates</a>
-        <a href="{{ url_for('admin_csv') }}" class="btn">Export CSV</a>
-        <a href="{{ url_for('admin_zip_pdfs') }}" class="btn">Download All PDFs (ZIP)</a>
-        <a href="{{ url_for('admin_zip_docxs') }}" class="btn">Download All DOCXs (ZIP)</a>
-        <a href="{{ url_for('admin_zip_pdfs', completed=1) }}" class="btn" style="background:#10b981;">Download Completed PDFs (ZIP)</a>
-        <a href="{{ url_for('admin_zip_docxs', completed=1) }}" class="btn" style="background:#10b981;">Download Completed DOCXs (ZIP)</a>
-        <a href="{{ url_for('admin_pdf_all') }}" class="btn" style="background:#4b5563;">Merged PDF</a>
-        <a href="{{ url_for('admin_docx_all') }}" class="btn" style="background:#4b5563;">Merged DOCX</a>
+        <a href="{{ url_for('admin.admin_dates') }}" class="btn">Course Dates</a>
+        <a href="{{ url_for('admin.admin_csv') }}" class="btn">Export CSV</a>
+        <a href="{{ url_for('admin.admin_zip_pdfs') }}" class="btn">Download All PDFs (ZIP)</a>
+        <a href="{{ url_for('admin.admin_zip_docxs') }}" class="btn">Download All DOCXs (ZIP)</a>
+        <a href="{{ url_for('admin.admin_zip_pdfs', completed=1) }}" class="btn" style="background:#10b981;">Download Completed PDFs (ZIP)</a>
+        <a href="{{ url_for('admin.admin_zip_docxs', completed=1) }}" class="btn" style="background:#10b981;">Download Completed DOCXs (ZIP)</a>
+        <a href="{{ url_for('admin.admin_pdf_all') }}" class="btn" style="background:#4b5563;">Merged PDF</a>
+        <a href="{{ url_for('admin.admin_docx_all') }}" class="btn" style="background:#4b5563;">Merged DOCX</a>
         
-        <form action="{{ url_for('admin_delete_all') }}" method="POST" onsubmit="return confirm('WARNING: Are you absolutely sure you want to permanently delete ALL nominations? This cannot be undone!');" style="margin-left: auto; display: flex; gap: 5px;">
+        <form action="{{ url_for('admin.admin_delete_all') }}" method="POST" onsubmit="return confirm('WARNING: Are you absolutely sure you want to permanently delete ALL nominations? This cannot be undone!');" style="margin-left: auto; display: flex; gap: 5px;">
             <input type="password" name="delete_password" placeholder="Password" required style="padding: 5px; border: 1px solid #ccc; border-radius: 4px; width: 100px;">
             <button type="submit" class="btn-danger">Delete All Nominations</button>
         </form>
@@ -98,11 +98,17 @@
                 <td>{{ row.course_start_date }}</td>
                 <td>{{ row.course_end_date }}</td>
                 <td>{{ row.organisation }}</td>
-                <td>{{ row.contact }}</td>
+                <td>
+                    {% if row.contact %}
+                        <a href="https://wa.me/{{ row.contact|replace(' ', '')|replace('+', '') }}" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">{{ row.contact }}</a>
+                    {% else %}
+                        
+                    {% endif %}
+                </td>
                 <td style="font-family: monospace; font-size: 0.9em; color: #6b7280;">{{ row.token[:8] }}...</td>
                 <td class="actions">
-                    <a href="{{ url_for('admin_pdf_single', row_id=row.id) }}" class="btn">PDF</a>
-                    <form action="{{ url_for('admin_delete', row_id=row.id) }}" method="POST" onsubmit="return confirm('Delete this nomination permanently?');" style="margin:0;">
+                    <a href="{{ url_for('admin.admin_pdf_single', row_id=row.id) }}" class="btn">PDF</a>
+                    <form action="{{ url_for('admin.admin_delete', row_id=row.id) }}" method="POST" onsubmit="return confirm('Delete this nomination permanently?');" style="margin:0;">
                         <button type="submit" class="btn-danger">Delete</button>
                     </form>
                 </td>
@@ -142,8 +148,8 @@
                         <a href="{{ row.sign_url }}" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 600;">Sign</a>
                     </td>
                     <td class="actions">
-                        <a href="{{ url_for('download_pdf', token=row.token) }}" class="btn">PDF</a>
-                        <a href="{{ url_for('download_docx', token=row.token) }}" class="btn" style="background:#4b5563;">DOCX</a>
+                        <a href="{{ url_for('public.download_pdf', token=row.token) }}" class="btn">PDF</a>
+                        <a href="{{ url_for('public.download_docx', token=row.token) }}" class="btn" style="background:#4b5563;">DOCX</a>
                     </td>
                 </tr>
                 {% endfor %}

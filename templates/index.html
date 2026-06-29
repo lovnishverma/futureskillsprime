@@ -11,6 +11,14 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/img/NIELIT-Logo-hd.png') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        corePlugins: {
+          preflight: false,
+        }
+      }
+    </script>
     <style>
         *,
         *::before,
@@ -2120,6 +2128,12 @@
 </head>
 
 <body>
+    <!-- Global Loading Overlay -->
+    <div id="global-loading-overlay" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex flex-col items-center justify-center">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mb-4"></div>
+        <h2 class="text-white text-2xl font-semibold tracking-wide">Processing Submission</h2>
+        <p class="text-blue-200 mt-2">Generating PDF and uploading documents. Please wait...</p>
+    </div>
 
     <!-- ===== NAVIGATION ===== -->
     <nav class="navbar" id="navbar">
@@ -2572,7 +2586,7 @@
         <div class="container fade-in">
             <div class="text-center" style="margin-bottom:2rem">
                 <div style="margin-bottom: 25px;">
-                    <a href="{{ url_for('search') }}" style="display: inline-block; padding: 12px 24px; background-color: var(--secondary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1em; transition: all 0.3s; box-shadow: 0 4px 6px rgba(109, 40, 217, 0.2);">
+                    <a href="{{ url_for('public.search') }}" style="display: inline-block; padding: 12px 24px; background-color: var(--secondary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1em; transition: all 0.3s; box-shadow: 0 4px 6px rgba(109, 40, 217, 0.2);">
                         Download your Submitted Nomination Form
                     </a>
                 </div>
@@ -3251,7 +3265,11 @@
             const btn = document.getElementById('submitBtn');
             if(btn) {
                 btn.disabled = true;
-                btn.textContent = "Submitting...";
+                btn.textContent = "Generating Document... Please wait";
+            }
+            const loadingOverlay = document.getElementById('global-loading-overlay');
+            if(loadingOverlay) {
+                loadingOverlay.classList.remove('hidden');
             }
         });
         
