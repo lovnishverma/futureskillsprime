@@ -78,6 +78,7 @@ def admin():
     search_query = request.args.get("search", "").strip()
     track_filter = request.args.get("track", "").strip()
     level_filter = request.args.get("level", "").strip()
+    batch_filter = request.args.get("batch_date", "").strip()
     tab = request.args.get("tab", "all")
 
     query = {}
@@ -95,6 +96,8 @@ def admin():
         query["track"] = track_filter
     if level_filter:
         query["level"] = level_filter
+    if batch_filter:
+        query["course_start_date"] = batch_filter
         
     if tab == "completed":
         query["photo_url"] = {"$ne": None, "$exists": True, "$type": "string"}
@@ -116,6 +119,7 @@ def admin():
         
     tracks = db.distinct("track")
     levels = db.distinct("level")
+    batch_dates = db.distinct("course_start_date")
     
     return render_template(
         "admin.html", 
@@ -126,9 +130,11 @@ def admin():
         search_query=search_query,
         track_filter=track_filter,
         level_filter=level_filter,
+        batch_filter=batch_filter,
         tab=tab,
         tracks=[t for t in tracks if t],
         levels=[l for l in levels if l],
+        batch_dates=[b for b in batch_dates if b],
         limit=limit
     )
 
