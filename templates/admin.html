@@ -204,20 +204,22 @@
                                 </td>
                                 {% endif %}
                                 
-                                <td class="px-6 py-4 text-right space-x-2">
-                                    {% if tab == 'all' %}
-                                        <a href="{{ url_for('admin.admin_pdf_single', row_id=row.id) }}" class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm transition">PDF</a>
-                                        <a href="{{ url_for('public.download_docx', token=row.token) }}" class="inline-flex items-center px-3 py-1.5 bg-gray-100 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200 shadow-sm transition">DOCX</a>
-                                        <a href="{{ url_for('admin.admin_edit_batch', row_id=row.id) }}" class="inline-flex items-center px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-md text-sm font-medium text-blue-700 hover:bg-blue-100 shadow-sm transition">Edit</a>
-                                    {% else %}
-                                        <a href="{{ url_for('public.download_pdf', token=row.token) }}" class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm transition">PDF</a>
-                                        <a href="{{ url_for('public.download_docx', token=row.token) }}" class="inline-flex items-center px-3 py-1.5 bg-gray-100 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200 shadow-sm transition">DOCX</a>
-                                        <a href="{{ url_for('admin.admin_edit_batch', row_id=row.id) }}" class="inline-flex items-center px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-md text-sm font-medium text-blue-700 hover:bg-blue-100 shadow-sm transition">Edit</a>
-                                    {% endif %}
-                                    
-                                    <form action="{{ url_for('admin.admin_delete', row_id=row.id) }}" method="POST" onsubmit="return confirm('Delete this nomination permanently?');" class="inline-block">
-                                        <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-red-50 border border-red-200 rounded-md text-sm font-medium text-red-600 hover:bg-red-100 transition">Delete</button>
-                                    </form>
+                                <td class="px-6 py-4 text-right whitespace-normal min-w-[250px]">
+                                    <div class="flex items-center justify-end gap-2 flex-wrap">
+                                        {% if tab == 'all' %}
+                                            <a href="{{ url_for('admin.admin_pdf_single', row_id=row.id) }}" class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm transition">PDF</a>
+                                            <a href="{{ url_for('public.download_docx', token=row.token) }}" class="inline-flex items-center px-3 py-1.5 bg-gray-100 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200 shadow-sm transition">DOCX</a>
+                                            <a href="{{ url_for('admin.admin_edit_batch', row_id=row.id) }}" class="inline-flex items-center px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-md text-sm font-medium text-blue-700 hover:bg-blue-100 shadow-sm transition">Edit</a>
+                                        {% else %}
+                                            <a href="{{ url_for('public.download_pdf', token=row.token) }}" class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm transition">PDF</a>
+                                            <a href="{{ url_for('public.download_docx', token=row.token) }}" class="inline-flex items-center px-3 py-1.5 bg-gray-100 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-200 shadow-sm transition">DOCX</a>
+                                            <a href="{{ url_for('admin.admin_edit_batch', row_id=row.id) }}" class="inline-flex items-center px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-md text-sm font-medium text-blue-700 hover:bg-blue-100 shadow-sm transition">Edit</a>
+                                        {% endif %}
+                                        
+                                        <form action="{{ url_for('admin.admin_delete', row_id=row.id) }}" method="POST" onsubmit="return confirm('Delete this nomination permanently?');" class="inline-block">
+                                            <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-red-50 border border-red-200 rounded-md text-sm font-medium text-red-600 hover:bg-red-100 transition">Delete</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                             {% else %}
