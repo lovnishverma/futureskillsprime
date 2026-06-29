@@ -8,26 +8,9 @@ import tempfile
 import glob
 from datetime import datetime
 import cloudinary.uploader
-import concurrent.futures
 from flask import current_app
 from models.database import get_db, get_config_col
 from services.document import generate_pdf, generate_docx, row_to_form_data
-
-def process_row_for_zip(row, doc_type):
-    form_data = row_to_form_data(row)
-    safe_name = re.sub(r"[^a-zA-Z0-9_\-]", "_", row.get("name") or "Nomination")
-    token_short = row.get("token", "")[:6]
-    try:
-        if doc_type == "pdf":
-            buf = generate_pdf(form_data)
-            return f"Nomination_{safe_name}_{token_short}.pdf", buf.getvalue()
-        else:
-            buf = generate_docx(form_data)
-            return f"Nomination_{safe_name}_{token_short}.docx", buf.getvalue()
-    except Exception as doc_e:
-        logging.error(f"Failed to generate {doc_type} for token {token_short}: {doc_e}")
-        return None, None
-
 
 def trigger_background_zip(doc_type, completed_only):
     """
@@ -81,15 +64,22 @@ def _generate_and_upload_zip(doc_type, completed_only):
         filename = f"{doc_type}_export_{'completed' if completed_only else 'all'}_{ts}.zip"
         filepath = os.path.join(exports_dir, filename)
         
-        logging.info(f"Generating ZIP at {filepath} with threads...")
+        logging.info(f"Generating ZIP at {filepath} sequentially to save memory...")
         try:
             with zipfile.ZipFile(filepath, "w", zipfile.ZIP_DEFLATED) as zf:
-                with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-                    futures = [executor.submit(process_row_for_zip, row, doc_type) for row in rows]
-                    for future in concurrent.futures.as_completed(futures):
-                        fname, fdata = future.result()
-                        if fname and fdata:
-                            zf.writestr(fname, fdata)
+                for row in rows:
+                    form_data = row_to_form_data(row)
+                    safe_name = re.sub(r"[^a-zA-Z0-9_\-]", "_", row.get("name") or "Nomination")
+                    token_short = row.get("token", "")[:6]
+                    try:
+                        if doc_type == "pdf":
+                            buf = generate_pdf(form_data)
+                            zf.writestr(f"Nomination_{safe_name}_{token_short}.pdf", buf.getvalue())
+                        else:
+                            buf = generate_docx(form_data)
+                            zf.writestr(f"Nomination_{safe_name}_{token_short}.docx", buf.getvalue())
+                    except Exception as doc_e:
+                        logging.error(f"Failed to generate {doc_type} for token {token_short}: {doc_e}")
         except Exception as e:
             logging.error(f"Failed to write ZIP: {e}")
             if os.path.exists(filepath):
