@@ -2,6 +2,7 @@ import uuid
 import logging
 import base64
 import re
+from io import BytesIO
 from datetime import datetime
 from flask import Blueprint, request, flash, redirect, url_for, render_template, abort, send_file
 import cloudinary.uploader
@@ -9,6 +10,7 @@ from pathlib import Path
 
 from models.database import get_db, get_config_col
 from services.document import generate_pdf, generate_docx, row_to_form_data, DOCX_TEMPLATE
+from services.email_service import send_welcome_email_async
 from services.helpers import fmt_course_dates
 
 public_bp = Blueprint('public', __name__)
@@ -132,6 +134,20 @@ def index():
             db.replace_one({"_id": existing["_id"]}, doc)
         else:
             db.insert_one(doc)
+            
+            # Send welcome email asynchronously for new registrations
+            try:
+                pdf_bytes = pdf_buf.getvalue() if 'pdf_buf' in locals() else None
+                course_name = f"{f.get('Track')} - {f.get('Level')}"
+                send_welcome_email_async(
+                    to_email=f.get("Email"),
+                    name=f.get("Name"),
+                    pdf_bytes=pdf_bytes,
+                    whatsapp_link=wa_link,
+                    course_name=course_name
+                )
+            except Exception as e:
+                logging.error(f"Failed to start async email thread: {e}")
             
         flash("success", "ok")
         return redirect(url_for('public.success', token=token))

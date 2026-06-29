@@ -82,9 +82,9 @@ def admin():
     batch_filter = request.args.get("batch_date", "").strip()
     tab = request.args.get("tab", "all")
 
-    query = {}
+    base_query = {}
     if search_query:
-        query["$or"] = [
+        base_query["$or"] = [
             {"name": {"$regex": search_query, "$options": "i"}},
             {"aadhar": {"$regex": search_query, "$options": "i"}},
             {"contact": {"$regex": search_query, "$options": "i"}},
@@ -94,17 +94,27 @@ def admin():
         ]
         
     if track_filter:
-        query["track"] = track_filter
+        base_query["track"] = track_filter
     if level_filter:
-        query["level"] = level_filter
+        base_query["level"] = level_filter
     if batch_filter:
-        query["course_start_date"] = batch_filter
+        base_query["course_start_date"] = batch_filter
         
-    if tab == "completed":
-        query["photo_url"] = {"$ne": None, "$exists": True, "$type": "string"}
-        query["sign_url"] = {"$ne": None, "$exists": True, "$type": "string"}
+    all_count = db.count_documents(base_query)
+    
+    completed_query = base_query.copy()
+    completed_query["photo_url"] = {"$ne": None, "$exists": True, "$type": "string"}
+    completed_query["sign_url"] = {"$ne": None, "$exists": True, "$type": "string"}
+    
+    completed_count = db.count_documents(completed_query)
 
-    total_records = db.count_documents(query)
+    if tab == "completed":
+        query = completed_query
+        total_records = completed_count
+    else:
+        query = base_query
+        total_records = all_count
+
     total_pages = (total_records + limit - 1) // limit
     
     if page < 1:
@@ -128,6 +138,8 @@ def admin():
         page=page, 
         total_pages=total_pages, 
         total_records=total_records,
+        all_count=all_count,
+        completed_count=completed_count,
         search_query=search_query,
         track_filter=track_filter,
         level_filter=level_filter,
