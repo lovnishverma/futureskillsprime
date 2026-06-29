@@ -19,6 +19,47 @@ from services.zip_generator import trigger_background_zip
 
 admin_bp = Blueprint('admin', __name__)
 
+def build_admin_query(args):
+    search_query = args.get("search", "").strip()
+    track_filter = args.get("track", "").strip()
+    level_filter = args.get("level", "").strip()
+    batch_filter = args.get("batch_date", "").strip()
+    tab = args.get("tab", "all")
+
+    and_conditions = []
+
+    if search_query:
+        and_conditions.append({
+            "$or": [
+                {"name": {"$regex": search_query, "$options": "i"}},
+                {"aadhar": {"$regex": search_query, "$options": "i"}},
+                {"contact": {"$regex": search_query, "$options": "i"}},
+                {"email": {"$regex": search_query, "$options": "i"}},
+                {"token": {"$regex": search_query, "$options": "i"}},
+                {"organisation": {"$regex": search_query, "$options": "i"}}
+            ]
+        })
+        
+    if track_filter:
+        and_conditions.append({"track": track_filter})
+    if level_filter:
+        and_conditions.append({"level": level_filter})
+    if batch_filter:
+        and_conditions.append({"course_start_date": batch_filter})
+        
+    if tab == "completed" or args.get("completed"):
+        and_conditions.append({
+            "$or": [
+                {"level": {"$regex": "^bootcamp$", "$options": "i"}, "sign_url": {"$nin": [None, ""]}},
+                {"level": {"$not": {"$regex": "^bootcamp$", "$options": "i"}}, "photo_url": {"$nin": [None, ""]}, "sign_url": {"$nin": [None, ""]}}
+            ]
+        })
+
+    if and_conditions:
+        return {"$and": and_conditions}
+    return {}
+
+
 @admin_bp.route("/admin/dates", methods=["GET", "POST"])
 def admin_dates():
     if not session.get("admin"):
