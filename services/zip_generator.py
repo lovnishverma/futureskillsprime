@@ -72,11 +72,12 @@ def _generate_and_upload_zip(doc_type, completed_only):
             ts = datetime.now().strftime("%Y%m%d_%H%M%S")
             public_id = f"exports/{doc_type}_export_{'completed' if completed_only else 'all'}_{ts}.zip"
             
-            logging.info(f"Uploading ZIP from {temp_path} to Cloudinary...")
-            upload_result = cloudinary.uploader.upload(
+            logging.info(f"Uploading ZIP from {temp_path} to Cloudinary using upload_large...")
+            upload_result = cloudinary.uploader.upload_large(
                 temp_path,
                 resource_type="raw",
                 public_id=public_id,
+                chunk_size=10000000, # 10MB chunks
                 invalidate=True
             )
         finally:
