@@ -83,42 +83,17 @@ def admin():
     batch_filter = request.args.get("batch_date", "").strip()
     tab = request.args.get("tab", "all")
 
-    base_query = {}
-    if search_query:
-        base_query["$or"] = [
-            {"name": {"$regex": search_query, "$options": "i"}},
-            {"aadhar": {"$regex": search_query, "$options": "i"}},
-            {"contact": {"$regex": search_query, "$options": "i"}},
-            {"email": {"$regex": search_query, "$options": "i"}},
-            {"token": {"$regex": search_query, "$options": "i"}},
-            {"organisation": {"$regex": search_query, "$options": "i"}}
-        ]
-        
-    if track_filter:
-        base_query["track"] = track_filter
-    if level_filter:
-        base_query["level"] = level_filter
-    if batch_filter:
-        base_query["course_start_date"] = batch_filter
-        
-    all_count = db.count_documents(base_query)
-    
-    completed_query = base_query.copy()
-    completed_query["$or"] = [
-        # Bootcamp only needs signature
-        {"level": {"$regex": "^bootcamp$", "$options": "i"}, "sign_url": {"$nin": [None, ""]}},
-        # Others need both photo and signature
-        {"level": {"$not": {"$regex": "^bootcamp$", "$options": "i"}}, "photo_url": {"$nin": [None, ""]}, "sign_url": {"$nin": [None, ""]}}
-    ]
-    
-    completed_count = db.count_documents(completed_query)
+    query = build_admin_query(request.args)
+    total_records = db.count_documents(query)
 
-    if tab == "completed":
-        query = completed_query
-        total_records = completed_count
-    else:
-        query = base_query
-        total_records = all_count
+    # Need counts for the tabs separately
+    base_args = dict(request.args)
+    base_args["tab"] = "all"
+    all_count = db.count_documents(build_admin_query(base_args))
+    
+    comp_args = dict(request.args)
+    comp_args["tab"] = "completed"
+    completed_count = db.count_documents(build_admin_query(comp_args))
 
     total_pages = (total_records + limit - 1) // limit
     
@@ -172,7 +147,8 @@ def admin_csv():
     if not session.get("admin"):
         abort(403)
     db = get_db()
-    rows = list(db.find().sort("submitted_at", -1))
+    query = build_admin_query(request.args)
+    rows = list(db.find(query).sort("submitted_at", -1))
     for r in rows:
         r["id"] = str(r["_id"])
     if not rows:
@@ -220,10 +196,8 @@ def admin_pdf_all():
         abort(403)
     db = get_db()
     
-    if request.args.get("completed"):
-        rows = list(db.find({"photo_url": {"$nin": [None, ""]}, "sign_url": {"$nin": [None, ""]}}).sort("submitted_at", 1))
-    else:
-        rows = list(db.find().sort("submitted_at", 1))
+    query = build_admin_query(request.args)
+    rows = list(db.find(query).sort("submitted_at", 1))
     if not rows:
         flash("No submissions yet.", "warning")
         return redirect(url_for('admin.admin'))
@@ -251,10 +225,8 @@ def admin_docx_all():
         abort(403)
     db = get_db()
     
-    if request.args.get("completed"):
-        rows = list(db.find({"photo_url": {"$nin": [None, ""]}, "sign_url": {"$nin": [None, ""]}}).sort("submitted_at", 1))
-    else:
-        rows = list(db.find().sort("submitted_at", 1))
+    query = build_admin_query(request.args)
+    rows = list(db.find(query).sort("submitted_at", 1))
     if not rows:
         flash("No submissions yet.", "warning")
         return redirect(url_for('admin.admin'))
