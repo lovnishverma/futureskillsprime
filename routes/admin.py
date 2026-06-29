@@ -7,7 +7,7 @@ from flask import Blueprint, request, session, flash, redirect, url_for, render_
 import os
 from datetime import datetime
 from bson.objectid import ObjectId
-from PyPDF2 import PdfWriter, PdfReader
+from pypdf import PdfWriter, PdfReader
 from docx import Document
 from docxcompose.composer import Composer
 
