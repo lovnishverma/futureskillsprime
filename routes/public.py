@@ -22,7 +22,7 @@ def test_email():
     from email.mime.text import MIMEText
     try:
         smtp_server = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
-        smtp_port = int(os.environ.get("SMTP_PORT", 587))
+        smtp_port = 465 # Hardcoded to 465 for Render
         smtp_user = os.environ.get("SMTP_USERNAME")
         smtp_pass = os.environ.get("SMTP_PASSWORD")
         sender_email = os.environ.get("SENDER_EMAIL", smtp_user)
@@ -32,12 +32,7 @@ def test_email():
         msg['From'] = sender_email
         msg['To'] = sender_email
         
-        if smtp_port == 465:
-            server = smtplib.SMTP_SSL(smtp_server, smtp_port)
-        else:
-            server = smtplib.SMTP(smtp_server, smtp_port)
-            server.starttls()
-        
+        server = smtplib.SMTP_SSL(smtp_server, smtp_port)
         server.set_debuglevel(1)
         server.login(smtp_user, smtp_pass)
         server.send_message(msg)

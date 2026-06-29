@@ -30,8 +30,8 @@ def send_incomplete_reminder_email_async(to_email, whatsapp_link, course_name):
 
 def _send_email(to_email, name, pdf_bytes, whatsapp_link, course_name):
     try:
-        smtp_server = os.environ.get("SMTP_SERVER")
-        smtp_port = int(os.environ.get("SMTP_PORT", 587))
+        smtp_server = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = 465 # Hardcoded for Render
         smtp_user = os.environ.get("SMTP_USERNAME")
         smtp_pass = os.environ.get("SMTP_PASSWORD")
         sender_email = os.environ.get("SENDER_EMAIL", smtp_user)
@@ -64,12 +64,8 @@ Please find your official nomination form attached to this email.
             part['Content-Disposition'] = 'attachment; filename="Nomination_Form.pdf"'
             msg.attach(part)
 
-        if smtp_port == 465:
-            server = smtplib.SMTP_SSL(smtp_server, smtp_port)
-        else:
-            server = smtplib.SMTP(smtp_server, smtp_port)
-            server.starttls()
-            
+        server = smtplib.SMTP_SSL(smtp_server, smtp_port)
+
         server.login(smtp_user, smtp_pass)
         server.send_message(msg)
         server.quit()
@@ -80,8 +76,8 @@ Please find your official nomination form attached to this email.
 
 def _send_reminder_email(to_email, whatsapp_link, course_name):
     try:
-        smtp_server = os.environ.get("SMTP_SERVER")
-        smtp_port = int(os.environ.get("SMTP_PORT", 587))
+        smtp_server = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
+        smtp_port = 465 # Hardcoded for Render
         smtp_user = os.environ.get("SMTP_USERNAME")
         smtp_pass = os.environ.get("SMTP_PASSWORD")
         sender_email = os.environ.get("SENDER_EMAIL", smtp_user)
@@ -115,12 +111,8 @@ Once the upload is completed, please download your nomination form.
         
         msg.attach(MIMEText(body, 'plain'))
 
-        if smtp_port == 465:
-            server = smtplib.SMTP_SSL(smtp_server, smtp_port)
-        else:
-            server = smtplib.SMTP(smtp_server, smtp_port)
-            server.starttls()
-            
+        server = smtplib.SMTP_SSL(smtp_server, smtp_port)
+
         server.login(smtp_user, smtp_pass)
         server.send_message(msg)
         server.quit()
