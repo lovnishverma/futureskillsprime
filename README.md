@@ -75,7 +75,7 @@ ADMIN_PASSWORD=nielit@admin
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 MONGO_URI=your_mongo_connection_string
-SENDER_EMAIL=your_email@gmail.com
+DELETE_ALL_PASSWORD=youpassword
 ```
 
 ### 4. Running the Application
@@ -113,7 +113,7 @@ In the Render dashboard under your Web Service settings, go to the **Environment
 - `CLOUDINARY_API_KEY`
 - `CLOUDINARY_API_SECRET`
 - `MONGO_URI`
-- `SENDER_EMAIL`
+- `DELETE_ALL_PASSWORD`
 
 ### 4. Deploy
 Click **Deploy**. Render will automatically build your environment, install the dependencies, and launch your Flask app using `gunicorn`. Once the deployment is live, your application will be accessible via a `*.onrender.com` URL.
