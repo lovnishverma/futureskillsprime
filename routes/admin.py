@@ -200,7 +200,18 @@ def admin_csv():
         abort(403)
     db = get_db()
     query = build_admin_query(request.args)
-    rows = list(db.find(query).sort("submitted_at", -1))
+    
+    sort_by = request.args.get("sort_by", "newest")
+    if sort_by == "oldest":
+        sort_args = [("submitted_at", 1)]
+    elif sort_by == "name_asc":
+        sort_args = [("name", 1)]
+    elif sort_by == "name_desc":
+        sort_args = [("name", -1)]
+    else:
+        sort_args = [("submitted_at", -1)]
+        
+    rows = list(db.find(query).sort(sort_args))
     for r in rows:
         r["id"] = str(r["_id"])
     if not rows:
@@ -249,7 +260,18 @@ def admin_pdf_all():
     db = get_db()
     
     query = build_admin_query(request.args)
-    rows = list(db.find(query).sort("submitted_at", 1))
+    
+    sort_by = request.args.get("sort_by", "newest")
+    if sort_by == "oldest":
+        sort_args = [("submitted_at", 1)]
+    elif sort_by == "name_asc":
+        sort_args = [("name", 1)]
+    elif sort_by == "name_desc":
+        sort_args = [("name", -1)]
+    else:
+        sort_args = [("submitted_at", 1)]
+        
+    rows = list(db.find(query).sort(sort_args))
     if not rows:
         flash("No submissions yet.", "warning")
         return redirect(url_for('admin.admin'))
@@ -278,7 +300,18 @@ def admin_docx_all():
     db = get_db()
     
     query = build_admin_query(request.args)
-    rows = list(db.find(query).sort("submitted_at", 1))
+    
+    sort_by = request.args.get("sort_by", "newest")
+    if sort_by == "oldest":
+        sort_args = [("submitted_at", 1)]
+    elif sort_by == "name_asc":
+        sort_args = [("name", 1)]
+    elif sort_by == "name_desc":
+        sort_args = [("name", -1)]
+    else:
+        sort_args = [("submitted_at", 1)]
+        
+    rows = list(db.find(query).sort(sort_args))
     if not rows:
         flash("No submissions yet.", "warning")
         return redirect(url_for('admin.admin'))
