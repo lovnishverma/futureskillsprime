@@ -113,6 +113,16 @@
             <span class="token">{{ token }}</span>
         </div>
 
+        {% if whatsapp_link %}
+        <div style="margin: 30px 0; padding: 25px; border-radius: 12px; background: linear-gradient(145deg, #f0fdfa, #ccfbf1); border: 2px dashed #14b8a6; box-shadow: 0 4px 15px rgba(20, 184, 166, 0.15);">
+            <h2 style="color: #0f766e; margin-top: 0; margin-bottom: 15px; font-size: 1.4em;">💬 Join WhatsApp Group</h2>
+            <p style="color: #0f766e; margin-bottom: 20px; font-size: 1.05em; font-weight: 600;">Please join your batch's official WhatsApp group for all important updates.</p>
+            <a href="{{ whatsapp_link }}" target="_blank" style="display: inline-block; background: #0d9488; color: white; padding: 16px 32px; font-size: 1.15em; font-weight: 700; text-decoration: none; border-radius: 8px; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.4); text-transform: uppercase; letter-spacing: 1px; transition: transform 0.2s, background 0.2s;" onmouseover="this.style.transform='scale(1.05)'; this.style.background='#0f766e';" onmouseout="this.style.transform='scale(1)'; this.style.background='#0d9488';">
+                Join WhatsApp Now
+            </a>
+        </div>
+        {% endif %}
+
         {% if media_pending %}
         <div style="margin: 30px 0; padding: 25px; border-radius: 12px; background: linear-gradient(145deg, #fff1f2, #ffe4e6); border: 2px dashed #f43f5e; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.15);">
             <h2 style="color: #be123c; margin-top: 0; margin-bottom: 15px; font-size: 1.4em;">⚠️ Action Required</h2>
