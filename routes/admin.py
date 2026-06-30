@@ -145,7 +145,17 @@ def admin():
 
     skip = (page - 1) * limit
 
-    rows = list(db.find(query).sort("submitted_at", -1).skip(skip).limit(limit))
+    sort_by = request.args.get("sort_by", "newest")
+    if sort_by == "oldest":
+        sort_args = [("submitted_at", 1)]
+    elif sort_by == "name_asc":
+        sort_args = [("name", 1)]
+    elif sort_by == "name_desc":
+        sort_args = [("name", -1)]
+    else:
+        sort_args = [("submitted_at", -1)]
+
+    rows = list(db.find(query).sort(sort_args).skip(skip).limit(limit))
     for r in rows:
         r["id"] = str(r["_id"])
         
@@ -169,6 +179,7 @@ def admin():
         level_filter=level_filter,
         batch_filter=batch_filter,
         tab=tab,
+        sort_by=sort_by,
         tracks=[t for t in tracks if t],
         levels=[l for l in levels if l],
         batch_dates=[b for b in batch_dates if b],
@@ -345,6 +356,43 @@ def admin_delete(row_id):
         db.delete_one({"_id": obj_id})
     flash("Entry deleted.", "success")
     return redirect(url_for('admin.admin'))
+
+
+@admin_bp.route("/admin/send_reminder/<string:row_id>", methods=["POST"])
+def admin_send_reminder(row_id):
+    if not session.get("admin"):
+        abort(403)
+    db = get_db()
+    try:
+        obj_id = ObjectId(row_id)
+    except Exception:
+        abort(400)
+    
+    row = db.find_one({"_id": obj_id})
+    if not row:
+        flash("Record not found.", "error")
+        return redirect(url_for('admin.admin'))
+        
+    from services.email_service import send_incomplete_reminder_email_async
+    
+    # Needs pdf_bytes for the reminder!
+    # Let's generate it synchronously before dispatching the background thread.
+    form_data = row_to_form_data(row)
+    pdf_buf = generate_pdf(form_data)
+    
+    course_name = f"{row.get('track')} - {row.get('level')}"
+    try:
+        send_incomplete_reminder_email_async(
+            to_email=row.get("email"),
+            whatsapp_link=row.get("whatsapp_link"),
+            course_name=course_name,
+            pdf_bytes=pdf_buf.getvalue()
+        )
+        flash(f"Reminder email sent to {row.get('name')}.", "success")
+    except Exception as e:
+        flash(f"Failed to send reminder email: {e}", "error")
+        
+    return redirect(request.referrer or url_for('admin.admin'))
 
 
 @admin_bp.route("/admin/edit_batch/<row_id>", methods=["GET", "POST"])
