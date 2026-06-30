@@ -50,7 +50,7 @@ def build_admin_query(args):
     if tab == "completed" or args.get("completed"):
         and_conditions.append({
             "$or": [
-                {"level": {"$regex": "^bootcamp$", "$options": "i"}, "sign_url": {"$nin": [None, ""]}},
+                {"level": {"$regex": "^bootcamp$", "$options": "i"}},
                 {"level": {"$not": {"$regex": "^bootcamp$", "$options": "i"}}, "photo_url": {"$nin": [None, ""]}, "sign_url": {"$nin": [None, ""]}}
             ]
         })
