@@ -4,7 +4,7 @@ import base64
 import re
 from io import BytesIO
 from datetime import datetime
-from flask import Blueprint, request, flash, redirect, url_for, render_template, abort, send_file
+from flask import Blueprint, request, flash, redirect, url_for, render_template, abort, send_file, make_response
 import cloudinary.uploader
 from pathlib import Path
 
@@ -360,3 +360,34 @@ def upload_media(token):
 
 
 
+
+
+@public_bp.route("/sitemap.xml", methods=["GET"])
+def sitemap():
+    base_url = "https://futureskillsprime.onrender.com"
+    pages = [
+        {"loc": f"{base_url}/", "changefreq": "daily", "priority": "1.0"},
+    ]
+    
+    xml_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml_content += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    
+    for page in pages:
+        xml_content += "  <url>\n"
+        xml_content += f"    <loc>{page['loc']}</loc>\n"
+        xml_content += f"    <changefreq>{page['changefreq']}</changefreq>\n"
+        xml_content += f"    <priority>{page['priority']}</priority>\n"
+        xml_content += "  </url>\n"
+        
+    xml_content += "</urlset>"
+    
+    response = make_response(xml_content)
+    response.headers["Content-Type"] = "application/xml"
+    return response
+
+@public_bp.route("/robots.txt", methods=["GET"])
+def robots():
+    txt_content = "User-agent: *\nAllow: /\n\nSitemap: https://futureskillsprime.onrender.com/sitemap.xml"
+    response = make_response(txt_content)
+    response.headers["Content-Type"] = "text/plain"
+    return response
