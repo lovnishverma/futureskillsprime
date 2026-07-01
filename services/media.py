@@ -7,6 +7,9 @@ from PIL import Image, ImageOps
 import cloudinary.uploader
 
 def fetch_image_as_jpeg(url, target_size=None):
+    if url.lower().endswith('.pdf'):
+        url = url[:-4] + '.jpg'
+
     req = urllib.request.urlopen(url)
     img = Image.open(BytesIO(req.read()))
     if img.mode in ("RGBA", "P"):
