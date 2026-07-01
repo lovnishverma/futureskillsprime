@@ -51,7 +51,8 @@ def build_admin_query(args):
         and_conditions.append({
             "$or": [
                 {"level": {"$regex": "^bootcamp$", "$options": "i"}, "sign_url": {"$nin": [None, ""]}},
-                {"level": {"$not": {"$regex": "^bootcamp$", "$options": "i"}}, "photo_url": {"$nin": [None, ""]}, "sign_url": {"$nin": [None, ""]}}
+                {"level": {"$not": {"$regex": "^bootcamp$", "$options": "i"}}, "photo_url": {"$nin": [None, ""]}, "sign_url": {"$nin": [None, ""]}},
+                {"manual_completed": True}
             ]
         })
 
@@ -511,3 +512,17 @@ def admin_edit_batch(row_id):
 def page_not_found(e):
 
     return render_template('404.html'), 404
+
+@admin_bp.route("/admin/mark_completed/<string:row_id>", methods=["POST"])
+def admin_mark_completed(row_id):
+    if not session.get("admin"):
+        abort(403)
+    db = get_db()
+    from bson.objectid import ObjectId
+    try:
+        obj_id = ObjectId(row_id)
+        db.update_one({"_id": obj_id}, {"$set": {"manual_completed": True}})
+        flash("Nomination marked as completed manually.", "success")
+    except Exception as e:
+        flash(f"Error marking as completed: {e}", "error")
+    return redirect(url_for('admin.admin', tab='all'))
