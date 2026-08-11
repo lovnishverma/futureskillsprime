@@ -16,6 +16,7 @@ import cloudinary.uploader
 from models.database import get_db, get_config_col
 from services.document import generate_pdf, generate_docx, row_to_form_data, DOCX_TEMPLATE
 from services.zip_generator import trigger_background_zip
+from services.helpers import is_batch_active, fmt_course_dates, get_ist_now
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -229,7 +230,7 @@ def admin_csv():
     for row in rows:
         writer.writerow(row)
     buf.seek(0)
-    ts = datetime.now().strftime("%Y-%m-%d_%H-%M")
+    ts = get_ist_now().strftime("%Y-%m-%d_%H-%M")
     return send_file(
         io.BytesIO(buf.getvalue().encode("utf-8-sig")),
         mimetype="text/csv",
@@ -288,7 +289,7 @@ def admin_pdf_all():
     out_buf = BytesIO()
     writer.write(out_buf)
     out_buf.seek(0)
-    ts = datetime.now().strftime("%Y-%m-%d_%H-%M")
+    ts = get_ist_now().strftime("%Y-%m-%d_%H-%M")
     return send_file(out_buf, mimetype="application/pdf", as_attachment=True,
                      download_name=f"All_Nominations_{ts}.pdf")
 
@@ -330,7 +331,7 @@ def admin_docx_all():
     out_buf = BytesIO()
     master.save(out_buf)
     out_buf.seek(0)
-    ts = datetime.now().strftime("%Y-%m-%d_%H-%M")
+    ts = get_ist_now().strftime("%Y-%m-%d_%H-%M")
     return send_file(out_buf, mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document", as_attachment=True,
                      download_name=f"All_Nominations_{ts}.docx")
 
@@ -462,7 +463,16 @@ def admin_edit_batch(row_id):
         end = b.get("end")
         wa = b.get("wa", "")
         if start and end:
-            valid_batches.append({"index": idx, "start": start, "end": end, "wa": wa})
+            active = is_batch_active(end)
+            status_text = " (Active)" if active else " (Ended)"
+            valid_batches.append({
+                "index": idx,
+                "start": start,
+                "end": end,
+                "wa": wa,
+                "active": active,
+                "status_text": status_text
+            })
 
     if request.method == "POST":
         new_batch_index_str = request.form.get("new_batch_index")

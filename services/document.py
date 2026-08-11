@@ -12,7 +12,7 @@ from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 
-from services.helpers import fmt_date, fmt_course_dates, _course_name, _technology
+from services.helpers import fmt_date, fmt_course_dates, _course_name, _technology, get_ist_now
 from services.media import fetch_image_as_jpeg
 from models.database import get_config_col
 
@@ -84,7 +84,7 @@ def row_to_form_data(row):
         "Exp1_Year": d.get("exp1_year", ""), "Exp1_Area_of_Expertise": d.get("exp1_area", ""), "Exp1_Centre": d.get("exp1_centre", ""),
         "Exp2_Year": d.get("exp2_year", ""), "Exp2_Area_of_Expertise": d.get("exp2_area", ""), "Exp2_Centre": d.get("exp2_centre", ""),
         "Exp3_Year": d.get("exp3_year", ""), "Exp3_Area_of_Expertise": d.get("exp3_area", ""), "Exp3_Centre": d.get("exp3_centre", ""),
-        "Today_Date": datetime.today().strftime("%d-%m-%Y"),
+        "Today_Date": get_ist_now().strftime("%d-%m-%Y"),
         "photo_url": d.get("photo_url"),
         "sign_url": d.get("sign_url"),
     }

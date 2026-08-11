@@ -2622,6 +2622,18 @@
                     <h2>NIELIT Chandigarh &ndash; Nomination Form</h2>
                 </div>
 
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    <div style="margin-bottom: 20px;">
+                    {% for category, message in messages %}
+                      <div style="padding: 12px 16px; border-radius: 8px; font-size: 0.95em; font-weight: 500; margin-bottom: 10px; {% if category == 'error' %}background-color: #fef2f2; border: 1px solid #fecaca; color: #b91c1c;{% else %}background-color: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d;{% endif %}">
+                          {{ message }}
+                      </div>
+                    {% endfor %}
+                    </div>
+                  {% endif %}
+                {% endwith %}
+
                 <!-- Ongoing Courses Banner -->
                 {% if available_courses %}
                 <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
@@ -2636,6 +2648,14 @@
                         {% endfor %}
                         {% endfor %}
                     </ul>
+                </div>
+                {% else %}
+                <div style="background-color: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+                    <h3 style="color: #991b1b; margin: 0 0 5px 0; font-size: 1.1em; display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        No Active Batches Available
+                    </h3>
+                    <p style="margin: 0; color: #b91c1c; font-size: 0.9em;">There are currently no active or upcoming course batches open for enrollment. Please check back later.</p>
                 </div>
                 {% endif %}
 
@@ -3443,9 +3463,26 @@
         // ==================== DYNAMIC COURSE DATES ====================
         const availableCourses = {{ available_courses | default({}) | tojson | safe }};
         const trackSelect = document.getElementById('trackSelect');
+        const levelSelect = document.getElementById('levelSelect');
         const courseDateDisplay = document.getElementById('courseDateDisplay');
 
         function updateCourseOptions() {
+            if (!trackSelect || !levelSelect) return;
+
+            // Check tracks
+            Array.from(trackSelect.options).forEach(opt => {
+                if (!opt.value) return;
+                const hasActiveBatches = Object.keys(availableCourses).some(k => k.startsWith(opt.value + '_') && availableCourses[k] && availableCourses[k].length > 0);
+                if (!hasActiveBatches) {
+                    opt.disabled = true;
+                    if (trackSelect.value === opt.value) {
+                        trackSelect.value = '';
+                    }
+                } else {
+                    opt.disabled = false;
+                }
+            });
+
             const track = trackSelect.value;
             const level = levelSelect.value;
 
@@ -3480,10 +3517,14 @@
 
                 if (validLevelsCount === 0) {
                     levelSelect.disabled = true;
-                    courseDateDisplay.innerHTML = `<span style="color: #e11d48;">This course is not currently ongoing. Please select another upcoming course from the list above.</span>`;
+                    if (courseDateDisplay) {
+                        courseDateDisplay.innerHTML = `<span style="color: #e11d48;">There are no active batches available for this course track. Please select another track.</span>`;
+                    }
                 } else {
                     levelSelect.disabled = false;
-                    courseDateDisplay.innerHTML = "";
+                    if (courseDateDisplay) {
+                        courseDateDisplay.innerHTML = "";
+                    }
                 }
             } else {
                 // If no track selected, disable all level options except placeholder
@@ -3495,7 +3536,9 @@
                 });
                 levelSelect.value = '';
                 levelSelect.disabled = false;
-                courseDateDisplay.innerHTML = "";
+                if (courseDateDisplay) {
+                    courseDateDisplay.innerHTML = "";
+                }
             }
 
             // Display batches if both selected

@@ -1,5 +1,23 @@
 import re
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+
+# Indian Standard Time (IST = UTC+05:30)
+try:
+    from zoneinfo import ZoneInfo
+    IST = ZoneInfo("Asia/Kolkata")
+except Exception:
+    IST = timezone(timedelta(hours=5, minutes=30), name="IST")
+
+def get_ist_now():
+    """Get current datetime in Indian Standard Time (Asia/Kolkata)."""
+    try:
+        return datetime.now(IST)
+    except Exception:
+        return datetime.now(timezone(timedelta(hours=5, minutes=30)))
+
+def get_ist_date():
+    """Get current date in Indian Standard Time."""
+    return get_ist_now().date()
 
 def fmt_date(val):
     """Convert YYYY-MM-DD → DD-MM-YYYY."""
@@ -9,6 +27,16 @@ def fmt_date(val):
         except Exception:
             pass
     return val or ""
+
+def is_batch_active(end_str):
+    """Check if a batch's end date has not passed yet in IST (end_date >= ist_today)."""
+    if not end_str:
+        return False
+    try:
+        end_date = datetime.strptime(end_str, "%Y-%m-%d").date()
+        return end_date >= get_ist_date()
+    except Exception:
+        return False
 
 def get_ordinal(n):
     return str(n) + ('th' if 11 <= n % 100 <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th'))

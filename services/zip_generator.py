@@ -11,6 +11,7 @@ import cloudinary.uploader
 from flask import current_app
 from models.database import get_db, get_config_col
 from services.document import generate_pdf, generate_docx, row_to_form_data
+from services.helpers import get_ist_now
 
 def trigger_background_zip(doc_type, completed_only):
     """
@@ -60,7 +61,7 @@ def _generate_and_upload_zip(doc_type, completed_only):
             except Exception:
                 pass
         
-        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        ts = get_ist_now().strftime("%Y%m%d_%H%M%S")
         filename = f"{doc_type}_export_{'completed' if completed_only else 'all'}_{ts}.zip"
         filepath = os.path.join(exports_dir, filename)
         
@@ -93,7 +94,7 @@ def _generate_and_upload_zip(doc_type, completed_only):
             {"_id": "export_links"},
             {"$set": {
                 status_key: secure_url,
-                f"{status_key}_time": datetime.now().strftime("%Y-%m-%d %H:%M")
+                f"{status_key}_time": get_ist_now().strftime("%Y-%m-%d %H:%M")
             }},
             upsert=True
         )

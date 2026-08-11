@@ -11,7 +11,7 @@ from pathlib import Path
 from models.database import get_db, get_config_col
 from services.document import generate_pdf, generate_docx, row_to_form_data, DOCX_TEMPLATE
 from services.email_service import send_welcome_email_async, send_incomplete_reminder_email_async
-from services.helpers import fmt_course_dates
+from services.helpers import fmt_course_dates, is_batch_active, get_ist_now
 
 public_bp = Blueprint('public', __name__)
 
@@ -33,36 +33,48 @@ def index():
         wa_link = ""
         gf_link = ""
 
-        if track and level and batch_index_str and batch_index_str.isdigit():
-            b_idx = int(batch_index_str)
-            config_col = get_config_col()
-            course_dates_doc = config_col.find_one({"_id": "course_dates"}) or {}
-            key = f"{track}_{level}"
-            batches = course_dates_doc.get(key, [])
-            if isinstance(batches, dict):
-                batches = [batches] if batches.get("start") else []
-            if b_idx < len(batches):
-                b = batches[b_idx]
-                c_start = b.get("start", "")
-                c_end = b.get("end", "")
-                wa_link = b.get("wa", "")
-                gf_link = b.get("gf", "")
-
-        db = get_db()
-        
         # Enforce strict server-side validation to block submissions from old cached tabs
         if not track or not level:
-            flash("error", "Invalid or outdated form submission detected. Please refresh the page completely and try again.")
+            flash("Invalid or outdated form submission detected. Please refresh the page completely and try again.", "error")
             return redirect(url_for('public.index') + "#nomination")
+
+        config_col = get_config_col()
+        course_dates_doc = config_col.find_one({"_id": "course_dates"}) or {}
+        key = f"{track}_{level}"
+        batches = course_dates_doc.get(key, [])
+        if isinstance(batches, dict):
+            batches = [batches] if batches.get("start") else []
+
+        if not batch_index_str or not batch_index_str.isdigit():
+            flash("Please select an active course batch.", "error")
+            return redirect(url_for('public.index') + "#nomination")
+
+        b_idx = int(batch_index_str)
+        if b_idx >= len(batches):
+            flash("Selected batch is invalid or no longer exists.", "error")
+            return redirect(url_for('public.index') + "#nomination")
+
+        b = batches[b_idx]
+        c_start = b.get("start", "")
+        c_end = b.get("end", "")
+        wa_link = b.get("wa", "")
+        gf_link = b.get("gf", "")
+
+        # Verify that the batch has not expired
+        if not c_start or not c_end or not is_batch_active(c_end):
+            flash("The selected course batch has already ended or is not active. Please select an active batch.", "error")
+            return redirect(url_for('public.index') + "#nomination")
+
+        db = get_db()
             
         if not f.get("Highest_Qualification"):
-            flash("error", "Highest Qualification is a mandatory field. Please refresh and fill it out.")
+            flash("Highest Qualification is a mandatory field. Please refresh and fill it out.", "error")
             return redirect(url_for('public.index') + "#nomination")
         
         # Enforce server-side validation for GOT forms (Educational Qualifications)
         if level in ["Basic", "Advanced"]:
             if not f.get("Edu1_Year") or not f.get("Edu1_Degree") or not f.get("Edu1_University"):
-                flash("error", "Detailed Educational Qualifications are mandatory for GOT forms.")
+                flash("Detailed Educational Qualifications are mandatory for GOT forms.", "error")
                 return redirect(url_for('public.index') + "#nomination")
 
         # Handle signature upload directly for Bootcamp
@@ -95,7 +107,7 @@ def index():
             sign_url = sign_url or existing.get("sign_url")
 
         doc = {
-            "token": token, "submitted_at": datetime.now().isoformat(),
+            "token": token, "submitted_at": get_ist_now().isoformat(),
             "track": track, "level": level, "batch_index": batch_index_str,
             "title": f.get("Title"), "name": f.get("Name"), "dob": f.get("DOB"), "gender": f.get("Gender"),
             "contact": f.get("Contact_Number"), "email": f.get("Email"), "aadhar": f.get("Aadhar"),
@@ -181,7 +193,7 @@ def index():
             start = b.get("start")
             end = b.get("end")
             wa = b.get("wa", "")
-            if start and end:
+            if start and end and is_batch_active(end):
                 formatted = fmt_course_dates(start, end)
                 if formatted:
                     valid_batches.append({"index": idx, "formatted": formatted, "wa": wa})
