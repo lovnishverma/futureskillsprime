@@ -13,7 +13,8 @@ A complete web-based nomination and registration portal developed for the **Futu
 
 - **Dynamic Landing Page**: Detailed information on courses, speakers, and the FutureSkills PRIME program.
 - **Dynamic Course Scheduling**: Administrators can dynamically configure multiple simultaneous batches for courses with custom start/end dates via the `/admin/dates` panel.
-- **Smart Form Guidance**: The public nomination form features an "Ongoing Courses" banner and intelligently prevents users from selecting course batches that are not currently active.
+- **Automated Batch Expiry & Enrollment Guard**: Batches whose dates have passed are automatically hidden from the public "Ongoing Courses" banner and nomination dropdowns in real-time. Strict dual-layer (client-side + server-side) validation prevents users from selecting or enrolling in expired course batches.
+- **Indian Standard Time (IST) Engine**: Built-in support for `Asia/Kolkata` (UTC+05:30) timezone ensures precise date calculations, batch validation, submission timestamps, and document date stamps regardless of the server's global hosting region.
 - **Cohort WhatsApp Integration**: Participants are automatically provided with the exact WhatsApp group link corresponding to their uniquely selected course batch upon successful submission.
 - **Online Nomination Form**: Interactive, multi-step form to collect participant details, educational qualifications, professional experience, and Institute details. Features an integrated **Signature Pad** canvas for Bootcamp applicants, allowing them to draw their signature via mouse/touch or upload an image directly during submission.
 - **100% Cloud-Native Document Storage**: Secure handling of dynamically generated PDFs and images. All final generated nomination PDFs and captured signatures/photos are uploaded directly to **Cloudinary**, making the application entirely stateless and resilient to ephemeral server restarts.
@@ -22,7 +23,10 @@ A complete web-based nomination and registration portal developed for the **Futu
 - **Participant Dashboard & Search**: Generates a unique tracking token for each submission. Participants can search via Aadhar, Phone, Email, or Token. The system intelligently retrieves **multiple applications** if a user has applied for more than one track, presenting them in a consolidated dashboard where they can preview and download their DOCX and PDF documents.
 - **Advanced Admin Portal**: A secure dashboard (`/admin`) powered by DataTables that allows administrators to:
   - Instantly Search, Sort, and Paginate through all submitted nominations.
+  - Filter applications by Track, Level, Batch Date, or Completion Status (Completed vs Incomplete).
   - Manage **Course Dates** and WhatsApp Links.
+  - Edit or reassign participant batches with instant PDF regeneration.
+  - Manually mark nominations as complete.
   - Export all data to a CSV file.
   - **Download All PDFs (ZIP)**: Generates and packages every individual PDF submission into a downloadable `.zip` archive.
   - **Download All DOCXs (ZIP)**: Generates and packages every editable DOCX submission into a downloadable `.zip` archive.
