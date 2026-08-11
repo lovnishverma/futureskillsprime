@@ -188,6 +188,9 @@ def admin():
         "today_submissions": total_today
     }
 
+    config_col = get_config_col()
+    export_links = config_col.find_one({"_id": "export_links"}) or {} if config_col is not None else {}
+
     return render_template(
         "admin.html", 
         rows=rows, 
