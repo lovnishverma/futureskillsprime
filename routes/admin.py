@@ -166,9 +166,28 @@ def admin():
     levels = db.distinct("level")
     batch_dates = db.distinct("course_start_date")
     
-    config_col = get_config_col()
-    export_links = config_col.find_one({"_id": "export_links"}) or {}
+    # Global Analytics KPIs
+    total_all_nominations = db.count_documents({})
+    completed_global_query = {
+        "$or": [
+            {"level": {"$regex": "^bootcamp$", "$options": "i"}, "sign_url": {"$nin": [None, ""]}},
+            {"level": {"$not": {"$regex": "^bootcamp$", "$options": "i"}}, "photo_url": {"$nin": [None, ""]}, "sign_url": {"$nin": [None, ""]}},
+            {"manual_completed": True}
+        ]
+    }
+    total_completed_all = db.count_documents(completed_global_query)
+    total_pending_all = max(0, total_all_nominations - total_completed_all)
     
+    today_ist_prefix = get_ist_date().strftime("%Y-%m-%d")
+    total_today = db.count_documents({"submitted_at": {"$regex": f"^{today_ist_prefix}"}})
+    
+    analytics = {
+        "total_nominations": total_all_nominations,
+        "completed": total_completed_all,
+        "pending": total_pending_all,
+        "today_submissions": total_today
+    }
+
     return render_template(
         "admin.html", 
         rows=rows, 
@@ -177,6 +196,7 @@ def admin():
         total_records=total_records,
         all_count=all_count,
         completed_count=completed_count,
+        analytics=analytics,
         search_query=search_query,
         track_filter=track_filter,
         level_filter=level_filter,

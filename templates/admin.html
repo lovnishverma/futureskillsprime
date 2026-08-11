@@ -100,6 +100,59 @@
                 {% endif %}
             {% endwith %}
 
+            <!-- Analytics Summary KPI Cards -->
+            {% if analytics %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <!-- Total Nominations -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between transition hover:shadow-md">
+                    <div>
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Nominations</p>
+                        <h3 class="text-2xl font-extrabold text-gray-900 mt-1">{{ analytics.total_nominations }}</h3>
+                        <p class="text-xs text-gray-400 mt-0.5">All-time registrations</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                    </div>
+                </div>
+
+                <!-- Today's Applications -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between transition hover:shadow-md">
+                    <div>
+                        <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Today's Applications</p>
+                        <h3 class="text-2xl font-extrabold text-emerald-700 mt-1">{{ analytics.today_submissions }}</h3>
+                        <p class="text-xs text-emerald-600/80 mt-0.5">Submitted today (IST)</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                </div>
+
+                <!-- Completed Nominations -->
+                <a href="{{ url_for('admin.admin', tab='completed') }}" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between transition hover:shadow-md hover:border-emerald-300 group">
+                    <div>
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-wider group-hover:text-emerald-700">Completed</p>
+                        <h3 class="text-2xl font-extrabold text-emerald-600 mt-1">{{ analytics.completed }}</h3>
+                        <p class="text-xs text-gray-400 mt-0.5">Photo &amp; Signature verified</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 group-hover:scale-105 transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                </a>
+
+                <!-- Pending Uploads -->
+                <a href="{{ url_for('admin.admin', tab='all') }}" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between transition hover:shadow-md hover:border-amber-300 group">
+                    <div>
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-wider group-hover:text-amber-700">Pending Uploads</p>
+                        <h3 class="text-2xl font-extrabold text-amber-600 mt-1">{{ analytics.pending }}</h3>
+                        <p class="text-xs text-gray-400 mt-0.5">Awaiting Photo / Signature</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 shrink-0 group-hover:scale-105 transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                    </div>
+                </a>
+            </div>
+            {% endif %}
+
             <!-- Filters & Search Bar -->
             <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-6">
                 <form method="GET" action="{{ url_for('admin.admin') }}" class="flex flex-wrap gap-4 items-end">
