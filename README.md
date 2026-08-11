@@ -131,5 +131,5 @@ Click **Deploy**. Render will automatically build your environment, install the 
 
 ## License
 
-&copy; 2026 NIELIT Chandigarh &mdash; FutureSkills PRIME. All rights reserved. 
+&copy; 2026 NIELIT Chandigarh / Ropar &mdash; FutureSkills PRIME. All rights reserved. 
 An Initiative by Ministry of Electronics and Information Technology (MeitY), Government of India.
