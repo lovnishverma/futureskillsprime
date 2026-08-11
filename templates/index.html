@@ -3463,7 +3463,6 @@
         // ==================== DYNAMIC COURSE DATES ====================
         const availableCourses = {{ available_courses | default({}) | tojson | safe }};
         const trackSelect = document.getElementById('trackSelect');
-        const levelSelect = document.getElementById('levelSelect');
         const courseDateDisplay = document.getElementById('courseDateDisplay');
 
         function updateCourseOptions() {
