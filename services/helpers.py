@@ -38,6 +38,34 @@ def is_batch_active(end_str):
     except Exception:
         return False
 
+def get_batch_status_badge(start_str, end_str):
+    """
+    Returns a status dict:
+    - label: 'Starting Soon' / 'Starts in X Days' / 'Enrollment Open' / 'Passed'
+    - type: 'starting_soon' / 'open' / 'passed'
+    """
+    if not start_str or not end_str:
+        return None
+    try:
+        s = datetime.strptime(start_str, "%Y-%m-%d").date()
+        e = datetime.strptime(end_str, "%Y-%m-%d").date()
+        today = get_ist_date()
+        
+        if e < today:
+            return {"label": "Passed", "type": "passed"}
+        elif s > today:
+            days_left = (s - today).days
+            if days_left == 1:
+                return {"label": "Starts Tomorrow", "type": "starting_soon"}
+            elif days_left <= 7:
+                return {"label": f"Starts in {days_left} Days", "type": "starting_soon"}
+            else:
+                return {"label": "Starting Soon", "type": "starting_soon"}
+        else:
+            return {"label": "Enrollment Open", "type": "open"}
+    except Exception:
+        return None
+
 def get_ordinal(n):
     return str(n) + ('th' if 11 <= n % 100 <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th'))
 

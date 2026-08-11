@@ -51,9 +51,17 @@
                     {% endif %}
                     
                     {% for batch in batches %}
-                    <div class="flex flex-col md:flex-row gap-4 p-4 bg-gray-50 border border-gray-200 rounded-lg relative">
+                    {% set is_past = batch.end and (batch.end < today_str) %}
+                    <div class="flex flex-col md:flex-row gap-4 p-4 {% if is_past %}bg-gray-100/90 border-gray-300{% else %}bg-gray-50 border-gray-200{% endif %} border rounded-lg relative transition-all">
                         <div class="flex-1 space-y-1">
-                            <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wide">Start Date</label>
+                            <div class="flex items-center justify-between">
+                                <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wide">Start Date</label>
+                                {% if is_past %}
+                                <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-gray-200 text-gray-600 border border-gray-300">Passed</span>
+                                {% elif batch.end %}
+                                <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-emerald-100 text-emerald-700 border border-emerald-200">Active</span>
+                                {% endif %}
+                            </div>
                             <input type="date" name="{{ course_key }}_start[]" value="{{ batch.start }}" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div class="flex-1 space-y-1">

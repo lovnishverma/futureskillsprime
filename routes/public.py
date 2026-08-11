@@ -11,7 +11,7 @@ from pathlib import Path
 from models.database import get_db, get_config_col
 from services.document import generate_pdf, generate_docx, row_to_form_data, DOCX_TEMPLATE
 from services.email_service import send_welcome_email_async, send_incomplete_reminder_email_async
-from services.helpers import fmt_course_dates, is_batch_active, get_ist_now
+from services.helpers import fmt_course_dates, is_batch_active, get_ist_now, get_batch_status_badge
 
 public_bp = Blueprint('public', __name__)
 
@@ -195,8 +195,14 @@ def index():
             wa = b.get("wa", "")
             if start and end and is_batch_active(end):
                 formatted = fmt_course_dates(start, end)
+                badge = get_batch_status_badge(start, end)
                 if formatted:
-                    valid_batches.append({"index": idx, "formatted": formatted, "wa": wa})
+                    valid_batches.append({
+                        "index": idx,
+                        "formatted": formatted,
+                        "wa": wa,
+                        "badge": badge
+                    })
                     
         if valid_batches:
             available_courses[track_level] = valid_batches

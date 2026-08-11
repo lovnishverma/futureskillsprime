@@ -16,7 +16,7 @@ import cloudinary.uploader
 from models.database import get_db, get_config_col
 from services.document import generate_pdf, generate_docx, row_to_form_data, DOCX_TEMPLATE
 from services.zip_generator import trigger_background_zip
-from services.helpers import is_batch_active, fmt_course_dates, get_ist_now
+from services.helpers import is_batch_active, fmt_course_dates, get_ist_now, get_ist_date
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -95,7 +95,8 @@ def admin_dates():
         return redirect(url_for('admin.admin_dates'))
 
     doc = config_col.find_one({"_id": "course_dates"}) or {}
-    return render_template("admin_dates.html", courses=courses, config_dates=doc)
+    today_str = get_ist_date().strftime("%Y-%m-%d")
+    return render_template("admin_dates.html", courses=courses, config_dates=doc, today_str=today_str)
 
 @admin_bp.route("/admin", methods=["GET", "POST"])
 def admin():
